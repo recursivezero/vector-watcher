@@ -1,4 +1,10 @@
-export type LanceStorageType = "local" | "s3" | "r2";
+export const LANCE_STORAGE = {
+  R2: "r2",
+  S3: "s3",
+  LOCAL: "local",
+} as const;
+
+export type LanceStorageType = (typeof LANCE_STORAGE)[keyof typeof LANCE_STORAGE];
 
 export interface LanceDataSource {
   name: string;

@@ -25,6 +25,8 @@ from models.lancedb import (
     LanceVectorColumn,
     LanceVectorSummary,
     LanceVectorValues,
+    SortColumn,
+    SortOrder,
 )
 
 
@@ -508,8 +510,8 @@ class LanceDBService:
     page: int = 1,
     page_size: int = 25,
     tag: str | None = None,
-    sort_by: str | None = None,
-    sort_order: str = "asc",
+    sort_by: SortColumn | None = None,
+    sort_order: SortOrder = "asc",
 ) -> LanceRowsResponse:
         if page < 1:
             raise LanceDBValidationError(
@@ -570,8 +572,12 @@ class LanceDBService:
                     )
 
                 query = query.order_by(
-                    sort_by,
-                    descending=sort_order == "desc",
+                    [
+                        {
+                            "column_name": sort_by,
+                            "ascending": sort_order == "asc",
+                        }
+                    ]
                 )
 
             rows = (
@@ -584,6 +590,7 @@ class LanceDBService:
         except LanceDBValidationError:
             raise
         except Exception as error:
+            print(f"Unable to read table rows: {error!r}")
             raise LanceDBUnavailable(
                 "Unable to read table rows."
             ) from error

@@ -7,6 +7,7 @@ from main import app
 
 load_dotenv()
 
+
 connection = {
     "name": "Threadzip R2",
     "storage": "r2",
@@ -18,23 +19,63 @@ connection = {
     "region": os.getenv("R2_REGION", "auto"),
 }
 
+
+
+
 client = TestClient(app)
 
-response = client.post(
-    "/connections/row",
-    params={
-        "table": "fabric_table",
-        "row_id": 0,
-    },
-    json=connection,
-)
+TABLE = "fabric_table"
 
-print(f"Status: {response.status_code}")
 
-data = response.json()
 
-print("Image:", data.get("image_uri"))
-print("Tag:", data.get("tag"))
-print("Hash:", data.get("hash"))
-print("Vector length:", data.get("vector", {}).get("length"))
-print("Vector values:", len(data.get("vector", {}).get("values", [])))
+
+def test_row() -> None:
+    response = client.post(
+        "/connections/row",
+        params={
+            "table": TABLE,
+            "row_id": 0,
+        },
+        json=connection,
+    )
+
+    print("\n=== ROW TEST ===")
+    print(f"Status: {response.status_code}")
+
+    data = response.json()
+
+    print("Image:", data.get("image_uri"))
+    print("Tag:", data.get("tag"))
+    print("Hash:", data.get("hash"))
+    print(
+        "Vector length:",
+        data.get("vector", {}).get("length"),
+    )
+    print(
+        "Vector values:",
+        len(data.get("vector", {}).get("values", [])),
+    )
+
+
+def test_sorted_rows() -> None:
+    response = client.post(
+        "/connections/rows",
+        params={
+            "table": "fabric_table",
+            "page": 1,
+            "page_size": 25,
+            "sort_by": "tag",
+            "sort_order": "asc",
+        },
+        json=connection,
+    )
+
+    print("\n=== SORTED ROWS TEST ===")
+    print(f"Status: {response.status_code}")
+    print(response.text)
+
+
+if __name__ == "__main__":
+    test_row()
+    test_sorted_rows()
+

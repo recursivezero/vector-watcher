@@ -944,6 +944,24 @@ code {
   font-weight: 800;
 }
 
+.field-with-action {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+}
+
+.field-with-action input {
+  flex: 1;
+  min-width: 0;
+}
+
+.field-with-action button {
+  flex: 0 0 auto;
+  min-width: 82px;
+  white-space: nowrap;
+}
+
 @media (max-width: 1000px) {
 
   .connection-layout,

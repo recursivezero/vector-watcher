@@ -35,41 +35,23 @@ const EMPTY_CONNECTION: LanceConnectionState = {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<AppTab>("connection");
-
   const [connection, setConnection] = useState<LanceConnectionState>(EMPTY_CONNECTION);
-
   const [connected, setConnected] = useState(false);
-
   const [tables, setTables] = useState<LanceTableItem[]>([]);
-
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
-
   const [details, setDetails] = useState<LanceTableDetails | null>(null);
-
   const [rows, setRows] = useState<LanceRowSummary[]>([]);
-
   const [query, setQuery] = useState<ExplorerQueryState>(DEFAULT_EXPLORER_QUERY);
-
   const [pagination, setPagination] = useState<LancePagination | null>(null);
-
   const [loading, setLoading] = useState(false);
-
   const [refreshing, setRefreshing] = useState(false);
-
   const [error, setError] = useState<string | null>(null);
-
   const [locked, setLocked] = useState(false);
-
   const [vectorRow, setVectorRow] = useState<LanceRowSummary | null>(null);
-
   const [vectorDetail, setVectorDetail] = useState<LanceRowDetail | null>(null);
-
   const [vectorLoading, setVectorLoading] = useState(false);
-
   const [vectorError, setVectorError] = useState<string | null>(null);
-
   const [vectorTrigger, setVectorTrigger] = useState<HTMLButtonElement | null>(null);
-
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
 
   const source: LanceDataSource = useMemo(
@@ -102,7 +84,6 @@ export default function App() {
           sortBy: nextQuery.sortBy,
           sortOrder: nextQuery.sortOrder,
         });
-
         setRows(response.rows);
         setPagination(response.pagination);
       } catch (err) {
@@ -118,17 +99,12 @@ export default function App() {
     async (table: string) => {
       setLoading(true);
       setError(null);
-
       try {
         const response = await getTableDetails(connection, table);
-
         setDetails(response);
         setSelectedTable(table);
-
         const resetQuery = DEFAULT_EXPLORER_QUERY;
-
         setQuery(resetQuery);
-
         const rowsResponse = await getRows(connection, table, {
           page: resetQuery.page,
           pageSize: resetQuery.pageSize,
@@ -136,9 +112,7 @@ export default function App() {
           sortBy: resetQuery.sortBy,
           sortOrder: resetQuery.sortOrder,
         });
-
         setRows(rowsResponse.rows);
-
         setPagination(rowsResponse.pagination);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unable to load table.");
@@ -153,24 +127,18 @@ export default function App() {
     async (goToExplorer = true) => {
       setLoading(true);
       setError(null);
-
       try {
         const response = await scanConnection(connection);
-
         setTables(response.tables);
         setConnected(true);
-
         const firstTable = response.tables[0]?.name ?? null;
-
         setSelectedTable(firstTable);
-
         if (firstTable) {
           await loadTable(firstTable);
         } else {
           setDetails(null);
           setRows([]);
         }
-
         if (goToExplorer) {
           setActiveTab(firstTable ? "explorer" : "database");
         }
@@ -187,18 +155,12 @@ export default function App() {
   const refresh = useCallback(async () => {
     setRefreshing(true);
     setError(null);
-
     try {
       const response = await scanConnection(connection);
-
       setTables(response.tables);
-
       const currentExists = response.tables.some((table) => table.name === selectedTable);
-
       const nextTable = currentExists ? selectedTable : (response.tables[0]?.name ?? null);
-
       setSelectedTable(nextTable);
-
       if (nextTable) {
         await loadTable(nextTable);
       }
@@ -275,9 +237,7 @@ export default function App() {
   const handleCopy = useCallback(async (value: string, message: string) => {
     try {
       await writeTextToClipboard(value);
-
       setCopyMessage(message);
-
       window.setTimeout(() => {
         setCopyMessage(null);
       }, 1800);
@@ -343,7 +303,6 @@ export default function App() {
           <span className="eyebrow">Vector Watcher</span>
           <h1>Explorer locked</h1>
           <p>Your session is still connected, but the explorer is hidden.</p>
-
           <button type="button" className="button button-primary" onClick={handleUnlock}>
             Unlock explorer
           </button>
@@ -366,12 +325,6 @@ export default function App() {
         <div className="header-status">
           <span className={`status-dot ${connected ? "is-connected" : ""}`} />
           {connected ? connection.name : "No connection"}
-
-          {connected && (
-            <button type="button" className="icon-button" title="Lock explorer" onClick={handleLock}>
-              Lock
-            </button>
-          )}
         </div>
       </header>
 
