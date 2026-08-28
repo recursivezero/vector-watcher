@@ -35,6 +35,13 @@
 		"peacock.color": "#42b883",
 		"cSpell.words": [
 			"tauri"
-		]
+		],
+		"folder-color.pathColors": [],
+		"python.analysis.typeCheckingMode": "basic",
+		"python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/bin/python",
+		"files.exclude": {
+			"**/__pycache__": true,
+			"**/.venv": true
+		}
 	}
 }
