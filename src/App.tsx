@@ -25,6 +25,7 @@ const EMPTY_CONNECTION: LanceConnectionState = {
   storage: "r2",
   path: "table",
   bucket: "",
+  accountId: "",
   endpoint: "",
   accessKeyId: "",
   secretAccessKey: "",
@@ -68,6 +69,8 @@ export default function App() {
   const [vectorError, setVectorError] = useState<string | null>(null);
 
   const [vectorTrigger, setVectorTrigger] = useState<HTMLButtonElement | null>(null);
+
+  const [copyMessage, setCopyMessage] = useState<string | null>(null);
 
   const source: LanceDataSource = useMemo(
     () => ({
@@ -272,8 +275,14 @@ export default function App() {
   const handleCopy = useCallback(async (value: string, message: string) => {
     try {
       await writeTextToClipboard(value);
+
+      setCopyMessage(message);
+
+      window.setTimeout(() => {
+        setCopyMessage(null);
+      }, 1800);
+
       setError(null);
-      console.info(message);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to copy.");
     }
@@ -394,6 +403,12 @@ export default function App() {
       </nav>
 
       <main className="app-content">
+        {copyMessage && (
+          <div className="copy-toast" role="status" aria-live="polite">
+            <span className="copy-toast__icon">✓</span>
+            {copyMessage}
+          </div>
+        )}
         {activeTab === "connection" && (
           <ConnectionTab
             connection={connection}

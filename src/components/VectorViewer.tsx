@@ -81,7 +81,7 @@ export default function VectorViewer({ row, detail, loading, error, returnFocusE
         <header>
           <div>
             <p className="lance-admin-eyebrow">Lazy row detail</p>
-            <h2 id="lance-vector-title">Vector for row {row.row_id}</h2>
+            <h2 id="lance-vector-title">Vector for row {row.row_id + 1}</h2>
           </div>
           <button ref={closeRef} type="button" className="lance-vector-modal__close" onClick={onClose} aria-label="Close vector viewer">
             ×

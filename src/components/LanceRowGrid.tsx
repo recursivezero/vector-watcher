@@ -85,9 +85,9 @@ export default function LanceRowGrid({ rows, loading, appliedTag, onCopy, onView
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.row_id}>
+              <tr key={row.row_id + 1}>
                 <td>
-                  <code>{row.row_id}</code>
+                  <code>{row.row_id + 1}</code>
                 </td>
                 <td title={row.image_uri ?? undefined}>
                   <code>{compactValue(row.image_uri, 34)}</code>
@@ -111,9 +111,9 @@ export default function LanceRowGrid({ rows, loading, appliedTag, onCopy, onView
 
       <div className="lance-admin-row-cards">
         {rows.map((row) => (
-          <article className="lance-admin-row-card" key={row.row_id}>
+          <article className="lance-admin-row-card" key={row.row_id + 1}>
             <div className="lance-admin-row-card__topline">
-              <strong>Row {row.row_id}</strong>
+              <strong>Row {row.row_id + 1}</strong>
               <span className="lance-admin-tag">{row.tag ?? "—"}</span>
             </div>
             <dl>

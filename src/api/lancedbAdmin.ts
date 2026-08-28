@@ -137,6 +137,7 @@ export interface LanceConnectionState {
   path: string;
   bucket: string;
   endpoint: string;
+  accountId: string;
   accessKeyId: string;
   secretAccessKey: string;
   sessionToken: string;
@@ -175,12 +176,15 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 }
 
 function toBackendConnection(connection: LanceConnectionState): LanceDataSource {
+  const endpoint =
+    connection.storage === "r2" ? `https://${connection.accountId.trim()}.r2.cloudflarestorage.com` : connection.endpoint.trim();
+
   return {
     name: connection.name,
     storage: connection.storage,
     path: connection.path,
     bucket: connection.bucket,
-    endpoint: connection.endpoint,
+    endpoint,
     access_key_id: connection.accessKeyId,
     secret_access_key: connection.secretAccessKey,
     session_token: connection.sessionToken,

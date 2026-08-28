@@ -34,7 +34,7 @@ export default function ConnectionTab({ connection, loading, error, connected, o
     if (!connection.secretAccessKey.trim()) return false;
 
     if (connection.storage === "r2") {
-      return Boolean(connection.endpoint.trim());
+      return Boolean(connection.accountId.trim());
     }
 
     return Boolean(connection.region.trim());
@@ -134,23 +134,51 @@ export default function ConnectionTab({ connection, loading, error, connected, o
                   />
                 </label>
 
-                <label className="field field-full">
-                  <span>{connection.storage === "r2" ? "R2 endpoint" : "S3 endpoint (optional)"}</span>
+                {connection.storage === "r2" ? (
+                  <label className="field field-full">
+                    <span>Cloudflare Account ID</span>
 
-                  <input
-                    value={connection.endpoint}
-                    onChange={(event) =>
-                      update({
-                        endpoint: event.target.value,
-                      })
-                    }
-                    placeholder={connection.storage === "r2" ? "https://<account-id>.r2.cloudflarestorage.com" : "https://s3.amazonaws.com"}
-                    disabled={loading}
-                  />
-                </label>
+                    <input
+                      value={connection.accountId}
+                      onChange={(event) =>
+                        update({
+                          accountId: event.target.value,
+                        })
+                      }
+                      placeholder="Your Cloudflare Account ID"
+                      disabled={loading}
+                      autoComplete="off"
+                      spellCheck={false}
+                    />
+
+                    <small>
+                      Endpoint:{" "}
+                      <code>
+                        https://
+                        {connection.accountId.trim() || "<account-id>"}
+                        .r2.cloudflarestorage.com
+                      </code>
+                    </small>
+                  </label>
+                ) : (
+                  <label className="field field-full">
+                    <span>S3 endpoint (optional)</span>
+
+                    <input
+                      value={connection.endpoint}
+                      onChange={(event) =>
+                        update({
+                          endpoint: event.target.value,
+                        })
+                      }
+                      placeholder="https://s3.amazonaws.com"
+                      disabled={loading}
+                    />
+                  </label>
+                )}
 
                 <label className="field">
-                  <span>Access key</span>
+                  <span>Access Key ID</span>
                   <input
                     value={connection.accessKeyId}
                     onChange={(event) =>
@@ -164,7 +192,7 @@ export default function ConnectionTab({ connection, loading, error, connected, o
                 </label>
 
                 <label className="field">
-                  <span>Secret key</span>
+                  <span>Secret Access Key</span>
                   <div className="secret-input">
                     <input
                       type={showSecret ? "text" : "password"}
