@@ -1,10 +1,10 @@
 import type {
-	LanceDataSource,
-	LancePagination as LancePaginationData,
-	LanceRowDetail,
-	LanceRowSummary,
-	LanceTableDetails,
-	LanceTableItem,
+  LanceDataSource,
+  LancePagination as LancePaginationData,
+  LanceRowDetail,
+  LanceRowSummary,
+  LanceTableDetails,
+  LanceTableItem,
 } from "@/api/lancedbAdmin";
 
 import LanceFilterBar from "./LanceFilterBar";
@@ -31,6 +31,9 @@ interface ExplorerTabProps {
   vectorLoading: boolean;
   vectorError: string | null;
   vectorTrigger: HTMLButtonElement | null;
+
+  search: string;
+  onSearchChange: (search: string) => void;
 
   onSelectTable: (table: string) => void;
   onRefresh: () => void;
@@ -79,6 +82,8 @@ export default function ExplorerTab({
   onClearFilter,
   onCloseVector,
   onRetryVector,
+  search,
+  onSearchChange,
 }: ExplorerTabProps) {
   return (
     <div className="explorer-page">
@@ -122,6 +127,8 @@ export default function ExplorerTab({
               onTagApply={onTagApply}
               onSortChange={onSortChange}
               onPageSizeChange={onPageSizeChange}
+              search={search}
+              onSearchChange={onSearchChange}
             />
           </div>
 

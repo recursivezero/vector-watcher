@@ -7,7 +7,9 @@ from models.lancedb import (
 	LanceRowDetailResponse,
 	LanceRowsResponse, 
   LanceTableDetailsResponse, 
-  LanceTablesResponse
+  LanceTablesResponse,
+	SortColumn,
+	SortOrder
 )
 
 from services.lancedb import (
@@ -120,9 +122,10 @@ def table_rows(
     table: str,
     page: int = 1,
     page_size: int = 25,
+    search: str | None = None,
     tag: str | None = None,
-    sort_by: str | None = None,
-    sort_order: str = "asc",
+    sort_by: SortColumn | None = None,
+    sort_order: SortOrder = "asc",
 ) -> LanceRowsResponse:
     try:
         service = LanceDBService(connection)
@@ -131,6 +134,7 @@ def table_rows(
             table_name=table,
             page=page,
             page_size=page_size,
+            search=search,
             tag=tag,
             sort_by=sort_by,
             sort_order=sort_order,

@@ -1,3 +1,4 @@
+
 import os
 
 from dotenv import load_dotenv
@@ -20,13 +21,9 @@ connection = {
 }
 
 
-
-
 client = TestClient(app)
 
 TABLE = "fabric_table"
-
-
 
 
 def test_row() -> None:
@@ -61,7 +58,7 @@ def test_sorted_rows() -> None:
     response = client.post(
         "/connections/rows",
         params={
-            "table": "fabric_table",
+            "table": TABLE,
             "page": 1,
             "page_size": 25,
             "sort_by": "tag",
@@ -72,10 +69,62 @@ def test_sorted_rows() -> None:
 
     print("\n=== SORTED ROWS TEST ===")
     print(f"Status: {response.status_code}")
-    print(response.text)
 
+    data = response.json()
+
+    print("Rows:", len(data.get("rows", [])))
+    print(
+        "Total rows:",
+        data.get("pagination", {}).get("total_rows"),
+    )
+
+    for row in data.get("rows", [])[:5]:
+        print(
+            row.get("row_id"),
+            row.get("tag"),
+        )
+
+
+def test_search_rows() -> None:
+    for search_term in (
+        "product",
+        "cc38c7",
+        "does-not-exist",
+    ):
+        response = client.post(
+            "/connections/rows",
+            params={
+                "table": TABLE,
+                "page": 1,
+                "page_size": 25,
+                "search": search_term,
+            },
+            json=connection,
+        )
+
+        print(f"\n=== SEARCH TEST: {search_term} ===")
+        print(f"Status: {response.status_code}")
+
+        data = response.json()
+
+        print(
+            "Rows:",
+            len(data.get("rows", [])),
+        )
+
+        print(
+            "Total matching rows:",
+            data.get("pagination", {}).get("total_rows"),
+        )
+
+        for row in data.get("rows", [])[:5]:
+            print(
+                row.get("row_id"),
+                row.get("tag"),
+                row.get("hash"),
+            )
 
 if __name__ == "__main__":
     test_row()
     test_sorted_rows()
-
+    test_search_rows()

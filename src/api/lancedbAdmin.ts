@@ -218,6 +218,7 @@ export async function getRows(
   options: {
     page: number;
     pageSize: number;
+    search?: string;
     tag?: string;
     sortBy?: LanceSortColumn | null;
     sortOrder?: LanceSortOrder;
@@ -228,6 +229,10 @@ export async function getRows(
     page: String(options.page),
     page_size: String(options.pageSize),
   });
+
+  if (options.search?.trim()) {
+    params.set("search", options.search.trim());
+  }
 
   if (options.tag) {
     params.set("tag", options.tag);

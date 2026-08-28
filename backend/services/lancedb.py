@@ -505,14 +505,15 @@ class LanceDBService:
         )
 
     def get_rows(
-    self,
-    table_name: str,
-    page: int = 1,
-    page_size: int = 25,
-    tag: str | None = None,
-    sort_by: SortColumn | None = None,
-    sort_order: SortOrder = "asc",
-) -> LanceRowsResponse:
+        self,
+        table_name: str,
+        page: int = 1,
+        page_size: int = 25,
+        search: str | None = None,
+        tag: str | None = None,
+        sort_by: SortColumn | None = None,
+        sort_order: SortOrder = "asc",
+    ) -> LanceRowsResponse:
         if page < 1:
             raise LanceDBValidationError(
                 "Page must be greater than or equal to 1."
@@ -526,31 +527,25 @@ class LanceDBService:
         table = self.open_table(table_name)
 
         try:
-            total_rows = int(table.count_rows())
-        except Exception as error:
-            raise LanceDBUnavailable(
-                "Unable to count table rows."
-            ) from error
-
-        total_pages = (
-            (total_rows + page_size - 1) // page_size
-            if total_rows
-            else 0
-        )
-
-        if total_pages and page > total_pages:
-            raise LanceDBValidationError(
-                "Requested page is outside the available range."
-            )
-
-        offset = (page - 1) * page_size
-
-        try:
             query = table.search()
 
-            if tag:
+            if search:
+                escaped_search = search.replace("'", "''")
+                search_pattern = f"%{escaped_search}%"
+
                 query = query.where(
-                    f"tag = '{tag.replace(chr(39), chr(39) + chr(39))}'"
+                    "("
+                    f"image_uri LIKE '{search_pattern}' "
+                    f"OR tag LIKE '{search_pattern}' "
+                    f"OR hash LIKE '{search_pattern}'"
+                    ")"
+                )
+            
+            if tag:
+                escaped_tag = tag.replace("'", "''")
+
+                query = query.where(
+                    f"tag = '{escaped_tag}'"
                 )
 
             if sort_by:
@@ -580,17 +575,34 @@ class LanceDBService:
                     ]
                 )
 
-            rows = (
-                query
-                .limit(page_size)
-                .offset(offset)
-                .to_list()
+            filtered_rows = query.to_list()
+            total_rows = len(filtered_rows)
+
+            total_pages = (
+                (total_rows + page_size - 1) // page_size
+                if total_rows
+                else 0
             )
+
+            if total_pages and page > total_pages:
+                raise LanceDBValidationError(
+                    "Requested page is outside the available range."
+                )
+
+            offset = (page - 1) * page_size
+
+            rows = filtered_rows[
+                offset : offset + page_size
+            ]
 
         except LanceDBValidationError:
             raise
+
         except Exception as error:
-            print(f"Unable to read table rows: {error!r}")
+            print(
+                f"Unable to read table rows: {error!r}"
+            )
+
             raise LanceDBUnavailable(
                 "Unable to read table rows."
             ) from error

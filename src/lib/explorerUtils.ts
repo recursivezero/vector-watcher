@@ -8,6 +8,7 @@ import type {
 } from "@/api/lancedbAdmin";
 
 export interface ExplorerQueryState {
+  search: string;
   page: number;
   pageSize: number;
   tag: string;
@@ -19,6 +20,7 @@ export const DEFAULT_EXPLORER_QUERY: ExplorerQueryState = {
   page: 1,
   pageSize: 25,
   tag: "",
+  search: "",
   sortBy: null,
   sortOrder: "asc",
 };

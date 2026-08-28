@@ -142,7 +142,7 @@ export default function ConnectionTab({ connection, loading, error, connected, o
                         bucket: event.target.value,
                       })
                     }
-                    placeholder="threadzip-bucket"
+                    placeholder="your-bucket-name"
                     disabled={loading}
                   />
                 </label>

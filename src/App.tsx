@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type {
   LanceConnectionState,
@@ -80,6 +80,7 @@ export default function App() {
         const response = await getRows(connection, table, {
           page: nextQuery.page,
           pageSize: nextQuery.pageSize,
+          search: nextQuery.search,
           tag: nextQuery.tag,
           sortBy: nextQuery.sortBy,
           sortOrder: nextQuery.sortOrder,
@@ -108,6 +109,7 @@ export default function App() {
         const rowsResponse = await getRows(connection, table, {
           page: resetQuery.page,
           pageSize: resetQuery.pageSize,
+          search: resetQuery.search,
           tag: resetQuery.tag,
           sortBy: resetQuery.sortBy,
           sortOrder: resetQuery.sortOrder,
@@ -191,6 +193,35 @@ export default function App() {
     },
     [loadRows, query],
   );
+
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleSearchChange = useCallback(
+    (search: string) => {
+      const next = {
+        ...query,
+        search,
+        page: 1,
+      };
+
+      setQuery(next);
+      if (searchTimerRef.current) {
+        clearTimeout(searchTimerRef.current);
+      }
+      searchTimerRef.current = setTimeout(() => {
+        void loadRows(next);
+      }, 400);
+    },
+    [loadRows, query],
+  );
+
+  useEffect(() => {
+    return () => {
+      if (searchTimerRef.current) {
+        clearTimeout(searchTimerRef.current);
+      }
+    };
+  }, []);
 
   const handleSortChange = useCallback(
     (sortBy: ExplorerQueryState["sortBy"], sortOrder: ExplorerQueryState["sortOrder"]) => {
@@ -394,6 +425,8 @@ export default function App() {
             rows={rows}
             pagination={pagination}
             query={query}
+            search={query.search}
+            onSearchChange={handleSearchChange}
             loading={loading}
             refreshing={refreshing}
             vectorRow={vectorRow}
