@@ -2,14 +2,20 @@ import { LANCE_STORAGE, type LanceConnectionState, type LanceStorageType } from 
 import { open } from "@tauri-apps/plugin-dialog";
 import { useMemo, useState } from "react";
 
+type SavedConnection = Omit<LanceConnectionState, "accessKeyId" | "secretAccessKey" | "sessionToken">;
+
 interface ConnectionTabProps {
   connection: LanceConnectionState;
   loading: boolean;
   error: string | null;
   connected: boolean;
+  savedConnections: SavedConnection[];
   onChange: (connection: LanceConnectionState) => void;
   onConnect: () => void;
   onDisconnect: () => void;
+  onSaveConnection: () => void;
+  onLoadConnection: (name: string) => void;
+  onDeleteConnection: (name: string) => void;
 }
 
 const STORAGE_LABELS: Record<LanceStorageType, string> = {
@@ -18,7 +24,32 @@ const STORAGE_LABELS: Record<LanceStorageType, string> = {
   [LANCE_STORAGE.LOCAL]: "Local LanceDB",
 };
 
-export default function ConnectionTab({ connection, loading, error, connected, onChange, onConnect, onDisconnect }: ConnectionTabProps) {
+const EMPTY_CONNECTION: LanceConnectionState = {
+  name: "",
+  storage: LANCE_STORAGE.R2,
+  path: "table",
+  bucket: "",
+  accountId: "",
+  endpoint: "",
+  accessKeyId: "",
+  secretAccessKey: "",
+  sessionToken: "",
+  region: "auto",
+};
+
+export default function ConnectionTab({
+  connection,
+  loading,
+  error,
+  connected,
+  savedConnections,
+  onChange,
+  onConnect,
+  onDisconnect,
+  onSaveConnection,
+  onLoadConnection,
+  onDeleteConnection,
+}: ConnectionTabProps) {
   const [showSecret, setShowSecret] = useState(false);
 
   const storageLabel = STORAGE_LABELS[connection.storage];
@@ -47,6 +78,8 @@ export default function ConnectionTab({ connection, loading, error, connected, o
     return Boolean(connection.region.trim());
   }, [connection]);
 
+  const canSave = Boolean(connection.name.trim());
+
   const update = (patch: Partial<LanceConnectionState>) => {
     onChange({
       ...connection,
@@ -68,13 +101,28 @@ export default function ConnectionTab({ connection, loading, error, connected, o
     }
   };
 
+  const handleNewConnection = () => {
+    onChange(EMPTY_CONNECTION);
+    setShowSecret(false);
+  };
+
+  const handleDeleteConnection = () => {
+    const name = connection.name.trim();
+
+    if (!name) {
+      return;
+    }
+
+    onDeleteConnection(name);
+  };
+
   return (
     <div className="connection-page">
       <div className="page-heading">
         <div>
           <span className="eyebrow">Connection</span>
           <h1>Connect to LanceDB</h1>
-          <p>Configure a storage source and open a LanceDB database. Credentials stay in application memory.</p>
+          <p>Configure a storage source and open a LanceDB database.</p>
         </div>
 
         <div className={`connection-status ${connected ? "is-connected" : ""}`}>
@@ -93,6 +141,65 @@ export default function ConnectionTab({ connection, loading, error, connected, o
           </div>
 
           <div className="form-grid">
+            {savedConnections.length > 0 && (
+              <div className="field field-full">
+                <span>Saved connection</span>
+
+                <div className="field-with-action">
+                  <select
+                    value=""
+                    onChange={(event) => {
+                      if (event.target.value) {
+                        onLoadConnection(event.target.value);
+                      }
+                    }}
+                    disabled={loading}
+                  >
+                    <option value="">Select saved connection</option>
+
+                    {savedConnections.map((saved) => (
+                      <option key={saved.name} value={saved.name}>
+                        {saved.name}
+                      </option>
+                    ))}
+                  </select>
+
+                  <button type="button" className="button button-secondary" onClick={handleNewConnection} disabled={loading}>
+                    New
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <label className="field field-full">
+              <span>Connection name</span>
+
+              <div className="field-with-action">
+                <input
+                  value={connection.name}
+                  onChange={(event) =>
+                    update({
+                      name: event.target.value,
+                    })
+                  }
+                  placeholder="e.g. Threadzip R2"
+                  maxLength={128}
+                  autoComplete="off"
+                  disabled={loading}
+                />
+
+                <button type="button" className="button button-secondary" onClick={onSaveConnection} disabled={loading || !canSave}>
+                  Save
+                </button>
+
+                {savedConnections.some((saved) => saved.name === connection.name.trim()) && (
+                  <button type="button" className="button button-secondary" onClick={handleDeleteConnection} disabled={loading}>
+                    Delete
+                  </button>
+                )}
+              </div>
+            </label>
+
             <label className="field field-full">
               <span>Storage provider</span>
 
@@ -316,7 +423,7 @@ export default function ConnectionTab({ connection, loading, error, connected, o
           <div className="surface security-card">
             <span className="eyebrow">Security</span>
             <h3>Credentials are session-only</h3>
-            <p>Vector Watcher does not persist your storage credentials in localStorage, cookies, or frontend environment variables.</p>
+            <p>Storage credentials are not persisted with saved connection settings.</p>
           </div>
         </aside>
       </div>

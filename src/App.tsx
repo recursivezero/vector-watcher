@@ -33,9 +33,38 @@ const EMPTY_CONNECTION: LanceConnectionState = {
   region: "auto",
 };
 
+const SAVED_CONNECTIONS_KEY = "vector-watcher:saved-connections";
+
+type SavedConnection = Omit<LanceConnectionState, "accessKeyId" | "secretAccessKey" | "sessionToken">;
+
+const getSavedConnections = (): SavedConnection[] => {
+  try {
+    const stored = localStorage.getItem(SAVED_CONNECTIONS_KEY);
+
+    if (!stored) {
+      return [];
+    }
+
+    const parsed: unknown = JSON.parse(stored);
+
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return parsed;
+  } catch {
+    return [];
+  }
+};
+
+const saveSavedConnections = (connections: SavedConnection[]) => {
+  localStorage.setItem(SAVED_CONNECTIONS_KEY, JSON.stringify(connections));
+};
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<AppTab>("connection");
   const [connection, setConnection] = useState<LanceConnectionState>(EMPTY_CONNECTION);
+  const [savedConnections, setSavedConnections] = useState<SavedConnection[]>(() => getSavedConnections());
   const [connected, setConnected] = useState(false);
   const [tables, setTables] = useState<LanceTableItem[]>([]);
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
@@ -326,6 +355,55 @@ export default function App() {
     }
   }, [connected]);
 
+  const handleSaveConnection = useCallback(() => {
+    const savedConnection: SavedConnection = {
+      name: connection.name.trim(),
+      storage: connection.storage,
+      path: connection.path,
+      bucket: connection.bucket,
+      endpoint: connection.endpoint,
+      accountId: connection.accountId,
+      region: connection.region,
+    };
+
+    if (!savedConnection.name) {
+      return;
+    }
+
+    const nextConnections = [...savedConnections.filter((item) => item.name !== savedConnection.name), savedConnection];
+
+    setSavedConnections(nextConnections);
+    saveSavedConnections(nextConnections);
+  }, [connection, savedConnections]);
+
+  const handleLoadConnection = useCallback(
+    (name: string) => {
+      const saved = savedConnections.find((item) => item.name === name);
+
+      if (!saved) {
+        return;
+      }
+
+      setConnection({
+        ...saved,
+        accessKeyId: "",
+        secretAccessKey: "",
+        sessionToken: "",
+      });
+    },
+    [savedConnections],
+  );
+
+  const handleDeleteConnection = useCallback(
+    (name: string) => {
+      const nextConnections = savedConnections.filter((item) => item.name !== name);
+
+      setSavedConnections(nextConnections);
+      saveSavedConnections(nextConnections);
+    },
+    [savedConnections],
+  );
+
   if (locked) {
     return (
       <div className="lock-screen">
@@ -399,9 +477,13 @@ export default function App() {
             loading={loading}
             error={error}
             connected={connected}
+            savedConnections={savedConnections}
             onChange={setConnection}
             onConnect={() => void scan()}
             onDisconnect={handleDisconnect}
+            onSaveConnection={handleSaveConnection}
+            onLoadConnection={handleLoadConnection}
+            onDeleteConnection={handleDeleteConnection}
           />
         )}
 
