@@ -3,7 +3,7 @@ name = "vector-watcher-backend"
 version = "0.1.0"
 description = "Local LanceDb backend for vector Watcher"
 authors = [
-    {name = "admin",email = "recursivezero@outlook.com"}
+    {name = "admin", email = "recursivezero@outlook.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.12"
@@ -17,12 +17,55 @@ dependencies = [
 [tool.poetry]
 package-mode = false
 
+[tool.poetry.group.dev.dependencies]
+ruff = ">=0.12.0,<0.13.0"
+pyright = ">=1.1.400,<1.2.0"
+pytest = ">=8.0.0,<9.0.0"
+httpx2 = ">=2.12.0,<3.0.0"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+extend-exclude = [
+    "__pycache__",
+    ".venv",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "W",
+    "I",
+    "UP",
+    "B",
+]
+ignore = [
+    "E501",
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pyright]
+include = [
+    "main.py",
+    "models",
+    "services",
+]
+exclude = [
+    "**/__pycache__",
+    ".venv",
+]
+typeCheckingMode = "standard"
+pythonVersion = "3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["."]
+addopts = "-ra"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-[dependency-groups]
-dev = [
-    "httpx2 (>=2.12.0,<3.0.0)"
-]

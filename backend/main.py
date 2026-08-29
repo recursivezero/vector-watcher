@@ -3,15 +3,14 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from models.lancedb import (
-	LanceConnection,
-	LanceRowDetailResponse,
-	LanceRowsResponse, 
-  LanceTableDetailsResponse, 
-  LanceTablesResponse,
-	SortColumn,
-	SortOrder
+    LanceConnection,
+    LanceRowDetailResponse,
+    LanceRowsResponse,
+    LanceTableDetailsResponse,
+    LanceTablesResponse,
+    SortColumn,
+    SortOrder,
 )
-
 from services.lancedb import (
     LanceDBError,
     LanceDBService,
@@ -77,6 +76,7 @@ def scan_connection(
             detail=str(error),
         ) from error
 
+
 @app.post(
     "/connections/table-details",
     response_model=LanceTableDetailsResponse,
@@ -112,6 +112,7 @@ def table_details(
             status_code=500,
             detail=str(error),
         ) from error
+
 
 @app.post(
     "/connections/rows",
@@ -163,6 +164,7 @@ def table_rows(
             status_code=500,
             detail=str(error),
         ) from error
+
 
 @app.post(
     "/connections/row",

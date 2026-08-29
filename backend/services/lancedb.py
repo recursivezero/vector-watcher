@@ -15,8 +15,8 @@ from models.lancedb import (
     LanceFilterState,
     LancePagination,
     LanceRowDetailResponse,
-    LanceRowSummary,
     LanceRowsResponse,
+    LanceRowSummary,
     LanceSchemaField,
     LanceSortState,
     LanceTableDetailsResponse,
@@ -29,22 +29,13 @@ from models.lancedb import (
     SortOrder,
 )
 
+_TABLE_NAME_PATTERN = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$")
 
-_TABLE_NAME_PATTERN = re.compile(
-    r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"
-)
+_AWS_BUCKET_PATTERN = re.compile(r"^[a-z0-9](?:[a-z0-9.-]{1,61})[a-z0-9]$")
 
-_AWS_BUCKET_PATTERN = re.compile(
-    r"^[a-z0-9](?:[a-z0-9.-]{1,61})[a-z0-9]$"
-)
+_R2_BUCKET_PATTERN = re.compile(r"^[a-z0-9](?:[a-z0-9-]{1,61})[a-z0-9]$")
 
-_R2_BUCKET_PATTERN = re.compile(
-    r"^[a-z0-9](?:[a-z0-9-]{1,61})[a-z0-9]$"
-)
-
-_IPV4_ADDRESS_PATTERN = re.compile(
-    r"^(?:\d{1,3}\.){3}\d{1,3}$"
-)
+_IPV4_ADDRESS_PATTERN = re.compile(r"^(?:\d{1,3}\.){3}\d{1,3}$")
 
 
 class LanceDBError(RuntimeError):
@@ -90,30 +81,22 @@ class LanceDBService:
         path = connection.path.strip()
 
         if "\x00" in path:
-            raise LanceDBValidationError(
-                "The LanceDB path contains an invalid character."
-            )
+            raise LanceDBValidationError("The LanceDB path contains an invalid character.")
 
         # Local LanceDB database.
         if connection.storage == "local":
             if not path:
-                raise LanceDBValidationError(
-                    "A local LanceDB path is required."
-                )
+                raise LanceDBValidationError("A local LanceDB path is required.")
 
             local_path = Path(path).expanduser()
 
             try:
                 resolved = local_path.resolve(strict=True)
             except (OSError, RuntimeError) as error:
-                raise LanceDBValidationError(
-                    "The local LanceDB path does not exist."
-                ) from error
+                raise LanceDBValidationError("The local LanceDB path does not exist.") from error
 
             if not resolved.is_dir():
-                raise LanceDBValidationError(
-                    "The local LanceDB path must be a directory."
-                )
+                raise LanceDBValidationError("The local LanceDB path must be a directory.")
 
             return str(resolved)
 
@@ -124,22 +107,14 @@ class LanceDBService:
             connection.storage,
             bucket,
         ):
-            provider = (
-                "Amazon S3"
-                if connection.storage == "s3"
-                else "Cloudflare R2"
-            )
+            provider = "Amazon S3" if connection.storage == "s3" else "Cloudflare R2"
 
-            raise LanceDBValidationError(
-                f"Enter a valid {provider} bucket name."
-            )
+            raise LanceDBValidationError(f"Enter a valid {provider} bucket name.")
 
         path = path.strip("/")
 
         if "\x00" in path:
-            raise LanceDBValidationError(
-                "The LanceDB path contains an invalid character."
-            )
+            raise LanceDBValidationError("The LanceDB path contains an invalid character.")
 
         if path:
             return f"s3://{bucket}/{path}"
@@ -157,15 +132,11 @@ class LanceDBService:
         region = connection.region.strip()
 
         if not access_key or not secret_key:
-            raise LanceDBValidationError(
-                "Access key and secret access key are required."
-            )
+            raise LanceDBValidationError("Access key and secret access key are required.")
 
         if connection.storage == "s3":
             if not region:
-                raise LanceDBValidationError(
-                    "AWS S3 region is required."
-                )
+                raise LanceDBValidationError("AWS S3 region is required.")
 
             options: dict[str, str] = {
                 "aws_access_key_id": access_key,
@@ -184,9 +155,7 @@ class LanceDBService:
         endpoint = connection.endpoint.strip()
 
         if not endpoint:
-            raise LanceDBValidationError(
-                "Cloudflare R2 endpoint is required."
-            )
+            raise LanceDBValidationError("Cloudflare R2 endpoint is required.")
 
         parsed_endpoint = urlsplit(endpoint)
 
@@ -199,9 +168,7 @@ class LanceDBService:
             or parsed_endpoint.query
             or parsed_endpoint.fragment
         ):
-            raise LanceDBValidationError(
-                "The Cloudflare R2 endpoint is invalid."
-            )
+            raise LanceDBValidationError("The Cloudflare R2 endpoint is invalid.")
 
         return {
             "endpoint": endpoint.rstrip("/"),
@@ -222,9 +189,7 @@ class LanceDBService:
         except LanceDBError:
             raise
         except Exception as error:
-            raise LanceDBUnavailable(
-                "Unable to connect to LanceDB."
-            ) from error
+            raise LanceDBUnavailable("Unable to connect to LanceDB.") from error
 
         return self._db
 
@@ -248,9 +213,7 @@ class LanceDBService:
             return sorted(str(name) for name in db.table_names())
 
         except Exception as error:
-            raise LanceDBUnavailable(
-                "Unable to list LanceDB tables."
-            ) from error
+            raise LanceDBUnavailable("Unable to list LanceDB tables.") from error
 
     def list_tables(self) -> LanceTablesResponse:
         source = LanceConnectionInfo(
@@ -261,10 +224,7 @@ class LanceDBService:
 
         return LanceTablesResponse(
             source=source,
-            tables=[
-                LanceTableItem(name=name)
-                for name in self._table_names()
-            ],
+            tables=[LanceTableItem(name=name) for name in self._table_names()],
         )
 
     def _validate_table_name(
@@ -272,9 +232,7 @@ class LanceDBService:
         table_name: str,
     ) -> None:
         if not _TABLE_NAME_PATTERN.fullmatch(table_name):
-            raise LanceDBValidationError(
-                "Invalid LanceDB table name."
-            )
+            raise LanceDBValidationError("Invalid LanceDB table name.")
 
     def open_table(
         self,
@@ -283,18 +241,14 @@ class LanceDBService:
         self._validate_table_name(table_name)
 
         if table_name not in self._table_names():
-            raise LanceDBTableNotFound(
-                "The selected LanceDB table was not found."
-            )
+            raise LanceDBTableNotFound("The selected LanceDB table was not found.")
 
         try:
             return self.connect().open_table(table_name)
         except LanceDBError:
             raise
         except Exception as error:
-            raise LanceDBUnavailable(
-                "Unable to open the selected LanceDB table."
-            ) from error
+            raise LanceDBUnavailable("Unable to open the selected LanceDB table.") from error
 
     @staticmethod
     def _vector_dimension(
@@ -334,14 +288,9 @@ class LanceDBService:
         vectors: list[LanceVectorColumn] = []
 
         for field in schema:
-            dimension = cls._vector_dimension(
-                field.type
-            )
+            dimension = cls._vector_dimension(field.type)
 
-            is_vector = (
-                dimension is not None
-                or field.name == "vector"
-            )
+            is_vector = dimension is not None or field.name == "vector"
 
             fields.append(
                 LanceSchemaField(
@@ -400,11 +349,7 @@ class LanceDBService:
                 {},
             )
 
-            configs = (
-                raw_configs()
-                if callable(raw_configs)
-                else raw_configs
-            )
+            configs = raw_configs() if callable(raw_configs) else raw_configs
         except Exception:
             configs = {}
 
@@ -431,11 +376,7 @@ class LanceDBService:
                     "__name__",
                     None,
                 )
-                or (
-                    function.__class__.__name__
-                    if function is not None
-                    else "unknown"
-                )
+                or (function.__class__.__name__ if function is not None else "unknown")
             )
 
             result.append(
@@ -474,33 +415,21 @@ class LanceDBService:
                 schema = schema()
 
         except Exception as error:
-            raise LanceDBUnavailable(
-                "Unable to read the table schema."
-            ) from error
+            raise LanceDBUnavailable("Unable to read the table schema.") from error
 
-        fields, vectors = self._schema_fields(
-            schema
-        )
+        fields, vectors = self._schema_fields(schema)
 
         try:
-            row_count = int(
-                table.count_rows()
-            )
+            row_count = int(table.count_rows())
         except Exception as error:
-            raise LanceDBUnavailable(
-                "Unable to count table rows."
-            ) from error
+            raise LanceDBUnavailable("Unable to count table rows.") from error
 
         return LanceTableDetailsResponse(
             name=table_name,
             row_count=row_count,
             schema=fields,
-            schema_metadata=self._schema_metadata(
-                schema
-            ),
-            embedding_functions=self._embedding_functions(
-                table
-            ),
+            schema_metadata=self._schema_metadata(schema),
+            embedding_functions=self._embedding_functions(table),
             vector_columns=vectors,
         )
 
@@ -515,14 +444,10 @@ class LanceDBService:
         sort_order: SortOrder = "asc",
     ) -> LanceRowsResponse:
         if page < 1:
-            raise LanceDBValidationError(
-                "Page must be greater than or equal to 1."
-            )
+            raise LanceDBValidationError("Page must be greater than or equal to 1.")
 
         if page_size < 1 or page_size > 100:
-            raise LanceDBValidationError(
-                "Page size must be between 1 and 100."
-            )
+            raise LanceDBValidationError("Page size must be between 1 and 100.")
 
         table = self.open_table(table_name)
 
@@ -540,13 +465,11 @@ class LanceDBService:
                     f"OR hash LIKE '{search_pattern}'"
                     ")"
                 )
-            
+
             if tag:
                 escaped_tag = tag.replace("'", "''")
 
-                query = query.where(
-                    f"tag = '{escaped_tag}'"
-                )
+                query = query.where(f"tag = '{escaped_tag}'")
 
             if sort_by:
                 allowed_sort_columns = {
@@ -557,14 +480,10 @@ class LanceDBService:
                 }
 
                 if sort_by not in allowed_sort_columns:
-                    raise LanceDBValidationError(
-                        "Invalid sort column."
-                    )
+                    raise LanceDBValidationError("Invalid sort column.")
 
                 if sort_order not in {"asc", "desc"}:
-                    raise LanceDBValidationError(
-                        "Invalid sort order."
-                    )
+                    raise LanceDBValidationError("Invalid sort order.")
 
                 query = query.order_by(
                     [
@@ -578,45 +497,29 @@ class LanceDBService:
             filtered_rows = query.to_list()
             total_rows = len(filtered_rows)
 
-            total_pages = (
-                (total_rows + page_size - 1) // page_size
-                if total_rows
-                else 0
-            )
+            total_pages = (total_rows + page_size - 1) // page_size if total_rows else 0
 
             if total_pages and page > total_pages:
-                raise LanceDBValidationError(
-                    "Requested page is outside the available range."
-                )
+                raise LanceDBValidationError("Requested page is outside the available range.")
 
             offset = (page - 1) * page_size
 
-            rows = filtered_rows[
-                offset : offset + page_size
-            ]
+            rows = filtered_rows[offset : offset + page_size]
 
         except LanceDBValidationError:
             raise
 
         except Exception as error:
-            print(
-                f"Unable to read table rows: {error!r}"
-            )
+            print(f"Unable to read table rows: {error!r}")
 
-            raise LanceDBUnavailable(
-                "Unable to read table rows."
-            ) from error
+            raise LanceDBUnavailable("Unable to read table rows.") from error
 
         result: list[LanceRowSummary] = []
 
         for index, row in enumerate(rows):
             vector = row.get("vector")
 
-            vector_length = (
-                len(vector)
-                if vector is not None
-                else 0
-            )
+            vector_length = len(vector) if vector is not None else 0
 
             result.append(
                 LanceRowSummary(
@@ -653,32 +556,22 @@ class LanceDBService:
         )
 
     def get_row(
-    self,
-    table_name: str,
-    row_id: int,
-) -> LanceRowDetailResponse:
+        self,
+        table_name: str,
+        row_id: int,
+    ) -> LanceRowDetailResponse:
         if row_id < 0:
-            raise LanceDBValidationError(
-                "Row ID must be greater than or equal to 0."
-            )
+            raise LanceDBValidationError("Row ID must be greater than or equal to 0.")
 
         table = self.open_table(table_name)
 
         try:
-            rows = (
-                table.to_arrow()
-                .slice(row_id, 1)
-                .to_pylist()
-            )
+            rows = table.to_arrow().slice(row_id, 1).to_pylist()
         except Exception as error:
-            raise LanceDBUnavailable(
-                "Unable to read the requested row."
-            ) from error
+            raise LanceDBUnavailable("Unable to read the requested row.") from error
 
         if not rows:
-            raise LanceDBTableNotFound(
-                "The requested row was not found."
-            )
+            raise LanceDBTableNotFound("The requested row was not found.")
 
         row = rows[0]
         vector = row.get("vector")

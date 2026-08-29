@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "vector-watcher",
+  "productName": "Vector Watcher",
   "version": "0.1.0",
   "identifier": "com.vectorwatcher.app",
   "build": {
@@ -12,9 +12,11 @@
   "app": {
     "windows": [
       {
-        "title": "vector-watcher",
-        "width": 800,
-        "height": 600
+        "title": "Vector Watcher",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 900,
+        "minHeight": 600
       }
     ],
     "security": {

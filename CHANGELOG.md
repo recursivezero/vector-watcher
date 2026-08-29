@@ -16,3 +16,8 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 - Update UI
 - Search enabled
 - Save connection feature
+
+## [0.1.2] - 29-08-2026
+
+- Added credentials save using vault
+- Added lint test tooling
