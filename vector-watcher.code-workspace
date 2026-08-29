@@ -43,6 +43,7 @@
 		"files.exclude": {
 			"**/__pycache__": true,
 			"**/.venv": true
-		}
+		},
+		"git.branchPrefix": "feature/TZV-26000X"
 	}
 }
