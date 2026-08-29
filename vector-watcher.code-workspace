@@ -45,17 +45,6 @@
 			"**/__pycache__": true,
 			"**/.venv": true
 		},
-		"breadcrumbs.showBooleans": false,
-		"breadcrumbs.showClasses": false,
-		"breadcrumbs.showConstants": false,
-		"breadcrumbs.showConstructors": false,
-		"breadcrumbs.showEnumMembers": false,
-		"breadcrumbs.showEnums": false,
-		"breadcrumbs.showEvents": false,
-		"breadcrumbs.showFields": false,
-		"breadcrumbs.showInterfaces": false,
-		"breadcrumbs.showObjects": false,
-		"breadcrumbs.showOperators": false,
-		"breadcrumbs.showPackages": false
+		"git.branchPrefix": "feature/TZV-26000X"
 	}
 }
