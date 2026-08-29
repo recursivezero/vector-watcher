@@ -52,7 +52,7 @@ export default function LanceFilterBar({
       </label>
 
       <form className="lance-admin-filter__tag" onSubmit={submit}>
-        <label className="lance-admin-field">
+        <label className="lance-admin-field lance-admin-filter__tag-input">
           <span>Exact tag filter</span>
           <input
             type="search"
@@ -64,23 +64,31 @@ export default function LanceFilterBar({
           />
         </label>
 
-        <button type="submit" className="lance-admin-button" disabled={loading}>
-          Apply
-        </button>
+        <div className="lance-admin-filter__tag-actions">
+          <span className="lance-admin-filter__action-label" aria-hidden="true">
+            Action
+          </span>
 
-        {(appliedTag || tagInput) && (
-          <button
-            type="button"
-            className="lance-admin-button lance-admin-button--quiet"
-            onClick={() => {
-              setTagInput("");
-              onTagApply("");
-            }}
-            disabled={loading}
-          >
-            Clear
-          </button>
-        )}
+          <div className="lance-admin-filter__tag-buttons">
+            <button type="submit" className="lance-admin-button" disabled={loading}>
+              Apply
+            </button>
+
+            {(appliedTag || tagInput) && (
+              <button
+                type="button"
+                className="lance-admin-button lance-admin-button--quiet"
+                onClick={() => {
+                  setTagInput("");
+                  onTagApply("");
+                }}
+                disabled={loading}
+              >
+                Clear
+              </button>
+            )}
+          </div>
+        </div>
       </form>
 
       <label className="lance-admin-field">

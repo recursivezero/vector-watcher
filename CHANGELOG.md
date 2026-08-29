@@ -14,3 +14,5 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 - Added Local database connection
 - fix sorting and filtering feature
 - Update UI
+- Search enabled
+- Save connection feature

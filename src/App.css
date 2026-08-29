@@ -345,6 +345,34 @@ code {
   font-size: 12px;
 }
 
+.secret-input .credential-mask {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  right: 62px;
+  bottom: 1px;
+  display: flex;
+  align-items: center;
+  padding: 9px 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+  font-family: monospace;
+  letter-spacing: 0.02em;
+  color: #17202a;
+  background: white;
+  border-radius: 7px;
+}
+
+.secret-input input.credential-hidden {
+  color: transparent;
+  caret-color: transparent;
+}
+
+.secret-input input.credential-hidden::selection {
+  background: transparent;
+}
+
 .local-source-note {
   padding: 16px;
   border: 1px dashed #cdd4dc;
@@ -597,7 +625,7 @@ code {
 
 .lance-admin-filter {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) 180px 160px 130px;
+  grid-template-columns: minmax(240px, 1.5fr) minmax(280px, 1.2fr) minmax(160px, 0.8fr) minmax(140px, 0.7fr) minmax(130px, 0.6fr);
   gap: 12px;
   align-items: end;
 }
@@ -605,13 +633,21 @@ code {
 .lance-admin-filter__tag {
   display: flex;
   gap: 8px;
-  align-items: end;
+  align-items: flex-end;
+  min-width: 0;
+  align-self: end;
+}
+
+.lance-admin-filter__tag .lance-admin-field {
+  flex: 1;
+  min-width: 0;
 }
 
 .lance-admin-field {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
 }
 
 .lance-admin-field span {
@@ -620,24 +656,20 @@ code {
   font-weight: 700;
 }
 
+
+
 .lance-admin-field input,
 .lance-admin-field select {
+  width: 100%;
+  min-width: 0;
+  height: 38px;
   min-height: 38px;
-  padding: 7px 10px;
+  padding: 0 7px;
   border: 1px solid #d5dbe2;
   border-radius: 7px;
   background: white;
-}
-
-.lance-admin-button {
-  min-height: 38px;
-  padding: 0 12px;
-  border: 1px solid #d5dbe2;
-  border-radius: 7px;
-  background: white;
-  color: #374151;
-  font-size: 12px;
-  font-weight: 700;
+  box-sizing: border-box;
+  line-height: normal;
 }
 
 .lance-admin-button--quiet {
@@ -647,6 +679,49 @@ code {
 
 .lance-admin-button--secondary {
   background: #f8f9fa;
+}
+
+.lance-admin-filter__tag-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.lance-admin-filter__action-label {
+  color: #707b86;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.lance-admin-filter__tag-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  height: 38px;
+}
+
+@media (max-width: 1200px) {
+  .lance-admin-filter {
+    grid-template-columns: minmax(240px, 1fr) minmax(280px, 1fr) 160px;
+  }
+}
+
+@media (max-width: 850px) {
+  .lance-admin-filter {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .lance-admin-filter {
+    grid-template-columns: 1fr;
+  }
+
+  .lance-admin-filter__tag {
+    flex-wrap: wrap;
+  }
 }
 
 .lance-admin-table-scroll {
@@ -960,6 +1035,59 @@ code {
   flex: 0 0 auto;
   min-width: 82px;
   white-space: nowrap;
+}
+
+.credential-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(20, 27, 34, 0.35);
+}
+
+.credential-modal {
+  width: min(440px, 100%);
+  padding: 24px;
+  border: 1px solid #d5dbe2;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 20px 60px rgba(20, 27, 34, 0.18);
+}
+
+.credential-modal__header {
+  margin-bottom: 20px;
+}
+
+.credential-modal__header h2 {
+  margin: 4px 0 8px;
+}
+
+.credential-modal__header p {
+  margin: 0;
+  color: #68727d;
+  line-height: 1.5;
+}
+
+.credential-modal__error {
+  margin: 8px 0 0;
+  color: #b42318;
+  font-size: 13px;
+}
+
+.credential-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.credential-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 @media (max-width: 1000px) {

@@ -16,12 +16,13 @@ import ConnectionTab from "@/components/ConnectionTab";
 import DatabaseTab from "@/components/DatabaseTab";
 import ExplorerTab from "@/components/ExplorerTab";
 
+import { deleteCredentials, isCredentialVaultInitialized, loadCredentials, saveCredentials, unlockCredentials } from "@/lib/credentials";
 import { DEFAULT_EXPLORER_QUERY, type ExplorerQueryState, writeTextToClipboard } from "@/lib/explorerUtils";
 
 type AppTab = "connection" | "database" | "explorer";
 
 const EMPTY_CONNECTION: LanceConnectionState = {
-  name: "Threadzip R2",
+  name: "",
   storage: "r2",
   path: "table",
   bucket: "",
@@ -65,6 +66,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<AppTab>("connection");
   const [connection, setConnection] = useState<LanceConnectionState>(EMPTY_CONNECTION);
   const [savedConnections, setSavedConnections] = useState<SavedConnection[]>(() => getSavedConnections());
+  const [selectedConnectionName, setSelectedConnectionName] = useState<string | null>(null);
   const [connected, setConnected] = useState(false);
   const [tables, setTables] = useState<LanceTableItem[]>([]);
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
@@ -82,10 +84,32 @@ export default function App() {
   const [vectorError, setVectorError] = useState<string | null>(null);
   const [vectorTrigger, setVectorTrigger] = useState<HTMLButtonElement | null>(null);
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
+  const [credentialUnlocking, setCredentialUnlocking] = useState(false);
+
+  type CredentialAction =
+    | {
+        type: "save";
+      }
+    | {
+        type: "load";
+        name: string;
+      }
+    | {
+        type: "delete";
+        name: string;
+      };
+
+  const [credentialsUnlocked, setCredentialsUnlocked] = useState(false);
+  const [credentialPassword, setCredentialPassword] = useState("");
+  const [credentialPasswordConfirm, setCredentialPasswordConfirm] = useState("");
+  const [credentialModalOpen, setCredentialModalOpen] = useState(false);
+  const [credentialModalError, setCredentialModalError] = useState<string | null>(null);
+  const [pendingCredentialAction, setPendingCredentialAction] = useState<CredentialAction | null>(null);
 
   const source: LanceDataSource = useMemo(
     () => ({
       name: connection.name,
+      account_id: connection.accountId,
       storage: connection.storage,
       path: connection.path,
       bucket: connection.bucket,
@@ -355,53 +379,278 @@ export default function App() {
     }
   }, [connected]);
 
-  const handleSaveConnection = useCallback(() => {
-    const savedConnection: SavedConnection = {
-      name: connection.name.trim(),
-      storage: connection.storage,
-      path: connection.path,
-      bucket: connection.bucket,
-      endpoint: connection.endpoint,
-      accountId: connection.accountId,
-      region: connection.region,
-    };
+  const handleNewConnection = useCallback(() => {
+    setConnection(EMPTY_CONNECTION);
+    setSelectedConnectionName(null);
+    setError(null);
+  }, []);
 
-    if (!savedConnection.name) {
+  const runCredentialAction = useCallback(
+    async (action: CredentialAction) => {
+      if (action.type === "save") {
+        const connectionName = connection.name.trim();
+
+        if (!connectionName) {
+          throw new Error("Enter a connection name.");
+        }
+
+        await saveCredentials(connectionName, {
+          accessKeyId: connection.accessKeyId,
+          secretAccessKey: connection.secretAccessKey,
+          sessionToken: connection.sessionToken,
+        });
+
+        const savedConnection: SavedConnection = {
+          name: connectionName,
+          storage: connection.storage,
+          path: connection.path,
+          bucket: connection.bucket,
+          endpoint: connection.endpoint,
+          accountId: connection.accountId,
+          region: connection.region,
+        };
+
+        const nextConnections = [...savedConnections.filter((item) => item.name !== connectionName), savedConnection];
+
+        saveSavedConnections(nextConnections);
+
+        setSavedConnections(nextConnections);
+        setSelectedConnectionName(connectionName);
+
+        return;
+      }
+
+      if (action.type === "load") {
+        const saved = savedConnections.find((item) => item.name === action.name);
+
+        if (!saved) {
+          return;
+        }
+
+        const credentials = await loadCredentials(saved.name);
+
+        if (!credentials) {
+          throw new Error(`No credentials were saved for "${saved.name}".`);
+        }
+
+        setConnection({
+          ...saved,
+          accessKeyId: credentials.accessKeyId,
+          secretAccessKey: credentials.secretAccessKey,
+          sessionToken: credentials.sessionToken,
+        });
+        setSelectedConnectionName(saved.name);
+
+        return;
+      }
+
+      await deleteCredentials(action.name);
+
+      const nextConnections = savedConnections.filter((item) => item.name !== action.name);
+
+      setSavedConnections(nextConnections);
+      saveSavedConnections(nextConnections);
+    },
+    [connection, savedConnections],
+  );
+
+  const handleSaveConnection = useCallback(async () => {
+    const name = connection.name.trim();
+
+    if (!name) {
       return;
     }
 
-    const nextConnections = [...savedConnections.filter((item) => item.name !== savedConnection.name), savedConnection];
+    if (connection.storage !== "local") {
+      if (!connection.accessKeyId.trim()) {
+        setError("Enter an Access Key ID.");
+        return;
+      }
 
-    setSavedConnections(nextConnections);
-    saveSavedConnections(nextConnections);
-  }, [connection, savedConnections]);
+      if (!connection.secretAccessKey.trim()) {
+        setError("Enter a Secret Access Key.");
+        return;
+      }
+    }
+
+    if (!isCredentialVaultInitialized() || !credentialsUnlocked) {
+      setPendingCredentialAction({
+        type: "save",
+      });
+
+      setCredentialPassword("");
+      setCredentialPasswordConfirm("");
+      setCredentialModalError(null);
+      setCredentialModalOpen(true);
+
+      return;
+    }
+
+    try {
+      await runCredentialAction({
+        type: "save",
+      });
+
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to save connection.");
+    }
+  }, [connection.name, credentialsUnlocked, runCredentialAction]);
 
   const handleLoadConnection = useCallback(
-    (name: string) => {
+    async (name: string) => {
       const saved = savedConnections.find((item) => item.name === name);
 
       if (!saved) {
         return;
       }
 
-      setConnection({
-        ...saved,
-        accessKeyId: "",
-        secretAccessKey: "",
-        sessionToken: "",
-      });
+      if (!isCredentialVaultInitialized()) {
+        setConnection({
+          ...saved,
+          accessKeyId: "",
+          secretAccessKey: "",
+          sessionToken: "",
+        });
+
+        setError("Enter the credentials for this connection, then click Save Connection to create the secure credential vault.");
+
+        return;
+      }
+
+      if (!credentialsUnlocked) {
+        setPendingCredentialAction({
+          type: "load",
+          name,
+        });
+
+        setCredentialPassword("");
+        setCredentialPasswordConfirm("");
+        setCredentialModalError(null);
+        setCredentialModalOpen(true);
+
+        return;
+      }
+
+      try {
+        await runCredentialAction({
+          type: "load",
+          name,
+        });
+
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unable to load connection.");
+      }
     },
-    [savedConnections],
+    [credentialsUnlocked, runCredentialAction, savedConnections],
   );
 
   const handleDeleteConnection = useCallback(
-    (name: string) => {
-      const nextConnections = savedConnections.filter((item) => item.name !== name);
+    async (name: string) => {
+      const saved = savedConnections.find((item) => item.name === name);
 
-      setSavedConnections(nextConnections);
-      saveSavedConnections(nextConnections);
+      if (!saved) {
+        return;
+      }
+
+      if (!isCredentialVaultInitialized()) {
+        const nextConnections = savedConnections.filter((item) => item.name !== name);
+
+        setSavedConnections(nextConnections);
+        saveSavedConnections(nextConnections);
+        setError(null);
+
+        if (connection.name === name) {
+          setConnection(EMPTY_CONNECTION);
+        }
+
+        return;
+      }
+
+      if (!credentialsUnlocked) {
+        setPendingCredentialAction({
+          type: "delete",
+          name,
+        });
+
+        setCredentialPassword("");
+        setCredentialPasswordConfirm("");
+        setCredentialModalError(null);
+        setCredentialModalOpen(true);
+
+        return;
+      }
+
+      try {
+        await runCredentialAction({
+          type: "delete",
+          name,
+        });
+
+        if (connection.name === name) {
+          setConnection(EMPTY_CONNECTION);
+        }
+
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Unable to delete connection.");
+      }
     },
-    [savedConnections],
+    [connection.name, credentialsUnlocked, runCredentialAction, savedConnections],
+  );
+
+  const handleCredentialUnlock = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      if (credentialUnlocking) {
+        return;
+      }
+
+      if (!credentialPassword) {
+        setCredentialModalError("Enter a master password.");
+        return;
+      }
+
+      if (!isCredentialVaultInitialized() && credentialPassword !== credentialPasswordConfirm) {
+        setCredentialModalError("The passwords do not match.");
+        return;
+      }
+
+      try {
+        setCredentialUnlocking(true);
+        setCredentialModalError(null);
+
+        await unlockCredentials(credentialPassword);
+
+        const action = pendingCredentialAction;
+
+        if (action) {
+          await runCredentialAction(action);
+        }
+
+        setCredentialsUnlocked(true);
+        setPendingCredentialAction(null);
+        setCredentialPassword("");
+        setCredentialPasswordConfirm("");
+        setCredentialModalOpen(false);
+        setError(null);
+      } catch (err) {
+        console.error("Credential vault error:", err);
+
+        const message = err instanceof Error ? err.message : String(err);
+
+        if (message.includes("BadFileKey") || message.includes("failed to decode/decrypt")) {
+          setCredentialModalError("Incorrect master password. Please try again.");
+        } else {
+          setCredentialModalError("Unable to unlock the credential vault. Please try again.");
+        }
+      } finally {
+        setCredentialUnlocking(false);
+      }
+    },
+    [credentialPassword, credentialPasswordConfirm, credentialUnlocking, pendingCredentialAction, runCredentialAction],
   );
 
   if (locked) {
@@ -422,6 +671,74 @@ export default function App() {
 
   return (
     <div className="app-shell">
+      {credentialModalOpen && (
+        <div className="credential-modal-backdrop">
+          <div className="credential-modal" role="dialog" aria-modal="true" aria-labelledby="credential-modal-title">
+            <div className="credential-modal__header">
+              <span className="eyebrow">Secure credentials</span>
+
+              <h2 id="credential-modal-title">{!isCredentialVaultInitialized() ? "Create credential vault" : "Unlock credential vault"}</h2>
+
+              <p>
+                {!isCredentialVaultInitialized()
+                  ? "Create a master password to protect your saved connection credentials."
+                  : "Enter your master password to access saved connection credentials."}
+              </p>
+            </div>
+
+            <form onSubmit={handleCredentialUnlock}>
+              <label className="field">
+                <span>Master password</span>
+
+                <input
+                  type="password"
+                  value={credentialPassword}
+                  onChange={(event) => setCredentialPassword(event.target.value)}
+                  autoFocus
+                  autoComplete="new-password"
+                  disabled={loading}
+                />
+              </label>
+
+              {!isCredentialVaultInitialized() && (
+                <label className="field">
+                  <span>Confirm password</span>
+
+                  <input
+                    type="password"
+                    value={credentialPasswordConfirm}
+                    onChange={(event) => setCredentialPasswordConfirm(event.target.value)}
+                    autoComplete="new-password"
+                    disabled={loading}
+                  />
+                </label>
+              )}
+
+              {credentialModalError && <p className="credential-modal__error">{credentialModalError}</p>}
+
+              <div className="credential-modal__actions">
+                <button
+                  type="button"
+                  className="button"
+                  onClick={() => {
+                    setCredentialModalOpen(false);
+                    setCredentialPassword("");
+                    setCredentialPasswordConfirm("");
+                    setPendingCredentialAction(null);
+                    setCredentialModalError(null);
+                  }}
+                >
+                  Cancel
+                </button>
+
+                <button type="submit" className="button button-primary" disabled={credentialUnlocking}>
+                  {credentialUnlocking ? "Unlocking..." : isCredentialVaultInitialized() ? "Unlock" : "Create vault"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       <header className="app-header">
         <div className="brand">
           <div className="brand-mark">◈</div>
@@ -480,10 +797,12 @@ export default function App() {
             savedConnections={savedConnections}
             onChange={setConnection}
             onConnect={() => void scan()}
+            selectedConnectionName={selectedConnectionName}
             onDisconnect={handleDisconnect}
             onSaveConnection={handleSaveConnection}
             onLoadConnection={handleLoadConnection}
             onDeleteConnection={handleDeleteConnection}
+            onNewConnection={handleNewConnection}
           />
         )}
 

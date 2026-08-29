@@ -1,6 +1,6 @@
 import { LANCE_STORAGE, type LanceConnectionState, type LanceStorageType } from "@/api/lancedbAdmin";
 import { open } from "@tauri-apps/plugin-dialog";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type SavedConnection = Omit<LanceConnectionState, "accessKeyId" | "secretAccessKey" | "sessionToken">;
 
@@ -10,12 +10,14 @@ interface ConnectionTabProps {
   error: string | null;
   connected: boolean;
   savedConnections: SavedConnection[];
+  selectedConnectionName: string | null;
   onChange: (connection: LanceConnectionState) => void;
   onConnect: () => void;
   onDisconnect: () => void;
   onSaveConnection: () => void;
   onLoadConnection: (name: string) => void;
   onDeleteConnection: (name: string) => void;
+  onNewConnection: () => void;
 }
 
 const STORAGE_LABELS: Record<LanceStorageType, string> = {
@@ -37,6 +39,18 @@ const EMPTY_CONNECTION: LanceConnectionState = {
   region: "auto",
 };
 
+function maskCredential(value: string): string {
+  if (!value) {
+    return "";
+  }
+
+  if (value.length <= 8) {
+    return "•".repeat(value.length);
+  }
+
+  return `${value.slice(0, 4)}${"•".repeat(value.length - 8)}${value.slice(-4)}`;
+}
+
 export default function ConnectionTab({
   connection,
   loading,
@@ -49,8 +63,25 @@ export default function ConnectionTab({
   onSaveConnection,
   onLoadConnection,
   onDeleteConnection,
+  onNewConnection,
+  selectedConnectionName,
 }: ConnectionTabProps) {
-  const [showSecret, setShowSecret] = useState(false);
+  const [showAccessKey, setShowAccessKey] = useState(false);
+  const [showSecretKey, setShowSecretKey] = useState(false);
+
+  useEffect(() => {
+    if (!showSecretKey) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setShowSecretKey(false);
+    }, 5000);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [showSecretKey]);
 
   const storageLabel = STORAGE_LABELS[connection.storage];
 
@@ -101,11 +132,6 @@ export default function ConnectionTab({
     }
   };
 
-  const handleNewConnection = () => {
-    onChange(EMPTY_CONNECTION);
-    setShowSecret(false);
-  };
-
   const handleDeleteConnection = () => {
     const name = connection.name.trim();
 
@@ -116,6 +142,41 @@ export default function ConnectionTab({
     onDeleteConnection(name);
   };
 
+  const onStorageChange = (event: import("react").ChangeEvent<HTMLSelectElement, HTMLSelectElement>): void => {
+    const storage = event.target.value as LanceStorageType;
+
+    if (storage === LANCE_STORAGE.R2) {
+      update({
+        storage,
+        endpoint: "",
+        region: "auto",
+        accountId: "",
+      });
+
+      return;
+    }
+
+    if (storage === LANCE_STORAGE.S3) {
+      update({
+        storage,
+        accountId: "",
+        region: "",
+      });
+
+      return;
+    }
+
+    update({
+      storage,
+      bucket: "",
+      accountId: "",
+      endpoint: "",
+      accessKeyId: "",
+      secretAccessKey: "",
+      sessionToken: "",
+      region: "",
+    });
+  };
   return (
     <div className="connection-page">
       <div className="page-heading">
@@ -147,11 +208,14 @@ export default function ConnectionTab({
 
                 <div className="field-with-action">
                   <select
-                    value=""
+                    value={selectedConnectionName ?? ""}
                     onChange={(event) => {
-                      if (event.target.value) {
-                        onLoadConnection(event.target.value);
+                      const name = event.currentTarget.value;
+                      if (!name) {
+                        return;
                       }
+                      void onLoadConnection(name);
+                      event.currentTarget.value = "";
                     }}
                     disabled={loading}
                   >
@@ -164,7 +228,7 @@ export default function ConnectionTab({
                     ))}
                   </select>
 
-                  <button type="button" className="button button-secondary" onClick={handleNewConnection} disabled={loading}>
+                  <button type="button" className="button button-secondary" onClick={onNewConnection} disabled={loading}>
                     New
                   </button>
                 </div>
@@ -189,7 +253,7 @@ export default function ConnectionTab({
                 />
 
                 <button type="button" className="button button-secondary" onClick={onSaveConnection} disabled={loading || !canSave}>
-                  Save
+                  {selectedConnectionName ? "Update Connection" : "Save Connection"}
                 </button>
 
                 {savedConnections.some((saved) => saved.name === connection.name.trim()) && (
@@ -203,15 +267,7 @@ export default function ConnectionTab({
             <label className="field field-full">
               <span>Storage provider</span>
 
-              <select
-                value={connection.storage}
-                onChange={(event) =>
-                  update({
-                    storage: event.target.value as LanceStorageType,
-                  })
-                }
-                disabled={loading}
-              >
+              <select value={connection.storage} onChange={onStorageChange} disabled={loading}>
                 <option value={LANCE_STORAGE.R2}>Cloudflare R2</option>
                 <option value={LANCE_STORAGE.S3}>Amazon S3</option>
                 <option value={LANCE_STORAGE.LOCAL}>Local LanceDB</option>
@@ -315,16 +371,30 @@ export default function ConnectionTab({
                 <label className="field">
                   <span>Access Key ID</span>
 
-                  <input
-                    value={connection.accessKeyId}
-                    onChange={(event) =>
-                      update({
-                        accessKeyId: event.target.value,
-                      })
-                    }
-                    autoComplete="off"
-                    disabled={loading}
-                  />
+                  <div className="secret-input">
+                    <input
+                      type="text"
+                      value={connection.accessKeyId}
+                      onChange={(event) =>
+                        update({
+                          accessKeyId: event.target.value,
+                        })
+                      }
+                      autoComplete="off"
+                      disabled={loading}
+                      className={!showAccessKey ? "credential-hidden" : ""}
+                    />
+
+                    {!showAccessKey && connection.accessKeyId && (
+                      <span className="credential-mask" aria-hidden="true">
+                        {maskCredential(connection.accessKeyId)}
+                      </span>
+                    )}
+
+                    <button type="button" onClick={() => setShowAccessKey((value) => !value)} disabled={loading}>
+                      {showAccessKey ? "Hide" : "Show"}
+                    </button>
+                  </div>
                 </label>
 
                 <label className="field">
@@ -332,7 +402,7 @@ export default function ConnectionTab({
 
                   <div className="secret-input">
                     <input
-                      type={showSecret ? "text" : "password"}
+                      type="text"
                       value={connection.secretAccessKey}
                       onChange={(event) =>
                         update({
@@ -341,10 +411,17 @@ export default function ConnectionTab({
                       }
                       autoComplete="off"
                       disabled={loading}
+                      className={!showSecretKey ? "credential-hidden" : ""}
                     />
 
-                    <button type="button" onClick={() => setShowSecret((value) => !value)} disabled={loading}>
-                      {showSecret ? "Hide" : "Show"}
+                    {!showSecretKey && connection.secretAccessKey && (
+                      <span className="credential-mask" aria-hidden="true">
+                        {maskCredential(connection.secretAccessKey)}
+                      </span>
+                    )}
+
+                    <button type="button" onClick={() => setShowSecretKey((value) => !value)} disabled={loading}>
+                      {showSecretKey ? "Hide" : "Show"}
                     </button>
                   </div>
                 </label>
@@ -422,8 +499,8 @@ export default function ConnectionTab({
 
           <div className="surface security-card">
             <span className="eyebrow">Security</span>
-            <h3>Credentials are session-only</h3>
-            <p>Storage credentials are not persisted with saved connection settings.</p>
+            <h3>Credentials are securely stored</h3>
+            <p>Storage credentials are stored separately from connection settings and protected by your credential vault password.</p>
           </div>
         </aside>
       </div>

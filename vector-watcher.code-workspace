@@ -35,6 +35,7 @@
 		"peacock.color": "#42b883",
 		"cSpell.words": [
 			"cloudflarestorage",
+			"serde",
 			"tauri"
 		],
 		"folder-color.pathColors": [],
@@ -43,6 +44,18 @@
 		"files.exclude": {
 			"**/__pycache__": true,
 			"**/.venv": true
-		}
+		},
+		"breadcrumbs.showBooleans": false,
+		"breadcrumbs.showClasses": false,
+		"breadcrumbs.showConstants": false,
+		"breadcrumbs.showConstructors": false,
+		"breadcrumbs.showEnumMembers": false,
+		"breadcrumbs.showEnums": false,
+		"breadcrumbs.showEvents": false,
+		"breadcrumbs.showFields": false,
+		"breadcrumbs.showInterfaces": false,
+		"breadcrumbs.showObjects": false,
+		"breadcrumbs.showOperators": false,
+		"breadcrumbs.showPackages": false
 	}
 }
