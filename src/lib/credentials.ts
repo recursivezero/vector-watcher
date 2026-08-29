@@ -179,7 +179,6 @@ export async function deleteCredentials(connectionName: string): Promise<void> {
     throw new Error("Credential vault is locked.");
   }
 
-  const deleteStart = performance.now();
   const client = requireCredentialClient();
   const store = client.getStore();
   const name = connectionName.trim();
@@ -191,20 +190,27 @@ export async function deleteCredentials(connectionName: string): Promise<void> {
   const prefix = `connection/${name}`;
 
   console.log(`[Stronghold] Deleting credentials for "${name}"`);
+  console.log(`[Stronghold] Prefix: ${prefix}`);
 
-  await Promise.all([
-    store.remove(`${prefix}/accessKeyId`),
-    store.remove(`${prefix}/secretAccessKey`),
-    store.remove(`${prefix}/sessionToken`),
-  ]);
+  try {
+    console.log("[Stronghold] Removing accessKeyId");
+    await store.remove(`${prefix}/accessKeyId`);
 
-  const vaultSaveStart = performance.now();
-  await stronghold.save();
+    console.log("[Stronghold] Removing secretAccessKey");
+    await store.remove(`${prefix}/secretAccessKey`);
 
-  console.log(`[Stronghold] Vault save after delete: ${(performance.now() - vaultSaveStart).toFixed(0)}ms`);
-  console.log(`[Stronghold] Delete credentials TOTAL: ${(performance.now() - deleteStart).toFixed(0)}ms`);
+    console.log("[Stronghold] Removing sessionToken");
+    await store.remove(`${prefix}/sessionToken`);
+
+    console.log("[Stronghold] Saving vault");
+    await stronghold.save();
+
+    console.log(`[Stronghold] Credentials deleted successfully for "${name}"`);
+  } catch (error) {
+    console.error(`[Stronghold] Failed to delete credentials for "${name}":`, error);
+    throw error;
+  }
 }
-
 export async function lockCredentials(): Promise<void> {
   console.log("[Stronghold] Locking credential vault");
 

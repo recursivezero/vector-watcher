@@ -85,6 +85,7 @@ export default function App() {
   const [vectorTrigger, setVectorTrigger] = useState<HTMLButtonElement | null>(null);
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
   const [credentialUnlocking, setCredentialUnlocking] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   type CredentialAction =
     | {
@@ -379,6 +380,14 @@ export default function App() {
     }
   }, [connected]);
 
+  const showToast = useCallback((message: string) => {
+    setToastMessage(message);
+
+    window.setTimeout(() => {
+      setToastMessage(null);
+    }, 2500);
+  }, []);
+
   const handleNewConnection = useCallback(() => {
     setConnection(EMPTY_CONNECTION);
     setSelectedConnectionName(null);
@@ -393,6 +402,7 @@ export default function App() {
         if (!connectionName) {
           throw new Error("Enter a connection name.");
         }
+        const isUpdate = savedConnections.some((item) => item.name === connectionName);
 
         await saveCredentials(connectionName, {
           accessKeyId: connection.accessKeyId,
@@ -417,7 +427,7 @@ export default function App() {
         setSavedConnections(nextConnections);
         setSelectedConnectionName(connectionName);
 
-        return;
+        return isUpdate ? "updated" : "saved";
       }
 
       if (action.type === "load") {
@@ -487,15 +497,16 @@ export default function App() {
     }
 
     try {
-      await runCredentialAction({
+      const result = await runCredentialAction({
         type: "save",
       });
 
       setError(null);
+      showToast(`Connection ${result === "updated" ? "updated" : "saved"} successfully`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to save connection.");
     }
-  }, [connection.name, credentialsUnlocked, runCredentialAction]);
+  }, [connection.name, credentialsUnlocked, runCredentialAction, showToast]);
 
   const handleLoadConnection = useCallback(
     async (name: string) => {
@@ -546,6 +557,60 @@ export default function App() {
     [credentialsUnlocked, runCredentialAction, savedConnections],
   );
 
+  //const handleDeleteConnection = useCallback(
+  //  async (name: string) => {
+  //    const saved = savedConnections.find((item) => item.name === name);
+
+  //    if (!saved) {
+  //      return;
+  //    }
+
+  //    if (!isCredentialVaultInitialized()) {
+  //      const nextConnections = savedConnections.filter((item) => item.name !== name);
+
+  //      setSavedConnections(nextConnections);
+  //      saveSavedConnections(nextConnections);
+  //      setError(null);
+
+  //      if (connection.name === name) {
+  //        setConnection(EMPTY_CONNECTION);
+  //      }
+
+  //      return;
+  //    }
+
+  //    if (!credentialsUnlocked) {
+  //      setPendingCredentialAction({
+  //        type: "delete",
+  //        name,
+  //      });
+
+  //      setCredentialPassword("");
+  //      setCredentialPasswordConfirm("");
+  //      setCredentialModalError(null);
+  //      setCredentialModalOpen(true);
+
+  //      return;
+  //    }
+
+  //    try {
+  //      await runCredentialAction({
+  //        type: "delete",
+  //        name,
+  //      });
+
+  //      if (connection.name === name) {
+  //        setConnection(EMPTY_CONNECTION);
+  //      }
+
+  //      setError(null);
+  //    } catch (err) {
+  //      setError(err instanceof Error ? err.message : "Unable to delete connection.");
+  //    }
+  //  },
+  //  [connection.name, credentialsUnlocked, runCredentialAction, savedConnections],
+  //);
+
   const handleDeleteConnection = useCallback(
     async (name: string) => {
       const saved = savedConnections.find((item) => item.name === name);
@@ -554,16 +619,29 @@ export default function App() {
         return;
       }
 
+      const confirmed = window.confirm(`Are you sure you want to delete the saved connection "${name}"?\n\nThis action cannot be undone.`);
+
+      if (!confirmed) {
+        return;
+      }
+
       if (!isCredentialVaultInitialized()) {
         const nextConnections = savedConnections.filter((item) => item.name !== name);
 
         setSavedConnections(nextConnections);
         saveSavedConnections(nextConnections);
-        setError(null);
 
         if (connection.name === name) {
           setConnection(EMPTY_CONNECTION);
         }
+
+        showToast(`Connection "${name}" deleted successfully.`);
+
+        window.setTimeout(() => {
+          setCopyMessage(null);
+        }, 1800);
+
+        setError(null);
 
         return;
       }
@@ -592,12 +670,18 @@ export default function App() {
           setConnection(EMPTY_CONNECTION);
         }
 
+        showToast(`Connection "${name}" deleted successfully.`);
+
+        window.setTimeout(() => {
+          setCopyMessage(null);
+        }, 1800);
+
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unable to delete connection.");
       }
     },
-    [connection.name, credentialsUnlocked, runCredentialAction, savedConnections],
+    [connection.name, credentialsUnlocked, runCredentialAction, savedConnections, showToast],
   );
 
   const handleCredentialUnlock = useCallback(
@@ -858,6 +942,12 @@ export default function App() {
           />
         )}
       </main>
+      {toastMessage && (
+        <div className="copy-toast" role="status">
+          <span className="copy-toast__icon">✓</span>
+          <span>{toastMessage}</span>
+        </div>
+      )}
     </div>
   );
 }

@@ -26,19 +26,6 @@ const STORAGE_LABELS: Record<LanceStorageType, string> = {
   [LANCE_STORAGE.LOCAL]: "Local LanceDB",
 };
 
-const EMPTY_CONNECTION: LanceConnectionState = {
-  name: "",
-  storage: LANCE_STORAGE.R2,
-  path: "table",
-  bucket: "",
-  accountId: "",
-  endpoint: "",
-  accessKeyId: "",
-  secretAccessKey: "",
-  sessionToken: "",
-  region: "auto",
-};
-
 function maskCredential(value: string): string {
   if (!value) {
     return "";
@@ -353,7 +340,7 @@ export default function ConnectionTab({
                   </label>
                 ) : (
                   <label className="field field-full">
-                    <span>S3 endpoint (optional)</span>
+                    <span>S3 endpoint (Optional)</span>
 
                     <input
                       value={connection.endpoint}

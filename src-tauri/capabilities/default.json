@@ -10,6 +10,7 @@
     "dialog:allow-open",
     "opener:default",
     "stronghold:default",
-    "stronghold:allow-initialize"
+    "stronghold:allow-initialize",
+    "stronghold:allow-remove-store-record"
   ]
 }
