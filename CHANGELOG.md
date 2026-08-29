@@ -21,3 +21,8 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 - Added credentials save using vault
 - Added lint test tooling
+
+## [1.1.0] - 29-08-2026
+
+- Added build for linux as a package
+- Added Copyright footer

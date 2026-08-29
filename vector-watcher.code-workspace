@@ -35,6 +35,7 @@
 		"peacock.color": "#42b883",
 		"cSpell.words": [
 			"cloudflarestorage",
+			"onedir",
 			"serde",
 			"tauri"
 		],
@@ -43,7 +44,8 @@
 		"python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/bin/python",
 		"files.exclude": {
 			"**/__pycache__": true,
-			"**/.venv": true
+			"**/.venv": true,
+			"**/*_cache": true
 		},
 		"breadcrumbs.showBooleans": false,
 		"breadcrumbs.showClasses": false,

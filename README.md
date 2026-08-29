@@ -363,4 +363,6 @@ Planned improvements include:
 
 ## License
 
-License information will be added as the project is prepared for release.
+MIT
+
+© 2026 RecursiveZero
