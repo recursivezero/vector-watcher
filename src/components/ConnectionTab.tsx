@@ -195,6 +195,7 @@ export default function ConnectionTab({
 
                 <div className="field-with-action">
                   <select
+                    className="connection-select" 
                     value={selectedConnectionName ?? ""}
                     onChange={(event) => {
                       const name = event.currentTarget.value;
@@ -254,7 +255,7 @@ export default function ConnectionTab({
             <label className="field field-full">
               <span>Storage provider</span>
 
-              <select value={connection.storage} onChange={onStorageChange} disabled={loading}>
+              <select value={connection.storage} onChange={onStorageChange} disabled={loading} className="connection-select" >
                 <option value={LANCE_STORAGE.R2}>Cloudflare R2</option>
                 <option value={LANCE_STORAGE.S3}>Amazon S3</option>
                 <option value={LANCE_STORAGE.LOCAL}>Local LanceDB</option>

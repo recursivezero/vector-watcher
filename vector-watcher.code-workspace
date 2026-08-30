@@ -37,7 +37,9 @@
 			"cloudflarestorage",
 			"onedir",
 			"serde",
-			"tauri"
+			"tauri",
+			"uvicorn",
+			"vectorwatcher"
 		],
 		"folder-color.pathColors": [],
 		"python.analysis.typeCheckingMode": "basic",

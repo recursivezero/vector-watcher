@@ -112,7 +112,6 @@ export async function saveCredentials(connectionName: string, credentials: Store
 }
 
 export async function loadCredentials(connectionName: string): Promise<StoredCredentials | null> {
-  const loadStart = performance.now();
   const client = requireCredentialClient();
   const store = client.getStore();
   const name = connectionName.trim();

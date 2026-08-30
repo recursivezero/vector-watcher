@@ -1,14 +1,31 @@
-use std::sync::Mutex;
+use std::{
+    fs,
+    process::{Child, Command},
+    sync::Mutex,
+};
 
 use tauri::{Manager, RunEvent, WindowEvent};
-use tauri_plugin_shell::{process::CommandChild, ShellExt};
+
+#[cfg(not(debug_assertions))]
+use tauri_plugin_shell::{
+    process::CommandChild,
+    ShellExt,
+};
+
+enum BackendProcess {
+    #[cfg(not(debug_assertions))]
+    Sidecar(CommandChild),
+
+    #[cfg(debug_assertions)]
+    Development(Child),
+}
 
 struct BackendState {
-    child: Mutex<Option<CommandChild>>,
+    child: Mutex<Option<BackendProcess>>,
 }
 
 fn stop_backend(app_handle: &tauri::AppHandle) {
-    let child = {
+    let backend = {
         let backend_state = app_handle.state::<BackendState>();
 
         let mut guard = backend_state
@@ -16,22 +33,91 @@ fn stop_backend(app_handle: &tauri::AppHandle) {
             .lock()
             .expect("failed to lock backend state");
 
-        let child = guard.take();
-
-        drop(guard);
-
-        child
+        guard.take()
     };
 
-    if let Some(child) = child {
-        println!("[Vector Watcher] Stopping backend sidecar...");
+    if let Some(backend) = backend {
+        println!("[Vector Watcher] Stopping backend...");
 
-        if let Err(error) = child.kill() {
-            eprintln!("[Vector Watcher] Failed to stop backend sidecar: {error}");
-        } else {
-            println!("[Vector Watcher] Backend sidecar stopped successfully");
+        match backend {
+            #[cfg(not(debug_assertions))]
+            BackendProcess::Sidecar(child) => {
+                if let Err(error) = child.kill() {
+                    eprintln!(
+                        "[Vector Watcher] Failed to stop backend sidecar: {error}"
+                    );
+                }
+            }
+
+            #[cfg(debug_assertions)]
+            BackendProcess::Development(mut child) => {
+                if let Err(error) = child.kill() {
+                    eprintln!(
+                        "[Vector Watcher] Failed to stop development backend: {error}"
+                    );
+                }
+            }
         }
     }
+}
+
+#[cfg(debug_assertions)]
+fn start_backend(
+    _app: &tauri::App,
+) -> BackendProcess {
+    println!(
+        "[Vector Watcher] Starting development backend from source..."
+    );
+
+    let backend_dir =
+        std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../backend");
+
+    let child = Command::new("poetry")
+        .args([
+            "run",
+            "uvicorn",
+            "main:app",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            "8765"
+        ])
+        .current_dir(backend_dir)
+        .spawn()
+        .expect("failed to start development backend");
+
+    println!(
+        "[Vector Watcher] Development backend started on port 8765"
+    );
+
+    BackendProcess::Development(child)
+}
+
+#[cfg(not(debug_assertions))]
+fn start_backend(
+    app: &tauri::App,
+) -> BackendProcess {
+    println!(
+        "[Vector Watcher] Starting packaged backend sidecar..."
+    );
+
+    let sidecar_command = app
+        .shell()
+        .sidecar("vector-watcher-backend")
+        .expect(
+            "failed to create Vector Watcher backend sidecar command",
+        );
+
+    let (_rx, child) = sidecar_command
+        .spawn()
+        .expect("failed to start Vector Watcher backend");
+
+    println!(
+        "[Vector Watcher] Backend sidecar started on port 8765"
+    );
+
+    BackendProcess::Sidecar(child)
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -41,43 +127,46 @@ pub fn run() {
             child: Mutex::new(None),
         })
         .setup(|app| {
-            let salt_path = app
+            let app_data_dir = app
                 .path()
                 .app_local_data_dir()
-                .expect("could not resolve app local data path")
-                .join("salt.txt");
+                .expect(
+                    "could not resolve app local data path",
+                );
+
+            fs::create_dir_all(&app_data_dir)
+                .expect(
+                    "could not create app local data directory",
+                );
+
+            let salt_path = app_data_dir.join("salt.txt");
 
             app.handle()
                 .plugin(
-                    tauri_plugin_stronghold::Builder::with_argon2(&salt_path)
-                        .build(),
+                    tauri_plugin_stronghold::Builder::with_argon2(
+                        &salt_path,
+                    )
+                    .build(),
                 )?;
 
-            println!("[Vector Watcher] Starting backend sidecar...");
-
-            let sidecar_command = app
-                .shell()
-                .sidecar("vector-watcher-backend")
-                .expect("failed to create Vector Watcher backend sidecar command");
-
-            let (_rx, child) = sidecar_command
-                .spawn()
-                .expect("failed to start Vector Watcher backend");
+            let backend = start_backend(app);
 
             let backend_state = app.state::<BackendState>();
 
             *backend_state
                 .child
                 .lock()
-                .expect("failed to lock backend state") = Some(child);
-
-            println!("[Vector Watcher] Backend sidecar started on port 8765");
+                .expect(
+                    "failed to lock backend state",
+                ) = Some(backend);
 
             Ok(())
         })
         .on_window_event(|window, event| {
             if let WindowEvent::CloseRequested { .. } = event {
-                println!("[Vector Watcher] Window close requested");
+                println!(
+                    "[Vector Watcher] Window close requested"
+                );
 
                 stop_backend(&window.app_handle());
             }
@@ -89,7 +178,9 @@ pub fn run() {
         .expect("error while building Tauri application")
         .run(|app_handle, event| {
             if let RunEvent::Exit = event {
-                println!("[Vector Watcher] Application exiting");
+                println!(
+                    "[Vector Watcher] Application exiting"
+                );
 
                 stop_backend(app_handle);
             }

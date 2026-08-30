@@ -62,6 +62,10 @@
   --focus-border: #8794a3;
   --focus-ring: rgba(80, 100, 120, 0.08);
 
+  --button-primary-background: #2563eb;
+  --button-primary-text: #ffffff;
+  --button-primary-border: #2563eb;
+
   /* --------------------------------------------------------------------------
    * Status
    * -------------------------------------------------------------------------- */
@@ -146,6 +150,10 @@
 
   --focus-border: #708090;
   --focus-ring: rgba(180, 200, 220, 0.1);
+
+  --button-primary-background: #3b82f6;
+  --button-primary-text: #ffffff;
+  --button-primary-border: #60a5fa;
 
   /* Status */
 
@@ -489,6 +497,32 @@ code {
   color: var(--button-secondary-text);
 }
 
+.button,
+.button-primary,
+.primary-button,
+.credential-modal button[type="submit"] {
+  color: var(--button-primary-text);
+  background: var(--button-primary-background);
+  border: 1px solid var(--button-primary-border);
+
+  font-weight: 600;
+  opacity: 1;
+}
+
+.button-primary:disabled,
+.primary-button:disabled,
+.credential-modal button[type="submit"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.button,
+.button-primary:not(:disabled):hover,
+.primary-button:not(:disabled):hover,
+.credential-modal button[type="submit"]:not(:disabled):hover {
+  filter: brightness(1.08);
+}
+
 /* =============================================================================
  * FORMS
  * ============================================================================= */
@@ -649,6 +683,25 @@ code {
 
 .connection-form-card {
   padding: 28px;
+}
+/* Connection form controls */
+
+.connection-form input,
+.connection-form select {
+  box-sizing: border-box;
+  width: 100%;
+  height: 42px;
+  min-height: 42px;
+  padding: 0 12px;
+
+  font: inherit;
+  line-height: 1;
+
+  color: var(--text-primary);
+  background: var(--input-background);
+
+  border: 1px solid var(--border-color);
+  border-radius: var(--control-radius);
 }
 
 .connection-side {
