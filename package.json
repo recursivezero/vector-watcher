@@ -10,7 +10,10 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build --config src-tauri/tauri.prod.conf.json"
+    "tauri:build": "tauri build --config src-tauri/tauri.prod.conf.json",
+    "tauri:build:linux": "tauri build --config src-tauri/tauri.prod.conf.json --bundles deb",
+    "tauri:build:mac": "tauri build --config src-tauri/tauri.prod.conf.json --bundles app,dmg",
+    "tauri:build:windows": "tauri build --config src-tauri/tauri.prod.conf.json --bundles nsis"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
