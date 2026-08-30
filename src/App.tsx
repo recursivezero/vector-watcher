@@ -10,14 +10,29 @@ import type {
   LanceTableItem,
 } from "@/api/lancedbAdmin";
 
-import { getRow, getRows, getTableDetails, scanConnection } from "@/api/lancedbAdmin";
+import {
+  getRow,
+  getRows,
+  getTableDetails,
+  scanConnection,
+} from "@/api/lancedbAdmin";
 
 import ConnectionTab from "@/components/ConnectionTab";
 import DatabaseTab from "@/components/DatabaseTab";
 import ExplorerTab from "@/components/ExplorerTab";
 
-import { deleteCredentials, isCredentialVaultInitialized, loadCredentials, saveCredentials, unlockCredentials } from "@/lib/credentials";
-import { DEFAULT_EXPLORER_QUERY, type ExplorerQueryState, writeTextToClipboard } from "@/lib/explorerUtils";
+import {
+  deleteCredentials,
+  isCredentialVaultInitialized,
+  loadCredentials,
+  saveCredentials,
+  unlockCredentials,
+} from "@/lib/credentials";
+import {
+  DEFAULT_EXPLORER_QUERY,
+  type ExplorerQueryState,
+  writeTextToClipboard,
+} from "@/lib/explorerUtils";
 import { isTauri } from "@tauri-apps/api/core";
 import { ThemeToggle } from "./components/ThemeToggle";
 
@@ -40,7 +55,10 @@ const EMPTY_CONNECTION: LanceConnectionState = {
 
 const SAVED_CONNECTIONS_KEY = "vector-watcher:saved-connections";
 
-type SavedConnection = Omit<LanceConnectionState, "accessKeyId" | "secretAccessKey" | "sessionToken">;
+type SavedConnection = Omit<
+  LanceConnectionState,
+  "accessKeyId" | "secretAccessKey" | "sessionToken"
+>;
 
 const getSavedConnections = (): SavedConnection[] => {
   try {
@@ -66,17 +84,37 @@ const saveSavedConnections = (connections: SavedConnection[]) => {
   localStorage.setItem(SAVED_CONNECTIONS_KEY, JSON.stringify(connections));
 };
 
+type CredentialAction =
+  | {
+      type: "save";
+    }
+  | {
+      type: "load";
+      name: string;
+    }
+  | {
+      type: "delete";
+      name: string;
+    };
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<AppTab>("connection");
-  const [connection, setConnection] = useState<LanceConnectionState>(EMPTY_CONNECTION);
-  const [savedConnections, setSavedConnections] = useState<SavedConnection[]>(() => getSavedConnections());
-  const [selectedConnectionName, setSelectedConnectionName] = useState<string | null>(null);
+  const [connection, setConnection] =
+    useState<LanceConnectionState>(EMPTY_CONNECTION);
+  const [savedConnections, setSavedConnections] = useState<SavedConnection[]>(
+    () => getSavedConnections(),
+  );
+  const [selectedConnectionName, setSelectedConnectionName] = useState<
+    string | null
+  >(null);
   const [connected, setConnected] = useState(false);
   const [tables, setTables] = useState<LanceTableItem[]>([]);
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [details, setDetails] = useState<LanceTableDetails | null>(null);
   const [rows, setRows] = useState<LanceRowSummary[]>([]);
-  const [query, setQuery] = useState<ExplorerQueryState>(DEFAULT_EXPLORER_QUERY);
+  const [query, setQuery] = useState<ExplorerQueryState>(
+    DEFAULT_EXPLORER_QUERY,
+  );
   const [pagination, setPagination] = useState<LancePagination | null>(null);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -86,30 +124,22 @@ export default function App() {
   const [vectorDetail, setVectorDetail] = useState<LanceRowDetail | null>(null);
   const [vectorLoading, setVectorLoading] = useState(false);
   const [vectorError, setVectorError] = useState<string | null>(null);
-  const [vectorTrigger, setVectorTrigger] = useState<HTMLButtonElement | null>(null);
+  const [vectorTrigger, setVectorTrigger] = useState<HTMLButtonElement | null>(
+    null,
+  );
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
   const [credentialUnlocking, setCredentialUnlocking] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-
-  type CredentialAction =
-    | {
-        type: "save";
-      }
-    | {
-        type: "load";
-        name: string;
-      }
-    | {
-        type: "delete";
-        name: string;
-      };
-
   const [credentialsUnlocked, setCredentialsUnlocked] = useState(false);
   const [credentialPassword, setCredentialPassword] = useState("");
-  const [credentialPasswordConfirm, setCredentialPasswordConfirm] = useState("");
+  const [credentialPasswordConfirm, setCredentialPasswordConfirm] =
+    useState("");
   const [credentialModalOpen, setCredentialModalOpen] = useState(false);
-  const [credentialModalError, setCredentialModalError] = useState<string | null>(null);
-  const [pendingCredentialAction, setPendingCredentialAction] = useState<CredentialAction | null>(null);
+  const [credentialModalError, setCredentialModalError] = useState<
+    string | null
+  >(null);
+  const [pendingCredentialAction, setPendingCredentialAction] =
+    useState<CredentialAction | null>(null);
 
   const source: LanceDataSource = useMemo(
     () => ({
@@ -218,8 +248,12 @@ export default function App() {
     try {
       const response = await scanConnection(connection);
       setTables(response.tables);
-      const currentExists = response.tables.some((table) => table.name === selectedTable);
-      const nextTable = currentExists ? selectedTable : (response.tables[0]?.name ?? null);
+      const currentExists = response.tables.some(
+        (table) => table.name === selectedTable,
+      );
+      const nextTable = currentExists
+        ? selectedTable
+        : (response.tables[0]?.name ?? null);
       setSelectedTable(nextTable);
       if (nextTable) {
         await loadTable(nextTable);
@@ -282,7 +316,10 @@ export default function App() {
   }, []);
 
   const handleSortChange = useCallback(
-    (sortBy: ExplorerQueryState["sortBy"], sortOrder: ExplorerQueryState["sortOrder"]) => {
+    (
+      sortBy: ExplorerQueryState["sortBy"],
+      sortOrder: ExplorerQueryState["sortOrder"],
+    ) => {
       const next = {
         ...query,
         sortBy,
@@ -352,7 +389,9 @@ export default function App() {
 
         setVectorDetail(detail);
       } catch (err) {
-        setVectorError(err instanceof Error ? err.message : "Unable to load vector.");
+        setVectorError(
+          err instanceof Error ? err.message : "Unable to load vector.",
+        );
       } finally {
         setVectorLoading(false);
       }
@@ -406,13 +445,34 @@ export default function App() {
         if (!connectionName) {
           throw new Error("Enter a connection name.");
         }
-        const isUpdate = savedConnections.some((item) => item.name === connectionName);
+
+        const previousConnectionName = selectedConnectionName;
+        const isUpdate = previousConnectionName !== null;
+
+        const existingConnectionWithSameName = savedConnections.some(
+          (item) =>
+            item.name === connectionName &&
+            item.name !== previousConnectionName,
+        );
+
+        if (existingConnectionWithSameName) {
+          throw new Error(
+            `A saved connection named "${connectionName}" already exists.`,
+          );
+        }
 
         await saveCredentials(connectionName, {
           accessKeyId: connection.accessKeyId,
           secretAccessKey: connection.secretAccessKey,
           sessionToken: connection.sessionToken,
         });
+
+        if (
+          previousConnectionName &&
+          previousConnectionName !== connectionName
+        ) {
+          await deleteCredentials(previousConnectionName);
+        }
 
         const savedConnection: SavedConnection = {
           name: connectionName,
@@ -424,7 +484,11 @@ export default function App() {
           region: connection.region,
         };
 
-        const nextConnections = [...savedConnections.filter((item) => item.name !== connectionName), savedConnection];
+        const nextConnections = isUpdate
+          ? savedConnections.map((item) =>
+              item.name === previousConnectionName ? savedConnection : item,
+            )
+          : [...savedConnections, savedConnection];
 
         saveSavedConnections(nextConnections);
 
@@ -435,7 +499,9 @@ export default function App() {
       }
 
       if (action.type === "load") {
-        const saved = savedConnections.find((item) => item.name === action.name);
+        const saved = savedConnections.find(
+          (item) => item.name === action.name,
+        );
 
         if (!saved) {
           return;
@@ -460,12 +526,14 @@ export default function App() {
 
       await deleteCredentials(action.name);
 
-      const nextConnections = savedConnections.filter((item) => item.name !== action.name);
+      const nextConnections = savedConnections.filter(
+        (item) => item.name !== action.name,
+      );
 
       setSavedConnections(nextConnections);
       saveSavedConnections(nextConnections);
     },
-    [connection, savedConnections],
+    [connection, savedConnections, selectedConnectionName],
   );
 
   const handleSaveConnection = useCallback(async () => {
@@ -506,9 +574,13 @@ export default function App() {
       });
 
       setError(null);
-      showToast(`Connection ${result === "updated" ? "updated" : "saved"} successfully`);
+      showToast(
+        `Connection ${result === "updated" ? "updated" : "saved"} successfully`,
+      );
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to save connection.");
+      setError(
+        err instanceof Error ? err.message : "Unable to save connection.",
+      );
     }
   }, [connection.name, credentialsUnlocked, runCredentialAction, showToast]);
 
@@ -528,7 +600,9 @@ export default function App() {
           sessionToken: "",
         });
 
-        setError("Enter the credentials for this connection, then click Save Connection to create the secure credential vault.");
+        setError(
+          "Enter the credentials for this connection, then click Save Connection to create the secure credential vault.",
+        );
 
         return;
       }
@@ -555,7 +629,9 @@ export default function App() {
 
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Unable to load connection.");
+        setError(
+          err instanceof Error ? err.message : "Unable to load connection.",
+        );
       }
     },
     [credentialsUnlocked, runCredentialAction, savedConnections],
@@ -623,14 +699,18 @@ export default function App() {
         return;
       }
 
-      const confirmed = window.confirm(`Are you sure you want to delete the saved connection "${name}"?\n\nThis action cannot be undone.`);
+      const confirmed = window.confirm(
+        `Are you sure you want to delete the saved connection "${name}"?\n\nThis action cannot be undone.`,
+      );
 
       if (!confirmed) {
         return;
       }
 
       if (!isCredentialVaultInitialized()) {
-        const nextConnections = savedConnections.filter((item) => item.name !== name);
+        const nextConnections = savedConnections.filter(
+          (item) => item.name !== name,
+        );
 
         setSavedConnections(nextConnections);
         saveSavedConnections(nextConnections);
@@ -678,10 +758,18 @@ export default function App() {
 
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Unable to delete connection.");
+        setError(
+          err instanceof Error ? err.message : "Unable to delete connection.",
+        );
       }
     },
-    [connection.name, credentialsUnlocked, runCredentialAction, savedConnections, showToast],
+    [
+      connection.name,
+      credentialsUnlocked,
+      runCredentialAction,
+      savedConnections,
+      showToast,
+    ],
   );
 
   const handleCredentialUnlock = useCallback(
@@ -697,7 +785,10 @@ export default function App() {
         return;
       }
 
-      if (!isCredentialVaultInitialized() && credentialPassword !== credentialPasswordConfirm) {
+      if (
+        !isCredentialVaultInitialized() &&
+        credentialPassword !== credentialPasswordConfirm
+      ) {
         setCredentialModalError("The passwords do not match.");
         return;
       }
@@ -725,16 +816,29 @@ export default function App() {
 
         const message = err instanceof Error ? err.message : String(err);
 
-        if (message.includes("BadFileKey") || message.includes("failed to decode/decrypt")) {
-          setCredentialModalError("Incorrect master password. Please try again.");
+        if (
+          message.includes("BadFileKey") ||
+          message.includes("failed to decode/decrypt")
+        ) {
+          setCredentialModalError(
+            "Incorrect master password. Please try again.",
+          );
         } else {
-          setCredentialModalError("Unable to unlock the credential vault. Please try again.");
+          setCredentialModalError(
+            "Unable to unlock the credential vault. Please try again.",
+          );
         }
       } finally {
         setCredentialUnlocking(false);
       }
     },
-    [credentialPassword, credentialPasswordConfirm, credentialUnlocking, pendingCredentialAction, runCredentialAction],
+    [
+      credentialPassword,
+      credentialPasswordConfirm,
+      credentialUnlocking,
+      pendingCredentialAction,
+      runCredentialAction,
+    ],
   );
 
   if (locked) {
@@ -745,7 +849,11 @@ export default function App() {
           <span className="eyebrow">Vector Watcher</span>
           <h1>Explorer locked</h1>
           <p>Your session is still connected, but the explorer is hidden.</p>
-          <button type="button" className="button button-primary" onClick={handleUnlock}>
+          <button
+            type="button"
+            className="button button-primary"
+            onClick={handleUnlock}
+          >
             Unlock explorer
           </button>
         </div>
@@ -757,11 +865,20 @@ export default function App() {
     <div className="app-shell">
       {credentialModalOpen && (
         <div className="credential-modal-backdrop">
-          <div className="credential-modal" role="dialog" aria-modal="true" aria-labelledby="credential-modal-title">
+          <div
+            className="credential-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="credential-modal-title"
+          >
             <div className="credential-modal__header">
               <span className="eyebrow">Secure credentials</span>
 
-              <h2 id="credential-modal-title">{!isCredentialVaultInitialized() ? "Create credential vault" : "Unlock credential vault"}</h2>
+              <h2 id="credential-modal-title">
+                {!isCredentialVaultInitialized()
+                  ? "Create credential vault"
+                  : "Unlock credential vault"}
+              </h2>
 
               <p>
                 {!isCredentialVaultInitialized()
@@ -777,7 +894,9 @@ export default function App() {
                 <input
                   type="password"
                   value={credentialPassword}
-                  onChange={(event) => setCredentialPassword(event.target.value)}
+                  onChange={(event) =>
+                    setCredentialPassword(event.target.value)
+                  }
                   autoFocus
                   autoComplete="new-password"
                   disabled={loading}
@@ -791,14 +910,20 @@ export default function App() {
                   <input
                     type="password"
                     value={credentialPasswordConfirm}
-                    onChange={(event) => setCredentialPasswordConfirm(event.target.value)}
+                    onChange={(event) =>
+                      setCredentialPasswordConfirm(event.target.value)
+                    }
                     autoComplete="new-password"
                     disabled={loading}
                   />
                 </label>
               )}
 
-              {credentialModalError && <p className="credential-modal__error">{credentialModalError}</p>}
+              {credentialModalError && (
+                <p className="credential-modal__error">
+                  {credentialModalError}
+                </p>
+              )}
 
               <div className="credential-modal__actions">
                 <button
@@ -819,9 +944,17 @@ export default function App() {
                   type="submit"
                   className="button button-primary"
                   disabled={credentialUnlocking || !isDesktopApp}
-                  title={!isDesktopApp ? "Credential storage is only available in the Vector Watcher desktop application." : undefined}
+                  title={
+                    !isDesktopApp
+                      ? "Credential storage is only available in the Vector Watcher desktop application."
+                      : undefined
+                  }
                 >
-                  {credentialUnlocking ? "Unlocking..." : isCredentialVaultInitialized() ? "Unlock" : "Create vault"}
+                  {credentialUnlocking
+                    ? "Unlocking..."
+                    : isCredentialVaultInitialized()
+                      ? "Unlock"
+                      : "Create vault"}
                 </button>
               </div>
             </form>
@@ -845,7 +978,11 @@ export default function App() {
       </header>
 
       <nav className="app-tabs">
-        <button type="button" className={activeTab === "connection" ? "active" : ""} onClick={() => setActiveTab("connection")}>
+        <button
+          type="button"
+          className={activeTab === "connection" ? "active" : ""}
+          onClick={() => setActiveTab("connection")}
+        >
           <span>01</span>
           Connection
         </button>
@@ -969,7 +1106,13 @@ export default function App() {
           aria-label="View Vector Watcher on GitHub"
           title="View source code on GitHub"
         >
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="currentColor">
+          <svg
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            aria-hidden="true"
+            fill="currentColor"
+          >
             <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-1.026-.013-1.862-2.782.604-3.369-1.18-3.369-1.18-.455-1.156-1.11-1.464-1.11-1.464-.908-.621.069-.608.069-.608 1.004.07 1.532 1.031 1.532 1.031.892 1.529 2.341 1.087 2.91.831.091-.646.349-1.087.635-1.337-2.221-.253-4.556-1.111-4.556-4.943 0-1.092.39-1.985 1.029-2.685-.103-.253-.446-1.271.098-2.65 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0 1 12 6.756a9.59 9.59 0 0 1 2.504.337c1.909-1.295 2.748-1.026 2.748-1.026.546 1.379.203 2.397.1 2.65.64.7 1.028 1.593 1.028 2.685 0 3.841-2.339 4.687-4.566 4.935.359.31.678.919.678 1.852 0 1.337-.012 2.415-.012 2.744 0 .267.18.578.688.48A10.001 10.001 0 0 0 22 12c0-5.523-4.477-10-10-10Z" />
           </svg>
 
