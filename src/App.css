@@ -6,9 +6,11 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 
-  /* --------------------------------------------------------------------------
-   * Backgrounds
-   * -------------------------------------------------------------------------- */
+  /* ==========================================================================
+   * COLORS
+   * ========================================================================== */
+
+  /* Backgrounds */
 
   --bg-page: #f5f7fa;
   --bg-page-gradient: rgba(75, 110, 160, 0.08);
@@ -17,19 +19,14 @@
   --bg-surface-muted: #fafbfc;
   --bg-surface-subtle: #f6f8fa;
   --bg-input: #ffffff;
-
-  --bg-brand: #17202a;
   --bg-code: #111827;
-
   --bg-error: #fff7f7;
 
-  --input-background: #ffffff;
-  --input-color: #111827;
-  --input-border: #d1d5db;
+  /* Brand */
 
-  /* --------------------------------------------------------------------------
-   * Text
-   * -------------------------------------------------------------------------- */
+  --bg-brand: #17202a;
+
+  /* Text */
 
   --text-primary: #17202a;
   --text-heading: #111827;
@@ -44,24 +41,19 @@
   --text-success: #176346;
   --text-error: #9c3030;
 
-  /* --------------------------------------------------------------------------
-   * Borders
-   * -------------------------------------------------------------------------- */
+  /* Borders */
 
   --border: #dfe4ea;
   --border-input: #d5dbe2;
   --border-subtle: #edf0f3;
   --border-soft: #f0f2f4;
   --border-dashed: #cdd4dc;
-
   --border-error: #eccaca;
 
-  /* --------------------------------------------------------------------------
-   * Interactive
-   * -------------------------------------------------------------------------- */
+  /* Interactive */
 
-  --button-secondary-text: #3e4853;
   --button-text: #46515c;
+  --button-secondary-text: #3e4853;
 
   --focus-border: #8794a3;
   --focus-ring: rgba(80, 100, 120, 0.08);
@@ -70,16 +62,12 @@
   --button-primary-text: #ffffff;
   --button-primary-border: #2563eb;
 
-  /* --------------------------------------------------------------------------
-   * Status
-   * -------------------------------------------------------------------------- */
+  /* Status */
 
   --status-offline: #aeb6bf;
   --status-success: #16835b;
 
-  /* --------------------------------------------------------------------------
-   * Overlays
-   * -------------------------------------------------------------------------- */
+  /* Overlays */
 
   --header-bg: rgba(255, 255, 255, 0.92);
   --footer-bg: rgba(255, 255, 255, 0.75);
@@ -87,9 +75,7 @@
   --modal-backdrop: rgba(17, 24, 39, 0.45);
   --credential-modal-backdrop: rgba(20, 27, 34, 0.35);
 
-  /* --------------------------------------------------------------------------
-   * Shadows
-   * -------------------------------------------------------------------------- */
+  /* Shadows */
 
   --shadow-surface-1: rgba(16, 24, 40, 0.03);
   --shadow-surface-2: rgba(16, 24, 40, 0.035);
@@ -102,9 +88,9 @@
   background: var(--bg-page);
 }
 
-/* =============================================================================
+/* ==========================================================================
  * DARK THEME
- * ============================================================================= */
+ * ========================================================================== */
 
 :root[data-theme="dark"] {
   /* Backgrounds */
@@ -116,15 +102,12 @@
   --bg-surface-muted: #1b222b;
   --bg-surface-subtle: #202832;
   --bg-input: #121820;
-
-  --bg-brand: #e6edf3;
   --bg-code: #0b0f14;
-
   --bg-error: #2a1719;
 
-  --input-background: #1a1d23;
-  --input-color: #f3f4f6;
-  --input-border: #3a3f48;
+  /* Brand */
+
+  --bg-brand: #e6edf3;
 
   /* Text */
 
@@ -148,13 +131,12 @@
   --border-subtle: #242d37;
   --border-soft: #222b35;
   --border-dashed: #3a4652;
-
   --border-error: #713636;
 
   /* Interactive */
 
-  --button-secondary-text: #c4ccd5;
   --button-text: #c4ccd5;
+  --button-secondary-text: #c4ccd5;
 
   --focus-border: #708090;
   --focus-ring: rgba(180, 200, 220, 0.1);
@@ -186,9 +168,9 @@
   --shadow-toast: rgba(0, 0, 0, 0.4);
 }
 
-/* =============================================================================
+/* ==========================================================================
  * GLOBAL
- * ============================================================================= */
+ * ========================================================================== */
 
 * {
   box-sizing: border-box;
@@ -205,31 +187,44 @@ body,
 
 body {
   min-height: 100vh;
+
   background:
-    radial-gradient(circle at top right,
+    radial-gradient(
+      circle at top right,
       var(--bg-page-gradient),
-      transparent 30rem),
+      transparent 30rem
+    ),
     var(--bg-page);
+
   color: var(--text-primary);
 }
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 
 input,
 select,
 textarea {
-  background: var(--input-background);
-  color: var(--input-color);
-  border: 1px solid var(--input-border);
+  color: var(--text-primary);
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-input);
+}
+
+select {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] select {
+  color-scheme: dark;
 }
 
 select option {
-  background: var(--input-background);
-  color: var(--input-color);
+  color: var(--text-primary);
+  background-color: var(--bg-input);
 }
 
 button {
@@ -243,13 +238,15 @@ button:disabled {
 
 code {
   font-family:
-    "SFMono-Regular", Consolas, "Liberation Mono",
+    "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
     monospace;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * APP SHELL
- * ============================================================================= */
+ * ========================================================================== */
 
 .app-shell {
   display: flex;
@@ -264,9 +261,9 @@ code {
   padding: 34px 0 60px;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * HEADER
- * ============================================================================= */
+ * ========================================================================== */
 
 .app-header {
   position: sticky;
@@ -360,9 +357,9 @@ code {
   color: var(--button-text);
 }
 
-/* =============================================================================
+/* ==========================================================================
  * TABS
- * ============================================================================= */
+ * ========================================================================== */
 
 .app-tabs {
   display: flex;
@@ -417,9 +414,9 @@ code {
   content: "";
 }
 
-/* =============================================================================
+/* ==========================================================================
  * HEADINGS
- * ============================================================================= */
+ * ========================================================================== */
 
 .page-heading,
 .explorer-heading {
@@ -475,9 +472,9 @@ code {
   font-size: 18px;
 }
 
-/* =============================================================================
- * COMMON SURFACES
- * ============================================================================= */
+/* ==========================================================================
+ * SURFACES
+ * ========================================================================== */
 
 .surface {
   border: 1px solid var(--border);
@@ -490,63 +487,64 @@ code {
     0 8px 24px var(--shadow-surface-2);
 }
 
-/* =============================================================================
+/* ==========================================================================
  * BUTTONS
- * ============================================================================= */
+ * ========================================================================== */
 
-.button {
+.button,
+.primary-button,
+.credential-modal button[type="submit"] {
   min-height: 40px;
   padding: 0 16px;
 
+  border: 1px solid var(--button-primary-border);
   border-radius: 8px;
+
+  background: var(--button-primary-background);
+  color: var(--button-primary-text);
 
   font-size: 13px;
   font-weight: 700;
 }
 
 .button-primary {
-  border: 1px solid var(--bg-brand);
+  min-height: 40px;
+  padding: 0 16px;
 
-  background: var(--bg-brand);
-  color: var(--text-on-brand);
+  border: 1px solid var(--button-primary-border);
+  border-radius: 8px;
+
+  background: var(--button-primary-background);
+  color: var(--button-primary-text);
+
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .button-secondary {
+  min-height: 40px;
+  padding: 0 16px;
+
   border: 1px solid var(--border-input);
+  border-radius: 8px;
 
   background: var(--bg-surface);
   color: var(--button-secondary-text);
+
+  font-size: 13px;
+  font-weight: 700;
 }
 
-.button,
-.button-primary,
-.primary-button,
-.credential-modal button[type="submit"] {
-  color: var(--button-primary-text);
-  background: var(--button-primary-background);
-  border: 1px solid var(--button-primary-border);
-
-  font-weight: 600;
-  opacity: 1;
-}
-
-.button-primary:disabled,
-.primary-button:disabled,
-.credential-modal button[type="submit"]:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
-}
-
-.button,
+.button:not(:disabled):hover,
 .button-primary:not(:disabled):hover,
 .primary-button:not(:disabled):hover,
 .credential-modal button[type="submit"]:not(:disabled):hover {
   filter: brightness(1.08);
 }
 
-/* =============================================================================
+/* ==========================================================================
  * FORMS
- * ============================================================================= */
+ * ========================================================================== */
 
 .form-grid {
   display: grid;
@@ -566,7 +564,7 @@ code {
   grid-column: 1 / -1;
 }
 
-.field>span {
+.field > span {
   color: var(--text-primary);
 
   font-size: 12px;
@@ -581,19 +579,27 @@ code {
 .field select,
 .secret-input input {
   width: 100%;
+  height: 42px;
   min-height: 42px;
-  padding: 9px 12px;
+  padding: 0 12px;
 
   border: 1px solid var(--border-input);
   border-radius: 8px;
   outline: none;
 
-  background: var(--bg-input);
+  background-color: var(--bg-input);
   color: var(--text-primary);
+
+  line-height: normal;
 
   transition:
     border-color 120ms ease,
     box-shadow 120ms ease;
+}
+
+.field select {
+  appearance: auto;
+  -webkit-appearance: auto;
 }
 
 .field input:focus,
@@ -625,9 +631,9 @@ code {
   white-space: nowrap;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * SECRET INPUT
- * ============================================================================= */
+ * ========================================================================== */
 
 .secret-input {
   position: relative;
@@ -666,7 +672,7 @@ code {
   display: flex;
   align-items: center;
 
-  padding: 9px 12px;
+  padding: 0 12px;
 
   overflow: hidden;
 
@@ -692,9 +698,9 @@ code {
   background: transparent;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * CONNECTION PAGE
- * ============================================================================= */
+ * ========================================================================== */
 
 .connection-layout {
   display: grid;
@@ -705,7 +711,8 @@ code {
 .connection-form-card {
   padding: 28px;
 }
-/* Connection form controls */
+
+/* Explicitly keep all connection inputs and selects identical in height */
 
 .connection-form input,
 .connection-form select {
@@ -715,14 +722,21 @@ code {
   min-height: 42px;
   padding: 0 12px;
 
-  font: inherit;
-  line-height: 1;
-
   color: var(--text-primary);
-  background: var(--input-background);
+  background-color: var(--bg-input);
 
-  border: 1px solid var(--border-color);
-  border-radius: var(--control-radius);
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+
+  line-height: normal;
+}
+
+.connection-form select {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] .connection-form select {
+  color-scheme: dark;
 }
 
 .connection-side {
@@ -820,9 +834,9 @@ code {
   color: var(--text-error);
 }
 
-/* =============================================================================
+/* ==========================================================================
  * TABLE PICKER / DATABASE
- * ============================================================================= */
+ * ========================================================================== */
 
 .table-picker {
   display: flex;
@@ -863,9 +877,9 @@ code {
   padding: 14px 16px;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * LOCK SCREEN
- * ============================================================================= */
+ * ========================================================================== */
 
 .lock-screen {
   display: grid;
@@ -911,9 +925,9 @@ code {
   line-height: 1.5;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * LANCE ADMIN SUMMARY
- * ============================================================================= */
+ * ========================================================================== */
 
 .lance-admin-summary {
   display: grid;
@@ -950,9 +964,9 @@ code {
   font-size: 22px;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * LANCE ADMIN PANELS
- * ============================================================================= */
+ * ========================================================================== */
 
 .lance-admin-panel,
 .lance-admin-rows {
@@ -984,9 +998,9 @@ code {
   font-size: 16px;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * LANCE ADMIN SCHEMA
- * ============================================================================= */
+ * ========================================================================== */
 
 .lance-admin-schema-list {
   padding: 8px 20px;
@@ -1036,15 +1050,15 @@ code {
   font-weight: 700;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * LANCE ADMIN JSON
- * ============================================================================= */
+ * ========================================================================== */
 
 .lance-admin-json-stack {
   padding: 18px;
 }
 
-.lance-admin-json-group+.lance-admin-json-group {
+.lance-admin-json-group + .lance-admin-json-group {
   margin-top: 16px;
 }
 
@@ -1069,14 +1083,18 @@ code {
   font-size: 11px;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * LANCE ADMIN FILTER
- * ============================================================================= */
+ * ========================================================================== */
 
 .lance-admin-filter {
   display: grid;
   grid-template-columns:
-    minmax(240px, 1.5fr) minmax(280px, 1.2fr) minmax(160px, 0.8fr) minmax(140px, 0.7fr) minmax(130px, 0.6fr);
+    minmax(240px, 1.5fr)
+    minmax(280px, 1.2fr)
+    minmax(160px, 0.8fr)
+    minmax(140px, 0.7fr)
+    minmax(130px, 0.6fr);
   align-items: end;
   gap: 12px;
 }
@@ -1114,17 +1132,16 @@ code {
 
 .lance-admin-field input,
 .lance-admin-field select {
+  box-sizing: border-box;
+
   width: 100%;
   min-width: 0;
   height: 38px;
   min-height: 38px;
   padding: 0 7px;
 
-  box-sizing: border-box;
-
   border: 1px solid var(--border-input);
   border-radius: 7px;
-
   outline: none;
 
   background: var(--bg-input);
@@ -1156,9 +1173,9 @@ code {
   height: 38px;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * LANCE ADMIN BUTTONS
- * ============================================================================= */
+ * ========================================================================== */
 
 .lance-admin-button {
   display: inline-flex;
@@ -1206,9 +1223,9 @@ code {
   justify-content: center;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * LANCE ADMIN TOOLBAR
- * ============================================================================= */
+ * ========================================================================== */
 
 .lance-admin-toolbar {
   display: flex;
@@ -1296,9 +1313,9 @@ code {
   min-width: 230px;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * LANCE ADMIN TABLE
- * ============================================================================= */
+ * ========================================================================== */
 
 .lance-admin-table-scroll {
   overflow: auto;
@@ -1356,9 +1373,9 @@ code {
   font-size: 10px;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * LANCE ADMIN PAGINATION / STATES
- * ============================================================================= */
+ * ========================================================================== */
 
 .lance-admin-pagination {
   display: flex;
@@ -1373,7 +1390,7 @@ code {
   font-size: 12px;
 }
 
-.lance-admin-pagination>div {
+.lance-admin-pagination > div {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1399,9 +1416,9 @@ code {
   display: none;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * VECTOR MODAL
- * ============================================================================= */
+ * ========================================================================== */
 
 .lance-vector-modal {
   position: fixed;
@@ -1429,7 +1446,7 @@ code {
   box-shadow: 0 25px 80px var(--shadow-modal);
 }
 
-.lance-vector-modal__dialog>header {
+.lance-vector-modal__dialog > header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1513,9 +1530,9 @@ code {
   padding: 18px 22px 22px;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * COPY TOAST
- * ============================================================================= */
+ * ========================================================================== */
 
 .copy-toast {
   position: fixed;
@@ -1557,9 +1574,9 @@ code {
   font-weight: 800;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * CREDENTIAL MODAL
- * ============================================================================= */
+ * ========================================================================== */
 
 .credential-modal-backdrop {
   position: fixed;
@@ -1627,9 +1644,9 @@ code {
   gap: 16px;
 }
 
-/* =============================================================================
+/* ==========================================================================
  * FOOTER
- * ============================================================================= */
+ * ========================================================================== */
 
 .app-footer {
   display: flex;
@@ -1679,19 +1696,20 @@ code {
   color: var(--border-dashed);
 }
 
-/* =============================================================================
+/* ==========================================================================
  * RESPONSIVE
- * ============================================================================= */
+ * ========================================================================== */
 
 @media (max-width: 1200px) {
   .lance-admin-filter {
     grid-template-columns:
-      minmax(240px, 1fr) minmax(280px, 1fr) 160px;
+      minmax(240px, 1fr)
+      minmax(280px, 1fr)
+      160px;
   }
 }
 
 @media (max-width: 1000px) {
-
   .connection-layout,
   .database-panels {
     grid-template-columns: 1fr;
@@ -1790,3 +1808,4 @@ code {
     text-align: center;
   }
 }
+
