@@ -1,7 +1,4 @@
-import type {
-  LanceEmbeddingFunction,
-  LanceVectorColumn,
-} from "@/api/lancedbAdmin";
+import type { LanceEmbeddingFunction, LanceVectorColumn } from "@/api/lancedbAdmin";
 
 interface LanceMetadataPanelProps {
   metadata: Record<string, unknown>;
@@ -10,7 +7,8 @@ interface LanceMetadataPanelProps {
   loading: boolean;
 }
 
-function JsonBlock({ value, label }: { value: unknown; label: string }) {
+function JsonBlock({ value, label }: { value: any; label: string }) {
+  console.log({ value });
   return (
     <div className="lance-admin-json-group">
       <h3>{label}</h3>
@@ -19,12 +17,7 @@ function JsonBlock({ value, label }: { value: unknown; label: string }) {
   );
 }
 
-export default function LanceMetadataPanel({
-  metadata,
-  embeddingFunctions,
-  vectorColumns,
-  loading,
-}: LanceMetadataPanelProps) {
+export default function LanceMetadataPanel({ metadata, embeddingFunctions, vectorColumns, loading }: LanceMetadataPanelProps) {
   return (
     <section className="lance-admin-panel" aria-labelledby="lance-metadata-heading">
       <div className="lance-admin-panel__heading">
@@ -34,7 +27,9 @@ export default function LanceMetadataPanel({
         </div>
       </div>
       {loading ? (
-        <div className="lance-admin-skeleton" role="status">Loading metadata…</div>
+        <div className="lance-admin-skeleton" role="status">
+          Loading metadata…
+        </div>
       ) : (
         <div className="lance-admin-json-stack">
           <JsonBlock value={embeddingFunctions} label="Embedding functions" />

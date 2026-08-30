@@ -3,11 +3,176 @@
     Inter, ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", sans-serif;
 
-  color: #17202a;
-  background: #f5f7fa;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+
+  /* --------------------------------------------------------------------------
+   * Backgrounds
+   * -------------------------------------------------------------------------- */
+
+  --bg-page: #f5f7fa;
+  --bg-page-gradient: rgba(75, 110, 160, 0.08);
+
+  --bg-surface: #ffffff;
+  --bg-surface-muted: #fafbfc;
+  --bg-surface-subtle: #f6f8fa;
+  --bg-input: #ffffff;
+
+  --bg-brand: #17202a;
+  --bg-code: #111827;
+
+  --bg-error: #fff7f7;
+
+  /* --------------------------------------------------------------------------
+   * Text
+   * -------------------------------------------------------------------------- */
+
+  --text-primary: #17202a;
+  --text-heading: #111827;
+  --text-secondary: #727c87;
+  --text-muted: #7a8490;
+  --text-subtle: #89929d;
+  --text-disabled: #a2aab4;
+
+  --text-on-brand: #ffffff;
+  --text-code: #e5e7eb;
+
+  --text-success: #176346;
+  --text-error: #9c3030;
+
+  /* --------------------------------------------------------------------------
+   * Borders
+   * -------------------------------------------------------------------------- */
+
+  --border: #dfe4ea;
+  --border-input: #d5dbe2;
+  --border-subtle: #edf0f3;
+  --border-soft: #f0f2f4;
+  --border-dashed: #cdd4dc;
+
+  --border-error: #eccaca;
+
+  /* --------------------------------------------------------------------------
+   * Interactive
+   * -------------------------------------------------------------------------- */
+
+  --button-secondary-text: #3e4853;
+  --button-text: #46515c;
+
+  --focus-border: #8794a3;
+  --focus-ring: rgba(80, 100, 120, 0.08);
+
+  /* --------------------------------------------------------------------------
+   * Status
+   * -------------------------------------------------------------------------- */
+
+  --status-offline: #aeb6bf;
+  --status-success: #16835b;
+
+  /* --------------------------------------------------------------------------
+   * Overlays
+   * -------------------------------------------------------------------------- */
+
+  --header-bg: rgba(255, 255, 255, 0.92);
+  --footer-bg: rgba(255, 255, 255, 0.75);
+
+  --modal-backdrop: rgba(17, 24, 39, 0.45);
+  --credential-modal-backdrop: rgba(20, 27, 34, 0.35);
+
+  /* --------------------------------------------------------------------------
+   * Shadows
+   * -------------------------------------------------------------------------- */
+
+  --shadow-surface-1: rgba(16, 24, 40, 0.03);
+  --shadow-surface-2: rgba(16, 24, 40, 0.035);
+
+  --shadow-modal: rgba(0, 0, 0, 0.2);
+  --shadow-credential-modal: rgba(20, 27, 34, 0.18);
+  --shadow-toast: rgba(16, 24, 40, 0.18);
+
+  color: var(--text-primary);
+  background: var(--bg-page);
 }
+
+/* =============================================================================
+ * DARK THEME
+ * ============================================================================= */
+
+:root[data-theme="dark"] {
+  /* Backgrounds */
+
+  --bg-page: #0f141a;
+  --bg-page-gradient: rgba(75, 110, 160, 0.07);
+
+  --bg-surface: #171d25;
+  --bg-surface-muted: #1b222b;
+  --bg-surface-subtle: #202832;
+  --bg-input: #121820;
+
+  --bg-brand: #e6edf3;
+  --bg-code: #0b0f14;
+
+  --bg-error: #2a1719;
+
+  /* Text */
+
+  --text-primary: #e6edf3;
+  --text-heading: #f1f5f9;
+  --text-secondary: #aab4bf;
+  --text-muted: #919ca8;
+  --text-subtle: #7f8a96;
+  --text-disabled: #68737e;
+
+  --text-on-brand: #111827;
+  --text-code: #e5e7eb;
+
+  --text-success: #62d6a4;
+  --text-error: #ff9b9b;
+
+  /* Borders */
+
+  --border: #2a3440;
+  --border-input: #35404c;
+  --border-subtle: #242d37;
+  --border-soft: #222b35;
+  --border-dashed: #3a4652;
+
+  --border-error: #713636;
+
+  /* Interactive */
+
+  --button-secondary-text: #c4ccd5;
+  --button-text: #c4ccd5;
+
+  --focus-border: #708090;
+  --focus-ring: rgba(180, 200, 220, 0.1);
+
+  /* Status */
+
+  --status-offline: #65717d;
+  --status-success: #35b985;
+
+  /* Overlays */
+
+  --header-bg: rgba(23, 29, 37, 0.92);
+  --footer-bg: rgba(23, 29, 37, 0.75);
+
+  --modal-backdrop: rgba(0, 0, 0, 0.65);
+  --credential-modal-backdrop: rgba(0, 0, 0, 0.65);
+
+  /* Shadows */
+
+  --shadow-surface-1: rgba(0, 0, 0, 0.15);
+  --shadow-surface-2: rgba(0, 0, 0, 0.25);
+
+  --shadow-modal: rgba(0, 0, 0, 0.55);
+  --shadow-credential-modal: rgba(0, 0, 0, 0.5);
+  --shadow-toast: rgba(0, 0, 0, 0.4);
+}
+
+/* =============================================================================
+ * GLOBAL
+ * ============================================================================= */
 
 * {
   box-sizing: border-box;
@@ -26,9 +191,10 @@ body {
   min-height: 100vh;
   background:
     radial-gradient(circle at top right,
-      rgba(75, 110, 160, 0.08),
+      var(--bg-page-gradient),
       transparent 30rem),
-    #f5f7fa;
+    var(--bg-page);
+  color: var(--text-primary);
 }
 
 button,
@@ -52,24 +218,43 @@ code {
     monospace;
 }
 
+/* =============================================================================
+ * APP SHELL
+ * ============================================================================= */
+
 .app-shell {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
+.app-content {
+  width: min(1480px, calc(100% - 56px));
+  flex: 1;
+  margin: 0 auto;
+  padding: 34px 0 60px;
+}
+
+/* =============================================================================
+ * HEADER
+ * ============================================================================= */
+
 .app-header {
-  height: 72px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 28px;
-  border-bottom: 1px solid #dfe4ea;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(14px);
   position: sticky;
   top: 0;
   z-index: 20;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 72px;
+  padding: 0 28px;
+
+  border-bottom: 1px solid var(--border);
+  background: var(--header-bg);
+
+  backdrop-filter: blur(14px);
 }
 
 .brand {
@@ -79,13 +264,16 @@ code {
 }
 
 .brand-mark {
+  display: grid;
   width: 36px;
   height: 36px;
-  display: grid;
   place-items: center;
+
   border-radius: 10px;
-  background: #17202a;
-  color: white;
+
+  background: var(--bg-brand);
+  color: var(--text-on-brand);
+
   font-size: 18px;
 }
 
@@ -101,7 +289,9 @@ code {
 
 .brand span {
   margin-top: 2px;
-  color: #77808c;
+
+  color: var(--text-muted);
+
   font-size: 12px;
 }
 
@@ -109,7 +299,9 @@ code {
   display: flex;
   align-items: center;
   gap: 9px;
-  color: #65707c;
+
+  color: var(--text-muted);
+
   font-size: 13px;
 }
 
@@ -117,72 +309,88 @@ code {
 .connection-status span {
   width: 8px;
   height: 8px;
+
   border-radius: 50%;
-  background: #aeb6bf;
+
+  background: var(--status-offline);
 }
 
 .status-dot.is-connected,
 .connection-status.is-connected span {
-  background: #16835b;
+  background: var(--status-success);
 }
 
 .icon-button {
   margin-left: 8px;
   padding: 7px 11px;
-  border: 1px solid #d8dee5;
+
+  border: 1px solid var(--border-input);
   border-radius: 7px;
-  background: white;
-  color: #374151;
+
+  background: var(--bg-surface);
+  color: var(--button-text);
 }
+
+/* =============================================================================
+ * TABS
+ * ============================================================================= */
 
 .app-tabs {
   display: flex;
   gap: 4px;
+
   padding: 14px 28px 0;
-  background: white;
-  border-bottom: 1px solid #dfe4ea;
+
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-surface);
 }
 
 .app-tabs button {
   position: relative;
+
   display: flex;
   align-items: center;
   gap: 9px;
+
   min-width: 150px;
   padding: 13px 16px;
+
   border: 0;
   background: transparent;
-  color: #77808c;
+
+  color: var(--text-muted);
+
   font-weight: 600;
   text-align: left;
 }
 
 .app-tabs button span {
-  color: #a2aab4;
+  color: var(--text-disabled);
+
   font-family: monospace;
   font-size: 11px;
 }
 
 .app-tabs button.active {
-  color: #17202a;
+  color: var(--text-primary);
 }
 
 .app-tabs button.active::after {
-  content: "";
   position: absolute;
   right: 12px;
   bottom: -1px;
   left: 12px;
+
   height: 2px;
-  background: #17202a;
+
+  background: var(--bg-brand);
+
+  content: "";
 }
 
-.app-content {
-  width: min(1480px, calc(100% - 56px));
-  margin: 0 auto;
-  padding: 34px 0 60px;
-  flex: 1;
-}
+/* =============================================================================
+ * HEADINGS
+ * ============================================================================= */
 
 .page-heading,
 .explorer-heading {
@@ -190,13 +398,17 @@ code {
   align-items: flex-start;
   justify-content: space-between;
   gap: 24px;
+
   margin-bottom: 26px;
 }
 
 .eyebrow {
   display: block;
+
   margin-bottom: 7px;
-  color: #7a8490;
+
+  color: var(--text-muted);
+
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -206,7 +418,9 @@ code {
 .page-heading h1,
 .explorer-heading h1 {
   margin: 0;
-  color: #111827;
+
+  color: var(--text-heading);
+
   font-size: 30px;
   line-height: 1.15;
   letter-spacing: -0.035em;
@@ -216,18 +430,216 @@ code {
 .explorer-heading p {
   max-width: 680px;
   margin: 9px 0 0;
-  color: #727c87;
+
+  color: var(--text-secondary);
+
   line-height: 1.6;
 }
 
-.surface {
-  border: 1px solid #dfe4ea;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow:
-    0 1px 2px rgba(16, 24, 40, 0.03),
-    0 8px 24px rgba(16, 24, 40, 0.035);
+.section-heading {
+  margin-bottom: 24px;
 }
+
+.section-heading h2 {
+  margin: 0;
+
+  font-size: 18px;
+}
+
+/* =============================================================================
+ * COMMON SURFACES
+ * ============================================================================= */
+
+.surface {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  background: var(--bg-surface);
+
+  box-shadow:
+    0 1px 2px var(--shadow-surface-1),
+    0 8px 24px var(--shadow-surface-2);
+}
+
+/* =============================================================================
+ * BUTTONS
+ * ============================================================================= */
+
+.button {
+  min-height: 40px;
+  padding: 0 16px;
+
+  border-radius: 8px;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.button-primary {
+  border: 1px solid var(--bg-brand);
+
+  background: var(--bg-brand);
+  color: var(--text-on-brand);
+}
+
+.button-secondary {
+  border: 1px solid var(--border-input);
+
+  background: var(--bg-surface);
+  color: var(--button-secondary-text);
+}
+
+/* =============================================================================
+ * FORMS
+ * ============================================================================= */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  min-width: 0;
+}
+
+.field-full {
+  grid-column: 1 / -1;
+}
+
+.field>span {
+  color: var(--text-primary);
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.field small {
+  color: var(--text-subtle);
+}
+
+.field input,
+.field select,
+.secret-input input {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 12px;
+
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  outline: none;
+
+  background: var(--bg-input);
+  color: var(--text-primary);
+
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.field input:focus,
+.field select:focus,
+.secret-input input:focus {
+  border-color: var(--focus-border);
+
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.field-with-action {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+
+  width: 100%;
+}
+
+.field-with-action input {
+  flex: 1;
+  min-width: 0;
+}
+
+.field-with-action button {
+  flex: 0 0 auto;
+
+  min-width: 82px;
+
+  white-space: nowrap;
+}
+
+/* =============================================================================
+ * SECRET INPUT
+ * ============================================================================= */
+
+.secret-input {
+  position: relative;
+
+  display: flex;
+}
+
+.secret-input input {
+  padding-right: 62px;
+}
+
+.secret-input button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  bottom: 5px;
+
+  padding: 0 9px;
+
+  border: 0;
+  border-radius: 6px;
+
+  background: var(--bg-surface-subtle);
+  color: var(--button-text);
+
+  font-size: 12px;
+}
+
+.secret-input .credential-mask {
+  position: absolute;
+  top: 1px;
+  right: 62px;
+  bottom: 1px;
+  left: 1px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 9px 12px;
+
+  overflow: hidden;
+
+  border-radius: 7px;
+
+  background: var(--bg-input);
+  color: var(--text-primary);
+
+  font-family: monospace;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+
+  pointer-events: none;
+}
+
+.secret-input input.credential-hidden {
+  color: transparent;
+
+  caret-color: transparent;
+}
+
+.secret-input input.credential-hidden::selection {
+  background: transparent;
+}
+
+/* =============================================================================
+ * CONNECTION PAGE
+ * ============================================================================= */
 
 .connection-layout {
   display: grid;
@@ -252,140 +664,38 @@ code {
 
 .info-card strong {
   display: block;
+
   font-size: 18px;
 }
 
 .info-card p,
 .security-card p {
-  color: #737d88;
+  color: var(--text-secondary);
+
   font-size: 13px;
   line-height: 1.65;
 }
 
 .security-card h3 {
   margin: 0;
+
   font-size: 15px;
-}
-
-.section-heading {
-  margin-bottom: 24px;
-}
-
-.section-heading h2 {
-  margin: 0;
-  font-size: 18px;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  min-width: 0;
-}
-
-.field-full {
-  grid-column: 1 / -1;
-}
-
-.field>span {
-  color: #374151;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.field small {
-  color: #89929d;
-}
-
-.field input,
-.field select,
-.secret-input input {
-  width: 100%;
-  min-height: 42px;
-  padding: 9px 12px;
-  border: 1px solid #d5dbe2;
-  border-radius: 8px;
-  outline: none;
-  background: white;
-  color: #17202a;
-  transition:
-    border-color 120ms ease,
-    box-shadow 120ms ease;
-}
-
-.field input:focus,
-.field select:focus,
-.secret-input input:focus {
-  border-color: #8794a3;
-  box-shadow: 0 0 0 3px rgba(80, 100, 120, 0.08);
-}
-
-.secret-input {
-  position: relative;
-  display: flex;
-}
-
-.secret-input input {
-  padding-right: 62px;
-}
-
-.secret-input button {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  bottom: 5px;
-  padding: 0 9px;
-  border: 0;
-  border-radius: 6px;
-  background: #f0f2f4;
-  color: #4c5661;
-  font-size: 12px;
-}
-
-.secret-input .credential-mask {
-  position: absolute;
-  top: 1px;
-  left: 1px;
-  right: 62px;
-  bottom: 1px;
-  display: flex;
-  align-items: center;
-  padding: 9px 12px;
-  overflow: hidden;
-  white-space: nowrap;
-  pointer-events: none;
-  font-family: monospace;
-  letter-spacing: 0.02em;
-  color: #17202a;
-  background: white;
-  border-radius: 7px;
-}
-
-.secret-input input.credential-hidden {
-  color: transparent;
-  caret-color: transparent;
-}
-
-.secret-input input.credential-hidden::selection {
-  background: transparent;
 }
 
 .local-source-note {
   padding: 16px;
-  border: 1px dashed #cdd4dc;
+
+  border: 1px dashed var(--border-dashed);
   border-radius: 10px;
-  background: #fafbfc;
+
+  background: var(--bg-surface-muted);
 }
 
 .local-source-note p {
   margin: 5px 0 0;
-  color: #737d88;
+
+  color: var(--text-secondary);
+
   font-size: 13px;
   line-height: 1.5;
 }
@@ -394,64 +704,58 @@ code {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+
   margin-top: 25px;
   padding-top: 20px;
-  border-top: 1px solid #edf0f3;
-}
 
-.button {
-  min-height: 40px;
-  padding: 0 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.button-primary {
-  border: 1px solid #17202a;
-  background: #17202a;
-  color: white;
-}
-
-.button-secondary {
-  border: 1px solid #d5dbe2;
-  background: white;
-  color: #3e4853;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .connection-status {
   display: flex;
   align-items: center;
   gap: 8px;
+
   padding: 8px 11px;
-  border: 1px solid #dfe4ea;
+
+  border: 1px solid var(--border);
   border-radius: 20px;
-  color: #77808c;
+
+  color: var(--text-muted);
+
   font-size: 12px;
 }
 
 .connection-status.is-connected {
-  color: #176346;
+  color: var(--text-success);
 }
 
 .alert {
   margin-top: 18px;
   padding: 12px 14px;
+
   border-radius: 8px;
+
   font-size: 13px;
 }
 
 .alert-error {
-  border: 1px solid #eccaca;
-  background: #fff7f7;
-  color: #9c3030;
+  border: 1px solid var(--border-error);
+
+  background: var(--bg-error);
+  color: var(--text-error);
 }
+
+/* =============================================================================
+ * TABLE PICKER / DATABASE
+ * ============================================================================= */
 
 .table-picker {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+
   padding: 16px 18px;
   margin-bottom: 18px;
 }
@@ -464,15 +768,19 @@ code {
   min-width: 280px;
   min-height: 40px;
   padding: 0 10px;
-  border: 1px solid #d5dbe2;
+
+  border: 1px solid var(--border-input);
   border-radius: 7px;
-  background: white;
+
+  background: var(--bg-input);
+  color: var(--text-primary);
 }
 
 .database-panels {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px;
+
   margin-top: 18px;
 }
 
@@ -481,22 +789,32 @@ code {
   padding: 14px 16px;
 }
 
+/* =============================================================================
+ * LOCK SCREEN
+ * ============================================================================= */
+
 .lock-screen {
-  min-height: 100vh;
   display: grid;
+  min-height: 100vh;
   place-items: center;
+
   padding: 24px;
-  background: #f5f7fa;
+
+  background: var(--bg-page);
 }
 
 .lock-card {
   width: min(420px, 100%);
   padding: 40px;
-  border: 1px solid #dfe4ea;
+
+  border: 1px solid var(--border);
   border-radius: 18px;
-  background: white;
+
+  background: var(--bg-surface);
+
   text-align: center;
-  box-shadow: 0 20px 60px rgba(16, 24, 40, 0.08);
+
+  box-shadow: 0 20px 60px var(--shadow-surface-2);
 }
 
 .lock-card .brand-mark {
@@ -505,47 +823,71 @@ code {
 
 .lock-card h1 {
   margin: 0;
+
+  color: var(--text-heading);
+
   font-size: 25px;
 }
 
 .lock-card p {
   margin: 10px 0 24px;
-  color: #737d88;
+
+  color: var(--text-secondary);
+
   line-height: 1.5;
 }
+
+/* =============================================================================
+ * LANCE ADMIN SUMMARY
+ * ============================================================================= */
 
 .lance-admin-summary {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
+
   margin-bottom: 18px;
 }
 
 .lance-admin-summary__card {
   padding: 18px;
-  border: 1px solid #dfe4ea;
+
+  border: 1px solid var(--border);
   border-radius: 12px;
-  background: white;
+
+  background: var(--bg-surface);
 }
 
 .lance-admin-summary__card span {
   display: block;
-  color: #7d8792;
+
+  color: var(--text-muted);
+
   font-size: 12px;
 }
 
 .lance-admin-summary__card strong {
   display: block;
+
   margin-top: 6px;
+
+  color: var(--text-primary);
+
   font-size: 22px;
 }
 
+/* =============================================================================
+ * LANCE ADMIN PANELS
+ * ============================================================================= */
+
 .lance-admin-panel,
 .lance-admin-rows {
-  border: 1px solid #dfe4ea;
-  border-radius: 12px;
-  background: white;
   overflow: hidden;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  background: var(--bg-surface);
 }
 
 .lance-admin-panel__heading,
@@ -553,15 +895,24 @@ code {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   padding: 18px 20px;
-  border-bottom: 1px solid #edf0f3;
+
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .lance-admin-panel__heading h2,
 .lance-admin-rows__heading h2 {
   margin: 0;
+
+  color: var(--text-primary);
+
   font-size: 16px;
 }
+
+/* =============================================================================
+ * LANCE ADMIN SCHEMA
+ * ============================================================================= */
 
 .lance-admin-schema-list {
   padding: 8px 20px;
@@ -570,10 +921,13 @@ code {
 .lance-admin-schema-row {
   display: grid;
   grid-template-columns: 1fr 1.5fr 100px;
-  gap: 16px;
   align-items: center;
+  gap: 16px;
+
   padding: 12px 0;
-  border-bottom: 1px solid #f0f2f4;
+
+  border-bottom: 1px solid var(--border-soft);
+
   font-size: 12px;
 }
 
@@ -583,7 +937,9 @@ code {
 
 .lance-admin-schema-row code {
   overflow: hidden;
-  color: #626c77;
+
+  color: var(--text-secondary);
+
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -592,15 +948,23 @@ code {
 .lance-admin-tag {
   display: inline-flex;
   align-items: center;
+
   width: fit-content;
   margin-left: 8px;
   padding: 3px 7px;
+
   border-radius: 5px;
-  background: #eef1f4;
-  color: #53606c;
+
+  background: var(--bg-surface-subtle);
+  color: var(--button-text);
+
   font-size: 10px;
   font-weight: 700;
 }
+
+/* =============================================================================
+ * LANCE ADMIN JSON
+ * ============================================================================= */
 
 .lance-admin-json-stack {
   padding: 18px;
@@ -612,6 +976,7 @@ code {
 
 .lance-admin-json-group h3 {
   margin: 0 0 7px;
+
   font-size: 12px;
 }
 
@@ -619,30 +984,42 @@ code {
   max-height: 220px;
   margin: 0;
   padding: 12px;
+
   overflow: auto;
+
   border-radius: 7px;
-  background: #f5f7f9;
-  color: #4f5964;
+
+  background: var(--bg-surface-subtle);
+  color: var(--text-secondary);
+
   font-size: 11px;
 }
 
+/* =============================================================================
+ * LANCE ADMIN FILTER
+ * ============================================================================= */
+
 .lance-admin-filter {
   display: grid;
-  grid-template-columns: minmax(240px, 1.5fr) minmax(280px, 1.2fr) minmax(160px, 0.8fr) minmax(140px, 0.7fr) minmax(130px, 0.6fr);
-  gap: 12px;
+  grid-template-columns:
+    minmax(240px, 1.5fr) minmax(280px, 1.2fr) minmax(160px, 0.8fr) minmax(140px, 0.7fr) minmax(130px, 0.6fr);
   align-items: end;
+  gap: 12px;
 }
 
 .lance-admin-filter__tag {
   display: flex;
-  gap: 8px;
   align-items: flex-end;
-  min-width: 0;
+  gap: 8px;
+
   align-self: end;
+
+  min-width: 0;
 }
 
 .lance-admin-filter__tag .lance-admin-field {
   flex: 1;
+
   min-width: 0;
 }
 
@@ -650,16 +1027,16 @@ code {
   display: flex;
   flex-direction: column;
   gap: 6px;
+
   min-width: 0;
 }
 
 .lance-admin-field span {
-  color: #707b86;
+  color: var(--text-secondary);
+
   font-size: 11px;
   font-weight: 700;
 }
-
-
 
 .lance-admin-field input,
 .lance-admin-field select {
@@ -668,31 +1045,30 @@ code {
   height: 38px;
   min-height: 38px;
   padding: 0 7px;
-  border: 1px solid #d5dbe2;
-  border-radius: 7px;
-  background: white;
+
   box-sizing: border-box;
+
+  border: 1px solid var(--border-input);
+  border-radius: 7px;
+
+  outline: none;
+
+  background: var(--bg-input);
+  color: var(--text-primary);
+
   line-height: normal;
-}
-
-.lance-admin-button--quiet {
-  border-color: transparent;
-  background: transparent;
-}
-
-.lance-admin-button--secondary {
-  background: #f8f9fa;
 }
 
 .lance-admin-filter__tag-actions {
   display: flex;
   flex-direction: column;
-  gap: 6px;
   flex-shrink: 0;
+  gap: 6px;
 }
 
 .lance-admin-filter__action-label {
-  color: #707b86;
+  color: var(--text-secondary);
+
   font-size: 11px;
   font-weight: 700;
   line-height: normal;
@@ -700,32 +1076,155 @@ code {
 
 .lance-admin-filter__tag-buttons {
   display: flex;
-  gap: 8px;
   align-items: center;
+  gap: 8px;
+
   height: 38px;
 }
 
-@media (max-width: 1200px) {
-  .lance-admin-filter {
-    grid-template-columns: minmax(240px, 1fr) minmax(280px, 1fr) 160px;
-  }
+/* =============================================================================
+ * LANCE ADMIN BUTTONS
+ * ============================================================================= */
+
+.lance-admin-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  min-height: 36px;
+  padding: 0 11px;
+
+  border: 1px solid var(--border-input);
+  border-radius: 7px;
+
+  background: var(--bg-surface);
+  color: var(--button-text);
+
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
-@media (max-width: 850px) {
-  .lance-admin-filter {
-    grid-template-columns: 1fr 1fr;
-  }
+.lance-admin-button:hover:not(:disabled) {
+  border-color: var(--border-dashed);
+
+  background: var(--bg-surface-subtle);
 }
 
-@media (max-width: 600px) {
-  .lance-admin-filter {
-    grid-template-columns: 1fr;
-  }
+.lance-admin-button--quiet {
+  border-color: transparent;
 
-  .lance-admin-filter__tag {
-    flex-wrap: wrap;
-  }
+  background: transparent;
 }
+
+.lance-admin-button--secondary {
+  background: var(--bg-surface-subtle);
+}
+
+.lance-admin-button--lock {
+  border-color: var(--border-dashed);
+}
+
+.lock-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =============================================================================
+ * LANCE ADMIN TOOLBAR
+ * ============================================================================= */
+
+.lance-admin-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+
+  min-height: 70px;
+  padding: 12px 16px;
+  margin-bottom: 22px;
+
+  border: 1px solid var(--border);
+  border-radius: 11px;
+
+  background: var(--bg-surface);
+}
+
+.lance-admin-toolbar__source {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  min-width: 0;
+}
+
+.lance-admin-toolbar__source span,
+.lance-admin-toolbar__table span {
+  color: var(--text-muted);
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.lance-admin-toolbar__source strong {
+  color: var(--text-primary);
+
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.lance-admin-toolbar__source code {
+  max-width: 220px;
+
+  overflow: hidden;
+
+  color: var(--text-secondary);
+
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lance-admin-toolbar__table {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  min-width: 230px;
+}
+
+.lance-admin-toolbar__table select {
+  min-width: 180px;
+  height: 36px;
+  padding: 0 30px 0 10px;
+
+  border: 1px solid var(--border-input);
+  border-radius: 7px;
+
+  background: var(--bg-input);
+  color: var(--text-primary);
+
+  font-size: 12px;
+}
+
+.lance-admin-toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  margin-left: auto;
+}
+
+.lance-admin-field--table {
+  min-width: 230px;
+}
+
+/* =============================================================================
+ * LANCE ADMIN TABLE
+ * ============================================================================= */
 
 .lance-admin-table-scroll {
   overflow: auto;
@@ -733,15 +1232,20 @@ code {
 
 .lance-admin-table {
   width: 100%;
+
   border-collapse: collapse;
+
   font-size: 12px;
 }
 
 .lance-admin-table th {
   padding: 11px 12px;
-  border-bottom: 1px solid #dfe4ea;
-  background: #fafbfc;
-  color: #727c87;
+
+  border-bottom: 1px solid var(--border);
+
+  background: var(--bg-surface-muted);
+  color: var(--text-secondary);
+
   font-size: 10px;
   letter-spacing: 0.04em;
   text-align: left;
@@ -750,12 +1254,14 @@ code {
 
 .lance-admin-table td {
   padding: 12px;
-  border-bottom: 1px solid #edf0f3;
+
+  border-bottom: 1px solid var(--border-subtle);
+
   vertical-align: middle;
 }
 
 .lance-admin-table code {
-  color: #59636e;
+  color: var(--text-secondary);
 }
 
 .lance-admin-row-actions {
@@ -766,20 +1272,30 @@ code {
 
 .lance-admin-row-actions button {
   padding: 5px 7px;
-  border: 1px solid #dfe4ea;
+
+  border: 1px solid var(--border);
   border-radius: 5px;
-  background: white;
-  color: #59636e;
+
+  background: var(--bg-surface);
+  color: var(--button-text);
+
   font-size: 10px;
 }
+
+/* =============================================================================
+ * LANCE ADMIN PAGINATION / STATES
+ * ============================================================================= */
 
 .lance-admin-pagination {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+
   padding: 16px 4px;
-  color: #737d88;
+
+  color: var(--text-secondary);
+
   font-size: 12px;
 }
 
@@ -793,115 +1309,15 @@ code {
   margin: 0;
 }
 
-.lance-admin-toolbar {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  min-height: 70px;
-  padding: 12px 16px;
-  margin-bottom: 22px;
-  border: 1px solid #dfe4ea;
-  border-radius: 11px;
-  background: white;
-}
-
-.lance-admin-toolbar__source {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
-
-.lance-admin-toolbar__source span,
-.lance-admin-toolbar__table span {
-  color: #7d8792;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.lance-admin-toolbar__source strong {
-  color: #27313b;
-  font-size: 13px;
-  white-space: nowrap;
-}
-
-.lance-admin-toolbar__source code {
-  max-width: 220px;
-  overflow: hidden;
-  color: #727c87;
-  font-size: 11px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.lance-admin-toolbar__table {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  min-width: 230px;
-}
-
-.lance-admin-toolbar__table select {
-  min-width: 180px;
-  height: 36px;
-  padding: 0 30px 0 10px;
-  border: 1px solid #d5dbe2;
-  border-radius: 7px;
-  background: white;
-  color: #27313b;
-  font-size: 12px;
-}
-
-.lance-admin-toolbar__actions {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-left: auto;
-}
-
-.lance-admin-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  min-height: 36px;
-  padding: 0 11px;
-  border: 1px solid #d5dbe2;
-  border-radius: 7px;
-  background: white;
-  color: #46515c;
-  font-size: 11px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.lance-admin-button:hover:not(:disabled) {
-  background: #f6f8fa;
-  border-color: #c5ccd4;
-}
-
-.lance-admin-button--lock {
-  border-color: #cfd6de;
-}
-
-.lock-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.lance-admin-field--table {
-  min-width: 230px;
-}
-
 .lance-admin-grid-state {
   padding: 50px 20px;
-  border: 1px solid #dfe4ea;
+
+  border: 1px solid var(--border);
   border-radius: 12px;
-  background: white;
-  color: #737d88;
+
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+
   text-align: center;
 }
 
@@ -909,44 +1325,64 @@ code {
   display: none;
 }
 
+/* =============================================================================
+ * VECTOR MODAL
+ * ============================================================================= */
+
 .lance-vector-modal {
   position: fixed;
   inset: 0;
   z-index: 100;
+
   display: grid;
   place-items: center;
+
   padding: 30px;
-  background: rgba(17, 24, 39, 0.45);
+
+  background: var(--modal-backdrop);
 }
 
 .lance-vector-modal__dialog {
   width: min(900px, 100%);
   max-height: calc(100vh - 60px);
+
   overflow: auto;
+
   border-radius: 16px;
-  background: white;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+
+  background: var(--bg-surface);
+
+  box-shadow: 0 25px 80px var(--shadow-modal);
 }
 
 .lance-vector-modal__dialog>header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   padding: 20px 22px;
-  border-bottom: 1px solid #edf0f3;
+
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .lance-vector-modal__dialog h2 {
   margin: 0;
+
+  color: var(--text-heading);
+
   font-size: 18px;
 }
 
 .lance-vector-modal__close {
   width: 34px;
   height: 34px;
-  border: 1px solid #dfe4ea;
+
+  border: 1px solid var(--border);
   border-radius: 7px;
-  background: white;
+
+  background: var(--bg-surface);
+  color: var(--text-primary);
+
   font-size: 20px;
 }
 
@@ -954,23 +1390,30 @@ code {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
+
   padding: 18px 22px;
 }
 
 .lance-vector-modal__summary div {
   padding: 12px;
+
   border-radius: 8px;
-  background: #f6f8fa;
+
+  background: var(--bg-surface-subtle);
 }
 
 .lance-vector-modal__summary dt {
-  color: #7d8792;
+  color: var(--text-muted);
+
   font-size: 10px;
   text-transform: uppercase;
 }
 
 .lance-vector-modal__summary dd {
   margin: 4px 0 0;
+
+  color: var(--text-primary);
+
   font-size: 13px;
 }
 
@@ -978,34 +1421,49 @@ code {
   max-height: 360px;
   margin: 0 22px;
   padding: 16px;
+
   overflow: auto;
+
   border-radius: 8px;
-  background: #111827;
-  color: #e5e7eb;
+
+  background: var(--bg-code);
+  color: var(--text-code);
+
   font-size: 11px;
 }
 
 .lance-vector-modal__actions {
   display: flex;
   gap: 8px;
+
   padding: 18px 22px 22px;
 }
+
+/* =============================================================================
+ * COPY TOAST
+ * ============================================================================= */
 
 .copy-toast {
   position: fixed;
   right: 24px;
   bottom: 24px;
   z-index: 200;
+
   display: flex;
   align-items: center;
   gap: 9px;
+
   min-height: 42px;
   padding: 0 14px;
-  border: 1px solid #d5dbe2;
+
+  border: 1px solid var(--border-input);
   border-radius: 9px;
-  background: #17202a;
-  color: white;
-  box-shadow: 0 10px 30px rgba(16, 24, 40, 0.18);
+
+  background: var(--bg-brand);
+  color: var(--text-on-brand);
+
+  box-shadow: 0 10px 30px var(--shadow-toast);
+
   font-size: 12px;
   font-weight: 600;
 }
@@ -1015,49 +1473,44 @@ code {
   width: 19px;
   height: 19px;
   place-items: center;
+
   border-radius: 50%;
-  background: white;
-  color: #17202a;
+
+  background: var(--text-on-brand);
+  color: var(--bg-brand);
+
   font-size: 11px;
   font-weight: 800;
 }
 
-.field-with-action {
-  display: flex;
-  align-items: stretch;
-  gap: 8px;
-  width: 100%;
-}
-
-.field-with-action input {
-  flex: 1;
-  min-width: 0;
-}
-
-.field-with-action button {
-  flex: 0 0 auto;
-  min-width: 82px;
-  white-space: nowrap;
-}
+/* =============================================================================
+ * CREDENTIAL MODAL
+ * ============================================================================= */
 
 .credential-modal-backdrop {
   position: fixed;
   inset: 0;
   z-index: 1000;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 24px;
-  background: rgba(20, 27, 34, 0.35);
+
+  background: var(--credential-modal-backdrop);
 }
 
 .credential-modal {
   width: min(440px, 100%);
   padding: 24px;
-  border: 1px solid #d5dbe2;
+
+  border: 1px solid var(--border-input);
   border-radius: 12px;
-  background: white;
-  box-shadow: 0 20px 60px rgba(20, 27, 34, 0.18);
+
+  background: var(--bg-surface);
+
+  box-shadow: 0 20px 60px var(--shadow-credential-modal);
 }
 
 .credential-modal__header {
@@ -1066,17 +1519,23 @@ code {
 
 .credential-modal__header h2 {
   margin: 4px 0 8px;
+
+  color: var(--text-heading);
 }
 
 .credential-modal__header p {
   margin: 0;
-  color: #68727d;
+
+  color: var(--text-secondary);
+
   line-height: 1.5;
 }
 
 .credential-modal__error {
   margin: 8px 0 0;
-  color: #b42318;
+
+  color: var(--text-error);
+
   font-size: 13px;
 }
 
@@ -1084,6 +1543,7 @@ code {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+
   margin-top: 20px;
 }
 
@@ -1091,6 +1551,69 @@ code {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+/* =============================================================================
+ * FOOTER
+ * ============================================================================= */
+
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  min-height: 48px;
+  padding: 12px 28px;
+
+  border-top: 1px solid var(--border);
+
+  background: var(--footer-bg);
+  color: var(--text-muted);
+
+  font-size: 12px;
+}
+
+.app-footer__github {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--button-text);
+
+  line-height: 1;
+
+  transition:
+    color 120ms ease,
+    transform 120ms ease;
+}
+
+.app-footer__github:hover {
+  color: var(--text-primary);
+
+  transform: translateY(-1px);
+}
+
+.app-footer__github svg {
+  width: 16px;
+  height: 16px;
+
+  fill: currentColor;
+}
+
+.app-footer__separator {
+  color: var(--border-dashed);
+}
+
+/* =============================================================================
+ * RESPONSIVE
+ * ============================================================================= */
+
+@media (max-width: 1200px) {
+  .lance-admin-filter {
+    grid-template-columns:
+      minmax(240px, 1fr) minmax(280px, 1fr) 160px;
+  }
 }
 
 @media (max-width: 1000px) {
@@ -1109,14 +1632,21 @@ code {
   }
 }
 
+@media (max-width: 850px) {
+  .lance-admin-filter {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @media (max-width: 700px) {
   .app-header {
     padding: 0 16px;
   }
 
   .app-tabs {
-    padding-left: 16px;
     padding-right: 16px;
+    padding-left: 16px;
+
     overflow-x: auto;
   }
 
@@ -1168,50 +1698,21 @@ code {
   }
 }
 
-.app-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 48px;
-  padding: 12px 28px;
-  border-top: 1px solid #dfe4ea;
-  background: rgba(255, 255, 255, 0.75);
-  color: #7a8490;
-  font-size: 12px;
-}
-
-.app-footer__github {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #59636e;
-  line-height: 1;
-  transition:
-    color 120ms ease,
-    transform 120ms ease;
-}
-
-.app-footer__github:hover {
-  color: #17202a;
-  transform: translateY(-1px);
-}
-
-.app-footer__github svg {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
-}
-
-.app-footer__separator {
-  color: #c3c9d0;
-}
-
 @media (max-width: 600px) {
+  .lance-admin-filter {
+    grid-template-columns: 1fr;
+  }
+
+  .lance-admin-filter__tag {
+    flex-wrap: wrap;
+  }
+
   .app-footer {
     flex-wrap: wrap;
     gap: 6px;
+
     padding: 12px 16px;
+
     text-align: center;
   }
 }

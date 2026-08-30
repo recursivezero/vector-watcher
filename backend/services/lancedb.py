@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+from unittest import result
 from urllib.parse import urlsplit
 
 import lancedb
@@ -81,7 +83,9 @@ class LanceDBService:
         path = connection.path.strip()
 
         if "\x00" in path:
-            raise LanceDBValidationError("The LanceDB path contains an invalid character.")
+            raise LanceDBValidationError(
+                "The LanceDB path contains an invalid character."
+            )
 
         # Local LanceDB database.
         if connection.storage == "local":
@@ -93,10 +97,14 @@ class LanceDBService:
             try:
                 resolved = local_path.resolve(strict=True)
             except (OSError, RuntimeError) as error:
-                raise LanceDBValidationError("The local LanceDB path does not exist.") from error
+                raise LanceDBValidationError(
+                    "The local LanceDB path does not exist."
+                ) from error
 
             if not resolved.is_dir():
-                raise LanceDBValidationError("The local LanceDB path must be a directory.")
+                raise LanceDBValidationError(
+                    "The local LanceDB path must be a directory."
+                )
 
             return str(resolved)
 
@@ -114,7 +122,9 @@ class LanceDBService:
         path = path.strip("/")
 
         if "\x00" in path:
-            raise LanceDBValidationError("The LanceDB path contains an invalid character.")
+            raise LanceDBValidationError(
+                "The LanceDB path contains an invalid character."
+            )
 
         if path:
             return f"s3://{bucket}/{path}"
@@ -132,7 +142,9 @@ class LanceDBService:
         region = connection.region.strip()
 
         if not access_key or not secret_key:
-            raise LanceDBValidationError("Access key and secret access key are required.")
+            raise LanceDBValidationError(
+                "Access key and secret access key are required."
+            )
 
         if connection.storage == "s3":
             if not region:
@@ -248,7 +260,9 @@ class LanceDBService:
         except LanceDBError:
             raise
         except Exception as error:
-            raise LanceDBUnavailable("Unable to open the selected LanceDB table.") from error
+            raise LanceDBUnavailable(
+                "Unable to open the selected LanceDB table."
+            ) from error
 
     @staticmethod
     def _vector_dimension(
@@ -317,6 +331,8 @@ class LanceDBService:
 
         return fields, vectors
 
+    import json
+
     @staticmethod
     def _schema_metadata(
         schema: Any,
@@ -333,7 +349,17 @@ class LanceDBService:
         result: dict[str, Any] = {}
 
         for key, value in metadata.items():
-            result[str(key)] = str(value)
+            decoded_key = key.decode("utf-8") if isinstance(key, bytes) else str(key)
+
+            decoded_value = value.decode("utf-8") if isinstance(value, bytes) else value
+
+            if isinstance(decoded_value, str):
+                try:
+                    decoded_value = json.loads(decoded_value)
+                except json.JSONDecodeError:
+                    pass
+
+        result[decoded_key] = decoded_value
 
         return result
 
@@ -353,52 +379,132 @@ class LanceDBService:
         except Exception:
             configs = {}
 
-        if not isinstance(configs, dict):
-            return []
-
         result: list[LanceEmbeddingFunction] = []
 
-        for vector_name, config in configs.items():
-            function = getattr(
-                config,
-                "function",
+        if isinstance(configs, dict):
+            for vector_name, config in configs.items():
+                function = getattr(
+                    config,
+                    "function",
+                    None,
+                )
+
+                function_name = (
+                    getattr(
+                        function,
+                        "name",
+                        None,
+                    )
+                    or getattr(
+                        function,
+                        "__name__",
+                        None,
+                    )
+                    or (
+                        function.__class__.__name__
+                        if function is not None
+                        else "unknown"
+                    )
+                )
+
+                result.append(
+                    LanceEmbeddingFunction(
+                        name=str(function_name),
+                        source_column=str(
+                            getattr(
+                                config,
+                                "source_column",
+                                "",
+                            )
+                        ),
+                        vector_column=str(
+                            getattr(
+                                config,
+                                "vector_column",
+                                None,
+                            )
+                            or vector_name
+                        ),
+                    )
+                )
+
+        # Existing API successfully returned functions.
+        if result:
+            return result
+
+        # Fallback: read embedding functions from schema metadata.
+        try:
+            schema = getattr(
+                table,
+                "schema",
                 None,
             )
 
-            function_name = (
+            metadata = (
                 getattr(
-                    function,
-                    "name",
+                    schema,
+                    "metadata",
                     None,
                 )
-                or getattr(
-                    function,
-                    "__name__",
-                    None,
-                )
-                or (function.__class__.__name__ if function is not None else "unknown")
+                or {}
             )
 
-            result.append(
-                LanceEmbeddingFunction(
-                    name=str(function_name),
-                    source_column=str(
-                        getattr(
-                            config,
-                            "source_column",
-                            "",
-                        )
-                    ),
-                    vector_column=str(
-                        getattr(
-                            config,
-                            "vector_column",
-                            None,
-                        )
-                        or vector_name
-                    ),
-                )
+            raw_embedding_functions = metadata.get(
+                b"embedding_functions",
             )
+
+            if raw_embedding_functions is None:
+                raw_embedding_functions = metadata.get(
+                    "embedding_functions",
+                )
+
+            if isinstance(
+                raw_embedding_functions,
+                bytes,
+            ):
+                raw_embedding_functions = raw_embedding_functions.decode("utf-8")
+
+            if isinstance(
+                raw_embedding_functions,
+                str,
+            ):
+                raw_embedding_functions = json.loads(raw_embedding_functions)
+
+            if not isinstance(
+                raw_embedding_functions,
+                list,
+            ):
+                return []
+
+            for config in raw_embedding_functions:
+                if not isinstance(config, dict):
+                    continue
+
+                result.append(
+                    LanceEmbeddingFunction(
+                        name=str(
+                            config.get(
+                                "name",
+                                "unknown",
+                            )
+                        ),
+                        source_column=str(
+                            config.get(
+                                "source_column",
+                                "",
+                            )
+                        ),
+                        vector_column=str(
+                            config.get(
+                                "vector_column",
+                                "",
+                            )
+                        ),
+                    )
+                )
+
+        except (Exception,):
+            return result
 
         return result
 
@@ -423,6 +529,13 @@ class LanceDBService:
             row_count = int(table.count_rows())
         except Exception as error:
             raise LanceDBUnavailable("Unable to count table rows.") from error
+
+        embedding_functions = self._embedding_functions(table)
+
+        print(
+            "EMBEDDING FUNCTIONS RESULT:",
+            embedding_functions,
+        )
 
         return LanceTableDetailsResponse(
             name=table_name,
@@ -500,7 +613,9 @@ class LanceDBService:
             total_pages = (total_rows + page_size - 1) // page_size if total_rows else 0
 
             if total_pages and page > total_pages:
-                raise LanceDBValidationError("Requested page is outside the available range.")
+                raise LanceDBValidationError(
+                    "Requested page is outside the available range."
+                )
 
             offset = (page - 1) * page_size
 

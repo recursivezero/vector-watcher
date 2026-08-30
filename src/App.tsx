@@ -18,6 +18,7 @@ import ExplorerTab from "@/components/ExplorerTab";
 
 import { deleteCredentials, isCredentialVaultInitialized, loadCredentials, saveCredentials, unlockCredentials } from "@/lib/credentials";
 import { DEFAULT_EXPLORER_QUERY, type ExplorerQueryState, writeTextToClipboard } from "@/lib/explorerUtils";
+import { ThemeToggle } from "./components/ThemeToggle";
 
 type AppTab = "connection" | "database" | "explorer";
 
@@ -832,6 +833,7 @@ export default function App() {
           <span className={`status-dot ${connected ? "is-connected" : ""}`} />
           {connected ? connection.name : "No connection"}
         </div>
+        <ThemeToggle />
       </header>
 
       <nav className="app-tabs">

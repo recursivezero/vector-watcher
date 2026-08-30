@@ -58,6 +58,12 @@
 		"breadcrumbs.showInterfaces": false,
 		"breadcrumbs.showObjects": false,
 		"breadcrumbs.showOperators": false,
-		"breadcrumbs.showPackages": false
+		"breadcrumbs.showPackages": false,
+		"js/ts.referencesCodeLens.showOnAllFunctions": true,
+		"[python]": {
+			"editor.defaultFormatter": "ms-python.black-formatter",
+			"editor.formatOnSave": true,
+			"editor.formatOnPaste": true
+  	}
 	}
 }

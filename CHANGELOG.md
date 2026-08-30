@@ -26,3 +26,4 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 - Added build for linux as a package
 - Added Copyright footer
+- Added Dark theme
