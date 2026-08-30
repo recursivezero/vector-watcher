@@ -465,7 +465,7 @@ export default function ConnectionTab({
             )}
 
             <button type="button" className="button button-primary" onClick={onConnect} disabled={!canConnect || loading}>
-              {loading ? "Connecting…" : connected ? "Reconnect" : "Test & connect"}
+              {loading ? "Connecting…" : connected ? "Reconnect" : "Connect"}
             </button>
           </div>
         </section>

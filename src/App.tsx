@@ -18,9 +18,12 @@ import ExplorerTab from "@/components/ExplorerTab";
 
 import { deleteCredentials, isCredentialVaultInitialized, loadCredentials, saveCredentials, unlockCredentials } from "@/lib/credentials";
 import { DEFAULT_EXPLORER_QUERY, type ExplorerQueryState, writeTextToClipboard } from "@/lib/explorerUtils";
+import { isTauri } from "@tauri-apps/api/core";
 import { ThemeToggle } from "./components/ThemeToggle";
 
 type AppTab = "connection" | "database" | "explorer";
+
+const isDesktopApp = isTauri();
 
 const EMPTY_CONNECTION: LanceConnectionState = {
   name: "",
@@ -812,7 +815,12 @@ export default function App() {
                   Cancel
                 </button>
 
-                <button type="submit" className="button button-primary" disabled={credentialUnlocking}>
+                <button
+                  type="submit"
+                  className="button button-primary"
+                  disabled={credentialUnlocking || !isDesktopApp}
+                  title={!isDesktopApp ? "Credential storage is only available in the Vector Watcher desktop application." : undefined}
+                >
                   {credentialUnlocking ? "Unlocking..." : isCredentialVaultInitialized() ? "Unlock" : "Create vault"}
                 </button>
               </div>

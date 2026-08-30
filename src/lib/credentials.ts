@@ -1,3 +1,4 @@
+import { isTauri } from "@tauri-apps/api/core";
 import { appLocalDataDir } from "@tauri-apps/api/path";
 import { Stronghold, type Client } from "@tauri-apps/plugin-stronghold";
 
@@ -20,46 +21,33 @@ export function isCredentialVaultInitialized(): boolean {
 }
 
 async function getStrongholdPath(): Promise<string> {
-  const start = performance.now();
-  console.log("[Stronghold] Getting app data directory");
+  if (!isTauri()) {
+    throw new Error("Credential storage is only available in the Vector Watcher desktop application.");
+  }
   const dataDir = await appLocalDataDir();
-  console.log(`[Stronghold] appLocalDataDir: ${(performance.now() - start).toFixed(0)}ms`);
   const path = `${dataDir}/${STRONGHOLD_FILE}`;
-  console.log("[Stronghold] Vault path:", path);
   return path;
 }
 
 async function getStronghold(password: string): Promise<Stronghold> {
   if (stronghold && cachedClient) {
-    console.log("[Stronghold] Using already unlocked vault");
     return stronghold;
   }
 
-  const totalStart = performance.now();
   const path = await getStrongholdPath();
 
-  console.log("[Stronghold] Loading vault...");
-  const loadStart = performance.now();
   const vault = await Stronghold.load(path, password);
 
-  console.log(`[Stronghold] Stronghold.load: ${(performance.now() - loadStart).toFixed(0)}ms`);
-
-  const clientStart = performance.now();
   let client: Client;
 
   try {
     client = await vault.loadClient(CLIENT_NAME);
-    console.log(`[Stronghold] loadClient: ${(performance.now() - clientStart).toFixed(0)}ms`);
   } catch {
-    console.log("[Stronghold] Client not found, creating client...");
     client = await vault.createClient(CLIENT_NAME);
-    console.log(`[Stronghold] createClient: ${(performance.now() - clientStart).toFixed(0)}ms`);
   }
 
   stronghold = vault;
   cachedClient = client;
-
-  console.log(`[Stronghold] TOTAL INITIALIZATION: ${(performance.now() - totalStart).toFixed(0)}ms`);
 
   return vault;
 }
@@ -74,23 +62,17 @@ function requireCredentialClient(): Client {
 
 export async function unlockCredentials(password: string): Promise<void> {
   if (stronghold && cachedClient) {
-    console.log("[Stronghold] Vault already unlocked");
     return;
   }
 
   if (unlockPromise) {
-    console.log("[Stronghold] Waiting for existing unlock operation");
     return unlockPromise;
   }
 
   unlockPromise = (async () => {
-    const unlockStart = performance.now();
-
     try {
-      console.log("[Stronghold] Starting credential unlock");
       await getStronghold(password);
       localStorage.setItem(VAULT_INITIALIZED_KEY, "true");
-      console.log(`[Stronghold] Credential unlock complete: ${(performance.now() - unlockStart).toFixed(0)}ms`);
     } catch (error) {
       cachedClient = null;
       stronghold = null;
@@ -109,7 +91,6 @@ export async function saveCredentials(connectionName: string, credentials: Store
     throw new Error("Credential vault is locked.");
   }
 
-  const saveStart = performance.now();
   const client = requireCredentialClient();
   const store = client.getStore();
   const name = connectionName.trim();
@@ -121,19 +102,13 @@ export async function saveCredentials(connectionName: string, credentials: Store
   const prefix = `connection/${name}`;
   const encoder = new TextEncoder();
 
-  console.log(`[Stronghold] Saving credentials for "${name}"`);
-
   await Promise.all([
     store.insert(`${prefix}/accessKeyId`, Array.from(encoder.encode(credentials.accessKeyId))),
     store.insert(`${prefix}/secretAccessKey`, Array.from(encoder.encode(credentials.secretAccessKey))),
     store.insert(`${prefix}/sessionToken`, Array.from(encoder.encode(credentials.sessionToken))),
   ]);
 
-  const vaultSaveStart = performance.now();
   await stronghold.save();
-
-  console.log(`[Stronghold] Vault save: ${(performance.now() - vaultSaveStart).toFixed(0)}ms`);
-  console.log(`[Stronghold] Save credentials TOTAL: ${(performance.now() - saveStart).toFixed(0)}ms`);
 }
 
 export async function loadCredentials(connectionName: string): Promise<StoredCredentials | null> {
@@ -148,8 +123,6 @@ export async function loadCredentials(connectionName: string): Promise<StoredCre
 
   const prefix = `connection/${name}`;
 
-  console.log(`[Stronghold] Loading credentials for "${name}"`);
-
   const [accessKeyId, secretAccessKey, sessionToken] = await Promise.all([
     store.get(`${prefix}/accessKeyId`),
     store.get(`${prefix}/secretAccessKey`),
@@ -157,7 +130,6 @@ export async function loadCredentials(connectionName: string): Promise<StoredCre
   ]);
 
   if (!accessKeyId || !secretAccessKey) {
-    console.log(`[Stronghold] Credentials not found: ${(performance.now() - loadStart).toFixed(0)}ms`);
     return null;
   }
 
@@ -168,8 +140,6 @@ export async function loadCredentials(connectionName: string): Promise<StoredCre
     secretAccessKey: decoder.decode(secretAccessKey),
     sessionToken: sessionToken ? decoder.decode(sessionToken) : "",
   };
-
-  console.log(`[Stronghold] Load credentials TOTAL: ${(performance.now() - loadStart).toFixed(0)}ms`);
 
   return credentials;
 }
@@ -189,31 +159,20 @@ export async function deleteCredentials(connectionName: string): Promise<void> {
 
   const prefix = `connection/${name}`;
 
-  console.log(`[Stronghold] Deleting credentials for "${name}"`);
-  console.log(`[Stronghold] Prefix: ${prefix}`);
-
   try {
-    console.log("[Stronghold] Removing accessKeyId");
     await store.remove(`${prefix}/accessKeyId`);
 
-    console.log("[Stronghold] Removing secretAccessKey");
     await store.remove(`${prefix}/secretAccessKey`);
 
-    console.log("[Stronghold] Removing sessionToken");
     await store.remove(`${prefix}/sessionToken`);
 
-    console.log("[Stronghold] Saving vault");
     await stronghold.save();
-
-    console.log(`[Stronghold] Credentials deleted successfully for "${name}"`);
   } catch (error) {
     console.error(`[Stronghold] Failed to delete credentials for "${name}":`, error);
     throw error;
   }
 }
 export async function lockCredentials(): Promise<void> {
-  console.log("[Stronghold] Locking credential vault");
-
   unlockPromise = null;
 
   const vault = stronghold;
@@ -222,8 +181,6 @@ export async function lockCredentials(): Promise<void> {
   stronghold = null;
 
   if (vault) {
-    const unloadStart = performance.now();
     await vault.unload();
-    console.log(`[Stronghold] Vault unloaded: ${(performance.now() - unloadStart).toFixed(0)}ms`);
   }
 }
