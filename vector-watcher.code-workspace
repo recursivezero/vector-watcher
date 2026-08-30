@@ -45,7 +45,8 @@
 		"files.exclude": {
 			"**/__pycache__": true,
 			"**/.venv": true,
-			"**/*_cache": true
+			"**/*_cache": true,
+			"node_modules": true
 		},
 		"breadcrumbs.showBooleans": false,
 		"breadcrumbs.showClasses": false,
