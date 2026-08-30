@@ -1,8 +1,10 @@
 use std::{
     fs,
-    process::{Child, Command},
     sync::Mutex,
 };
+
+#[cfg(debug_assertions)]
+use std::process::{Child, Command};
 
 use tauri::{Manager, RunEvent, WindowEvent};
 
