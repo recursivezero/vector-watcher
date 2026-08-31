@@ -1,0 +1,149 @@
+.welcome-screen {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.welcome-main {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2rem;
+}
+
+.welcome-topbar {
+	position: fixed;
+	top: 1.5rem;
+	left: 2rem;
+	right: 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.welcome-topbar__brand {
+	color: var(--muted);
+	font-size: 1.25rem;
+	font-weight: 600;
+}
+
+.welcome-card {
+	width: min(100%, 680px);
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+.welcome-brand {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.welcome-brand__mark {
+	width: 3.5rem;
+	height: 3.5rem;
+	display: grid;
+	place-items: center;
+	font-size: 1.8rem;
+	border-radius: 0.75rem;
+	background: var(--surface);
+	border: 1px solid var(--border);
+}
+
+.welcome-brand h1 {
+	margin: 0.15rem 0;
+	font-size: 2rem;
+}
+
+.welcome-brand p {
+	margin: 0;
+	color: var(--muted);
+}
+
+.welcome-content {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.welcome-content h2 {
+	margin: 0;
+	font-size: 1.5rem;
+}
+
+.welcome-content p {
+	margin: 0;
+	max-width: 58ch;
+	color: var(--muted);
+	line-height: 1.6;
+}
+
+.welcome-network {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.9rem;
+	padding: 1rem 1.1rem;
+	border: 1px solid var(--border);
+	border-radius: 0.75rem;
+	background: var(--surface);
+}
+
+.welcome-network__dot {
+	width: 0.65rem;
+	height: 0.65rem;
+	flex: 0 0 auto;
+	margin-top: 0.35rem;
+	border-radius: 50%;
+	background: var(--muted);
+}
+
+.welcome-network.is-online .welcome-network__dot {
+	background: #22c55e;
+}
+
+.welcome-network.is-offline .welcome-network__dot {
+	background: #f59e0b;
+}
+
+.welcome-network strong {
+	display: block;
+}
+
+.welcome-network p {
+	margin: 0.25rem 0 0;
+	color: var(--muted);
+	line-height: 1.5;
+}
+
+.welcome-actions {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 1rem;
+}
+
+.welcome-actions__start {
+	min-width: 180px;
+}
+
+.welcome-actions__secondary {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	color: var(--muted);
+}
+
+.welcome-link {
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
+}
+
+.welcome-link:hover {
+	color: var(--text);
+}
