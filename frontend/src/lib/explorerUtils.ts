@@ -154,3 +154,44 @@ export async function writeTextToClipboard(value: string): Promise<void> {
     textarea.remove();
   }
 }
+
+
+export const getErrorMessage = (error: unknown): string => {
+  if (typeof error === "string") {
+    return error;
+  }
+
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  if (Array.isArray(error)) {
+    return error
+      .map((item) => {
+        if (typeof item === "string") {
+          return item;
+        }
+
+        if (typeof item === "object" && item !== null && "msg" in item && typeof item.msg === "string") {
+          return item.msg;
+        }
+
+        return JSON.stringify(item);
+      })
+      .join(", ");
+  }
+
+  if (typeof error === "object" && error !== null) {
+    if ("detail" in error && typeof error.detail === "string") {
+      return error.detail;
+    }
+
+    if ("message" in error && typeof error.message === "string") {
+      return error.message;
+    }
+
+    return JSON.stringify(error);
+  }
+
+  return "An unexpected error occurred.";
+};

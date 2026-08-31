@@ -76,9 +76,13 @@ echo ""
 echo "Building backend with PyInstaller..."
 
 poetry run pyinstaller \
-  --onefile \
+  --onedir \
   --name "$BACKEND_NAME" \
   --clean \
+  --exclude-module pytest \
+  --exclude-module pyright \
+  --exclude-module ruff \
+  --exclude-module black \
   server.py
 
 BACKEND_EXECUTABLE="$SCRIPT_DIR/dist/$BACKEND_NAME"

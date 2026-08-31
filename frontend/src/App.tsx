@@ -7,15 +7,10 @@ import type {
   LanceRowDetail,
   LanceRowSummary,
   LanceTableDetails,
-  LanceTableItem,
+  LanceTableItem
 } from "@/api/lancedbAdmin";
 
-import {
-  getRow,
-  getRows,
-  getTableDetails,
-  scanConnection,
-} from "@/api/lancedbAdmin";
+import { getRow, getRows, getTableDetails, scanConnection } from "@/api/lancedbAdmin";
 
 import ConnectionTab from "@/components/ConnectionTab";
 import DatabaseTab from "@/components/DatabaseTab";
@@ -26,12 +21,13 @@ import {
   isCredentialVaultInitialized,
   loadCredentials,
   saveCredentials,
-  unlockCredentials,
+  unlockCredentials
 } from "@/lib/credentials";
 import {
   DEFAULT_EXPLORER_QUERY,
   type ExplorerQueryState,
-  writeTextToClipboard,
+  getErrorMessage,
+  writeTextToClipboard
 } from "@/lib/explorerUtils";
 import { isTauri } from "@tauri-apps/api/core";
 import { ThemeToggle } from "./components/ThemeToggle";
@@ -50,15 +46,12 @@ const EMPTY_CONNECTION: LanceConnectionState = {
   accessKeyId: "",
   secretAccessKey: "",
   sessionToken: "",
-  region: "auto",
+  region: "auto"
 };
 
 const SAVED_CONNECTIONS_KEY = "vector-watcher:saved-connections";
 
-type SavedConnection = Omit<
-  LanceConnectionState,
-  "accessKeyId" | "secretAccessKey" | "sessionToken"
->;
+type SavedConnection = Omit<LanceConnectionState, "accessKeyId" | "secretAccessKey" | "sessionToken">;
 
 const getSavedConnections = (): SavedConnection[] => {
   try {
@@ -99,22 +92,15 @@ type CredentialAction =
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<AppTab>("connection");
-  const [connection, setConnection] =
-    useState<LanceConnectionState>(EMPTY_CONNECTION);
-  const [savedConnections, setSavedConnections] = useState<SavedConnection[]>(
-    () => getSavedConnections(),
-  );
-  const [selectedConnectionName, setSelectedConnectionName] = useState<
-    string | null
-  >(null);
+  const [connection, setConnection] = useState<LanceConnectionState>(EMPTY_CONNECTION);
+  const [savedConnections, setSavedConnections] = useState<SavedConnection[]>(() => getSavedConnections());
+  const [selectedConnectionName, setSelectedConnectionName] = useState<string | null>(null);
   const [connected, setConnected] = useState(false);
   const [tables, setTables] = useState<LanceTableItem[]>([]);
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [details, setDetails] = useState<LanceTableDetails | null>(null);
   const [rows, setRows] = useState<LanceRowSummary[]>([]);
-  const [query, setQuery] = useState<ExplorerQueryState>(
-    DEFAULT_EXPLORER_QUERY,
-  );
+  const [query, setQuery] = useState<ExplorerQueryState>(DEFAULT_EXPLORER_QUERY);
   const [pagination, setPagination] = useState<LancePagination | null>(null);
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -124,22 +110,16 @@ export default function App() {
   const [vectorDetail, setVectorDetail] = useState<LanceRowDetail | null>(null);
   const [vectorLoading, setVectorLoading] = useState(false);
   const [vectorError, setVectorError] = useState<string | null>(null);
-  const [vectorTrigger, setVectorTrigger] = useState<HTMLButtonElement | null>(
-    null,
-  );
+  const [vectorTrigger, setVectorTrigger] = useState<HTMLButtonElement | null>(null);
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
   const [credentialUnlocking, setCredentialUnlocking] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [credentialsUnlocked, setCredentialsUnlocked] = useState(false);
   const [credentialPassword, setCredentialPassword] = useState("");
-  const [credentialPasswordConfirm, setCredentialPasswordConfirm] =
-    useState("");
+  const [credentialPasswordConfirm, setCredentialPasswordConfirm] = useState("");
   const [credentialModalOpen, setCredentialModalOpen] = useState(false);
-  const [credentialModalError, setCredentialModalError] = useState<
-    string | null
-  >(null);
-  const [pendingCredentialAction, setPendingCredentialAction] =
-    useState<CredentialAction | null>(null);
+  const [credentialModalError, setCredentialModalError] = useState<string | null>(null);
+  const [pendingCredentialAction, setPendingCredentialAction] = useState<CredentialAction | null>(null);
 
   const source: LanceDataSource = useMemo(
     () => ({
@@ -152,9 +132,9 @@ export default function App() {
       access_key_id: connection.accessKeyId,
       secret_access_key: connection.secretAccessKey,
       session_token: connection.sessionToken,
-      region: connection.region,
+      region: connection.region
     }),
-    [connection],
+    [connection]
   );
 
   const loadRows = useCallback(
@@ -171,17 +151,17 @@ export default function App() {
           search: nextQuery.search,
           tag: nextQuery.tag,
           sortBy: nextQuery.sortBy,
-          sortOrder: nextQuery.sortOrder,
+          sortOrder: nextQuery.sortOrder
         });
         setRows(response.rows);
         setPagination(response.pagination);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Unable to load rows.");
+        setError(getErrorMessage(err));
       } finally {
         setLoading(false);
       }
     },
-    [connected, connection, query, selectedTable],
+    [connected, connection, query, selectedTable]
   );
 
   const loadTable = useCallback(
@@ -200,17 +180,17 @@ export default function App() {
           search: resetQuery.search,
           tag: resetQuery.tag,
           sortBy: resetQuery.sortBy,
-          sortOrder: resetQuery.sortOrder,
+          sortOrder: resetQuery.sortOrder
         });
         setRows(rowsResponse.rows);
         setPagination(rowsResponse.pagination);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Unable to load table.");
+        setError(getErrorMessage(err));
       } finally {
         setLoading(false);
       }
     },
-    [connection],
+    [connection]
   );
 
   const scan = useCallback(
@@ -234,12 +214,12 @@ export default function App() {
         }
       } catch (err) {
         setConnected(false);
-        setError(err instanceof Error ? err.message : "Unable to connect.");
+        setError(getErrorMessage(err));
       } finally {
         setLoading(false);
       }
     },
-    [connection, loadTable],
+    [connection, loadTable]
   );
 
   const refresh = useCallback(async () => {
@@ -248,18 +228,14 @@ export default function App() {
     try {
       const response = await scanConnection(connection);
       setTables(response.tables);
-      const currentExists = response.tables.some(
-        (table) => table.name === selectedTable,
-      );
-      const nextTable = currentExists
-        ? selectedTable
-        : (response.tables[0]?.name ?? null);
+      const currentExists = response.tables.some((table) => table.name === selectedTable);
+      const nextTable = currentExists ? selectedTable : (response.tables[0]?.name ?? null);
       setSelectedTable(nextTable);
       if (nextTable) {
         await loadTable(nextTable);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to refresh.");
+      setError(getErrorMessage(err));
     } finally {
       setRefreshing(false);
     }
@@ -269,7 +245,7 @@ export default function App() {
     async (table: string) => {
       await loadTable(table);
     },
-    [loadTable],
+    [loadTable]
   );
 
   const handleTagApply = useCallback(
@@ -277,13 +253,13 @@ export default function App() {
       const next = {
         ...query,
         tag,
-        page: 1,
+        page: 1
       };
 
       setQuery(next);
       void loadRows(next);
     },
-    [loadRows, query],
+    [loadRows, query]
   );
 
   const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -293,7 +269,7 @@ export default function App() {
       const next = {
         ...query,
         search,
-        page: 1,
+        page: 1
       };
 
       setQuery(next);
@@ -304,7 +280,7 @@ export default function App() {
         void loadRows(next);
       }, 400);
     },
-    [loadRows, query],
+    [loadRows, query]
   );
 
   useEffect(() => {
@@ -316,21 +292,18 @@ export default function App() {
   }, []);
 
   const handleSortChange = useCallback(
-    (
-      sortBy: ExplorerQueryState["sortBy"],
-      sortOrder: ExplorerQueryState["sortOrder"],
-    ) => {
+    (sortBy: ExplorerQueryState["sortBy"], sortOrder: ExplorerQueryState["sortOrder"]) => {
       const next = {
         ...query,
         sortBy,
         sortOrder,
-        page: 1,
+        page: 1
       };
 
       setQuery(next);
       void loadRows(next);
     },
-    [loadRows, query],
+    [loadRows, query]
   );
 
   const handlePageSizeChange = useCallback(
@@ -338,26 +311,26 @@ export default function App() {
       const next = {
         ...query,
         pageSize,
-        page: 1,
+        page: 1
       };
 
       setQuery(next);
       void loadRows(next);
     },
-    [loadRows, query],
+    [loadRows, query]
   );
 
   const handlePageChange = useCallback(
     (page: number) => {
       const next = {
         ...query,
-        page,
+        page
       };
 
       setQuery(next);
       void loadRows(next);
     },
-    [loadRows, query],
+    [loadRows, query]
   );
 
   const handleCopy = useCallback(async (value: string, message: string) => {
@@ -370,7 +343,7 @@ export default function App() {
 
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to copy.");
+      setError(getErrorMessage(err));
     }
   }, []);
 
@@ -389,14 +362,12 @@ export default function App() {
 
         setVectorDetail(detail);
       } catch (err) {
-        setVectorError(
-          err instanceof Error ? err.message : "Unable to load vector.",
-        );
+        setVectorError(err instanceof Error ? err.message : "Unable to load vector.");
       } finally {
         setVectorLoading(false);
       }
     },
-    [connection, selectedTable],
+    [connection, selectedTable]
   );
 
   const handleLock = () => {
@@ -408,6 +379,8 @@ export default function App() {
   };
 
   const handleDisconnect = () => {
+    setConnection(EMPTY_CONNECTION);
+    setSelectedConnectionName(null);
     setConnected(false);
     setTables([]);
     setSelectedTable(null);
@@ -416,12 +389,6 @@ export default function App() {
     setPagination(null);
     setActiveTab("connection");
   };
-
-  useEffect(() => {
-    if (!connected) {
-      setActiveTab("connection");
-    }
-  }, [connected]);
 
   const showToast = useCallback((message: string) => {
     setToastMessage(message);
@@ -450,27 +417,20 @@ export default function App() {
         const isUpdate = previousConnectionName !== null;
 
         const existingConnectionWithSameName = savedConnections.some(
-          (item) =>
-            item.name === connectionName &&
-            item.name !== previousConnectionName,
+          (item) => item.name === connectionName && item.name !== previousConnectionName
         );
 
         if (existingConnectionWithSameName) {
-          throw new Error(
-            `A saved connection named "${connectionName}" already exists.`,
-          );
+          throw new Error(`A saved connection named "${connectionName}" already exists.`);
         }
 
         await saveCredentials(connectionName, {
           accessKeyId: connection.accessKeyId,
           secretAccessKey: connection.secretAccessKey,
-          sessionToken: connection.sessionToken,
+          sessionToken: connection.sessionToken
         });
 
-        if (
-          previousConnectionName &&
-          previousConnectionName !== connectionName
-        ) {
+        if (previousConnectionName && previousConnectionName !== connectionName) {
           await deleteCredentials(previousConnectionName);
         }
 
@@ -481,13 +441,11 @@ export default function App() {
           bucket: connection.bucket,
           endpoint: connection.endpoint,
           accountId: connection.accountId,
-          region: connection.region,
+          region: connection.region
         };
 
         const nextConnections = isUpdate
-          ? savedConnections.map((item) =>
-              item.name === previousConnectionName ? savedConnection : item,
-            )
+          ? savedConnections.map((item) => (item.name === previousConnectionName ? savedConnection : item))
           : [...savedConnections, savedConnection];
 
         saveSavedConnections(nextConnections);
@@ -499,9 +457,7 @@ export default function App() {
       }
 
       if (action.type === "load") {
-        const saved = savedConnections.find(
-          (item) => item.name === action.name,
-        );
+        const saved = savedConnections.find((item) => item.name === action.name);
 
         if (!saved) {
           return;
@@ -517,7 +473,7 @@ export default function App() {
           ...saved,
           accessKeyId: credentials.accessKeyId,
           secretAccessKey: credentials.secretAccessKey,
-          sessionToken: credentials.sessionToken,
+          sessionToken: credentials.sessionToken
         });
         setSelectedConnectionName(saved.name);
 
@@ -526,14 +482,12 @@ export default function App() {
 
       await deleteCredentials(action.name);
 
-      const nextConnections = savedConnections.filter(
-        (item) => item.name !== action.name,
-      );
+      const nextConnections = savedConnections.filter((item) => item.name !== action.name);
 
       setSavedConnections(nextConnections);
       saveSavedConnections(nextConnections);
     },
-    [connection, savedConnections, selectedConnectionName],
+    [connection, savedConnections, selectedConnectionName]
   );
 
   const handleSaveConnection = useCallback(async () => {
@@ -557,7 +511,7 @@ export default function App() {
 
     if (!isCredentialVaultInitialized() || !credentialsUnlocked) {
       setPendingCredentialAction({
-        type: "save",
+        type: "save"
       });
 
       setCredentialPassword("");
@@ -570,19 +524,23 @@ export default function App() {
 
     try {
       const result = await runCredentialAction({
-        type: "save",
+        type: "save"
       });
 
       setError(null);
-      showToast(
-        `Connection ${result === "updated" ? "updated" : "saved"} successfully`,
-      );
+      showToast(`Connection ${result === "updated" ? "updated" : "saved"} successfully`);
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Unable to save connection.",
-      );
+      setError(getErrorMessage(err));
     }
-  }, [connection.name, credentialsUnlocked, runCredentialAction, showToast]);
+  }, [
+    connection.accessKeyId,
+    connection.name,
+    connection.secretAccessKey,
+    connection.storage,
+    credentialsUnlocked,
+    runCredentialAction,
+    showToast
+  ]);
 
   const handleLoadConnection = useCallback(
     async (name: string) => {
@@ -597,11 +555,11 @@ export default function App() {
           ...saved,
           accessKeyId: "",
           secretAccessKey: "",
-          sessionToken: "",
+          sessionToken: ""
         });
 
         setError(
-          "Enter the credentials for this connection, then click Save Connection to create the secure credential vault.",
+          "Enter the credentials for this connection, then click Save Connection to create the secure credential vault."
         );
 
         return;
@@ -610,7 +568,7 @@ export default function App() {
       if (!credentialsUnlocked) {
         setPendingCredentialAction({
           type: "load",
-          name,
+          name
         });
 
         setCredentialPassword("");
@@ -624,72 +582,16 @@ export default function App() {
       try {
         await runCredentialAction({
           type: "load",
-          name,
+          name
         });
 
         setError(null);
       } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Unable to load connection.",
-        );
+        setError(getErrorMessage(err));
       }
     },
-    [credentialsUnlocked, runCredentialAction, savedConnections],
+    [credentialsUnlocked, runCredentialAction, savedConnections]
   );
-
-  //const handleDeleteConnection = useCallback(
-  //  async (name: string) => {
-  //    const saved = savedConnections.find((item) => item.name === name);
-
-  //    if (!saved) {
-  //      return;
-  //    }
-
-  //    if (!isCredentialVaultInitialized()) {
-  //      const nextConnections = savedConnections.filter((item) => item.name !== name);
-
-  //      setSavedConnections(nextConnections);
-  //      saveSavedConnections(nextConnections);
-  //      setError(null);
-
-  //      if (connection.name === name) {
-  //        setConnection(EMPTY_CONNECTION);
-  //      }
-
-  //      return;
-  //    }
-
-  //    if (!credentialsUnlocked) {
-  //      setPendingCredentialAction({
-  //        type: "delete",
-  //        name,
-  //      });
-
-  //      setCredentialPassword("");
-  //      setCredentialPasswordConfirm("");
-  //      setCredentialModalError(null);
-  //      setCredentialModalOpen(true);
-
-  //      return;
-  //    }
-
-  //    try {
-  //      await runCredentialAction({
-  //        type: "delete",
-  //        name,
-  //      });
-
-  //      if (connection.name === name) {
-  //        setConnection(EMPTY_CONNECTION);
-  //      }
-
-  //      setError(null);
-  //    } catch (err) {
-  //      setError(err instanceof Error ? err.message : "Unable to delete connection.");
-  //    }
-  //  },
-  //  [connection.name, credentialsUnlocked, runCredentialAction, savedConnections],
-  //);
 
   const handleDeleteConnection = useCallback(
     async (name: string) => {
@@ -700,7 +602,7 @@ export default function App() {
       }
 
       const confirmed = window.confirm(
-        `Are you sure you want to delete the saved connection "${name}"?\n\nThis action cannot be undone.`,
+        `Are you sure you want to delete the saved connection "${name}"?\n\nThis action cannot be undone.`
       );
 
       if (!confirmed) {
@@ -708,9 +610,7 @@ export default function App() {
       }
 
       if (!isCredentialVaultInitialized()) {
-        const nextConnections = savedConnections.filter(
-          (item) => item.name !== name,
-        );
+        const nextConnections = savedConnections.filter((item) => item.name !== name);
 
         setSavedConnections(nextConnections);
         saveSavedConnections(nextConnections);
@@ -729,7 +629,7 @@ export default function App() {
       if (!credentialsUnlocked) {
         setPendingCredentialAction({
           type: "delete",
-          name,
+          name
         });
 
         setCredentialPassword("");
@@ -743,7 +643,7 @@ export default function App() {
       try {
         await runCredentialAction({
           type: "delete",
-          name,
+          name
         });
 
         if (connection.name === name) {
@@ -758,18 +658,10 @@ export default function App() {
 
         setError(null);
       } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Unable to delete connection.",
-        );
+        setError(getErrorMessage(err));
       }
     },
-    [
-      connection.name,
-      credentialsUnlocked,
-      runCredentialAction,
-      savedConnections,
-      showToast,
-    ],
+    [connection.name, credentialsUnlocked, runCredentialAction, savedConnections, showToast]
   );
 
   const handleCredentialUnlock = useCallback(
@@ -785,10 +677,7 @@ export default function App() {
         return;
       }
 
-      if (
-        !isCredentialVaultInitialized() &&
-        credentialPassword !== credentialPasswordConfirm
-      ) {
+      if (!isCredentialVaultInitialized() && credentialPassword !== credentialPasswordConfirm) {
         setCredentialModalError("The passwords do not match.");
         return;
       }
@@ -816,29 +705,16 @@ export default function App() {
 
         const message = err instanceof Error ? err.message : String(err);
 
-        if (
-          message.includes("BadFileKey") ||
-          message.includes("failed to decode/decrypt")
-        ) {
-          setCredentialModalError(
-            "Incorrect master password. Please try again.",
-          );
+        if (message.includes("BadFileKey") || message.includes("failed to decode/decrypt")) {
+          setCredentialModalError("Incorrect master password. Please try again.");
         } else {
-          setCredentialModalError(
-            "Unable to unlock the credential vault. Please try again.",
-          );
+          setCredentialModalError("Unable to unlock the credential vault. Please try again.");
         }
       } finally {
         setCredentialUnlocking(false);
       }
     },
-    [
-      credentialPassword,
-      credentialPasswordConfirm,
-      credentialUnlocking,
-      pendingCredentialAction,
-      runCredentialAction,
-    ],
+    [credentialPassword, credentialPasswordConfirm, credentialUnlocking, pendingCredentialAction, runCredentialAction]
   );
 
   if (locked) {
@@ -849,11 +725,7 @@ export default function App() {
           <span className="eyebrow">Vector Watcher</span>
           <h1>Explorer locked</h1>
           <p>Your session is still connected, but the explorer is hidden.</p>
-          <button
-            type="button"
-            className="button button-primary"
-            onClick={handleUnlock}
-          >
+          <button type="button" className="button button-primary" onClick={handleUnlock}>
             Unlock explorer
           </button>
         </div>
@@ -865,19 +737,12 @@ export default function App() {
     <div className="app-shell">
       {credentialModalOpen && (
         <div className="credential-modal-backdrop">
-          <div
-            className="credential-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="credential-modal-title"
-          >
+          <div className="credential-modal" role="dialog" aria-modal="true" aria-labelledby="credential-modal-title">
             <div className="credential-modal__header">
               <span className="eyebrow">Secure credentials</span>
 
               <h2 id="credential-modal-title">
-                {!isCredentialVaultInitialized()
-                  ? "Create credential vault"
-                  : "Unlock credential vault"}
+                {!isCredentialVaultInitialized() ? "Create credential vault" : "Unlock credential vault"}
               </h2>
 
               <p>
@@ -894,9 +759,7 @@ export default function App() {
                 <input
                   type="password"
                   value={credentialPassword}
-                  onChange={(event) =>
-                    setCredentialPassword(event.target.value)
-                  }
+                  onChange={(event) => setCredentialPassword(event.target.value)}
                   autoFocus
                   autoComplete="new-password"
                   disabled={loading}
@@ -910,20 +773,14 @@ export default function App() {
                   <input
                     type="password"
                     value={credentialPasswordConfirm}
-                    onChange={(event) =>
-                      setCredentialPasswordConfirm(event.target.value)
-                    }
+                    onChange={(event) => setCredentialPasswordConfirm(event.target.value)}
                     autoComplete="new-password"
                     disabled={loading}
                   />
                 </label>
               )}
 
-              {credentialModalError && (
-                <p className="credential-modal__error">
-                  {credentialModalError}
-                </p>
-              )}
+              {credentialModalError && <p className="credential-modal__error">{credentialModalError}</p>}
 
               <div className="credential-modal__actions">
                 <button
@@ -950,11 +807,7 @@ export default function App() {
                       : undefined
                   }
                 >
-                  {credentialUnlocking
-                    ? "Unlocking..."
-                    : isCredentialVaultInitialized()
-                      ? "Unlock"
-                      : "Create vault"}
+                  {credentialUnlocking ? "Unlocking..." : isCredentialVaultInitialized() ? "Unlock" : "Create vault"}
                 </button>
               </div>
             </form>
@@ -1106,13 +959,7 @@ export default function App() {
           aria-label="View Vector Watcher on GitHub"
           title="View source code on GitHub"
         >
-          <svg
-            viewBox="0 0 24 24"
-            width="16"
-            height="16"
-            aria-hidden="true"
-            fill="currentColor"
-          >
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="currentColor">
             <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-1.026-.013-1.862-2.782.604-3.369-1.18-3.369-1.18-.455-1.156-1.11-1.464-1.11-1.464-.908-.621.069-.608.069-.608 1.004.07 1.532 1.031 1.532 1.031.892 1.529 2.341 1.087 2.91.831.091-.646.349-1.087.635-1.337-2.221-.253-4.556-1.111-4.556-4.943 0-1.092.39-1.985 1.029-2.685-.103-.253-.446-1.271.098-2.65 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0 1 12 6.756a9.59 9.59 0 0 1 2.504.337c1.909-1.295 2.748-1.026 2.748-1.026.546 1.379.203 2.397.1 2.65.64.7 1.028 1.593 1.028 2.685 0 3.841-2.339 4.687-4.566 4.935.359.31.678.919.678 1.852 0 1.337-.012 2.415-.012 2.744 0 .267.18.578.688.48A10.001 10.001 0 0 0 22 12c0-5.523-4.477-10-10-10Z" />
           </svg>
 

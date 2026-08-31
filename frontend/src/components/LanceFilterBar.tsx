@@ -1,5 +1,5 @@
 import type { LanceSortColumn, LanceSortOrder } from "@/api/lancedbAdmin";
-import { type FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useState } from "react";
 
 interface LanceFilterBarProps {
   appliedTag: string;
@@ -24,14 +24,9 @@ export default function LanceFilterBar({
   onSearchChange,
   onTagApply,
   onSortChange,
-  onPageSizeChange,
+  onPageSizeChange
 }: LanceFilterBarProps) {
   const [tagInput, setTagInput] = useState(appliedTag);
-
-  useEffect(() => {
-    setTagInput(appliedTag);
-  }, [appliedTag]);
-
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onTagApply(tagInput);

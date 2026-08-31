@@ -3,17 +3,20 @@
   "private": true,
   "description": "A desktop explorer for LanceDB vector datasets",
   "author": "RecursiveZero",
-  "version": "1.1.0",
+  "version": "1.1.5",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build --config src-tauri/tauri.prod.conf.json",
-    "tauri:build:linux": "tauri build --config src-tauri/tauri.prod.conf.json --bundles deb",
-    "tauri:build:mac": "tauri build --config src-tauri/tauri.prod.conf.json --bundles app,dmg",
-    "tauri:build:windows": "tauri build --config src-tauri/tauri.prod.conf.json --bundles nsis"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "version:set": "node scripts/set-version.mjs",
+    "tauri:build": "tauri build --config ../src-tauri/tauri.prod.conf.json",
+    "tauri:build:linux": "tauri build --config ../src-tauri/tauri.prod.conf.json --bundles deb",
+    "tauri:build:mac": "tauri build --config ../src-tauri/tauri.prod.conf.json --bundles app,dmg",
+    "tauri:build:windows": "tauri build --config ../src-tauri/tauri.prod.conf.json --bundles nsis"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
@@ -25,12 +28,21 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@tauri-apps/cli": "^2",
     "@types/node": "^26.4.0",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
+    "eslint": "^10.9.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.5",
+    "globals": "^17.11.0",
+    "jiti": "^2.7.0",
+    "prettier": "^3.9.6",
     "typescript": "~5.8.3",
+    "typescript-eslint": "^8.68.0",
     "vite": "^7.0.4"
   }
 }

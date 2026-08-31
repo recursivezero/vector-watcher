@@ -7,8 +7,8 @@ interface LanceMetadataPanelProps {
   loading: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function JsonBlock({ value, label }: { value: any; label: string }) {
-  console.log({ value });
   return (
     <div className="lance-admin-json-group">
       <h3>{label}</h3>
@@ -17,7 +17,12 @@ function JsonBlock({ value, label }: { value: any; label: string }) {
   );
 }
 
-export default function LanceMetadataPanel({ metadata, embeddingFunctions, vectorColumns, loading }: LanceMetadataPanelProps) {
+export default function LanceMetadataPanel({
+  metadata,
+  embeddingFunctions,
+  vectorColumns,
+  loading
+}: LanceMetadataPanelProps) {
   return (
     <section className="lance-admin-panel" aria-labelledby="lance-metadata-heading">
       <div className="lance-admin-panel__heading">
