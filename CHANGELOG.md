@@ -29,3 +29,9 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 - Added Dark theme
 - Fix Database tab vector metadata view schema
 - Added build package for linux and macOS
+
+## [1.1.5] - 31-08-2026
+
+- Added Help and About page
+- Added for Windows desktop app
+- 

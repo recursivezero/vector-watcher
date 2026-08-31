@@ -9,7 +9,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri:dev": "tauri dev",
+    "tauri:dev": "cd .. && tauri dev",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "version:set": "node scripts/set-version.mjs",
@@ -18,9 +18,10 @@
     "tauri:build:windows": "cd .. && tauri build --config ./src-tauri/tauri.prod.conf.json --bundles nsis"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2",
+    "@tauri-apps/api": "^2.11.1",
     "@tauri-apps/plugin-dialog": "^2.7.2",
     "@tauri-apps/plugin-opener": "^2",
+    "@tauri-apps/plugin-os": "^2.3.2",
     "@tauri-apps/plugin-shell": "^2.3.5",
     "@tauri-apps/plugin-stronghold": "^2.3.1",
     "react": "^19.1.0",

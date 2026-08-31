@@ -133,6 +133,26 @@
 	text-align: right;
 }
 
+.about-support {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	flex-wrap: wrap;
+
+	margin-top: 1rem;
+}
+
+.about-support__email {
+	color: var(--text-primary);
+	font-weight: 500;
+	margin-bottom: 1rem;
+	text-decoration: dashed;
+}
+
+.about-support__email:hover {
+	text-decoration: underline;
+}
+
 @media (max-width: 600px) {
 	.about-main {
 		padding:

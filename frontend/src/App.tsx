@@ -11,6 +11,7 @@ import type {
 } from "@/api/lancedbAdmin";
 
 import { getRow, getRows, getTableDetails, scanConnection } from "@/api/lancedbAdmin";
+import { confirmAction } from "@/libs/confirm";
 
 import ConnectionTab from "@/components/ConnectionTab";
 import DatabaseTab from "@/components/DatabaseTab";
@@ -22,13 +23,13 @@ import {
   loadCredentials,
   saveCredentials,
   unlockCredentials
-} from "@/lib/credentials";
+} from "@/libs/credentials";
 import {
   DEFAULT_EXPLORER_QUERY,
   type ExplorerQueryState,
   getErrorMessage,
   writeTextToClipboard
-} from "@/lib/explorerUtils";
+} from "@/libs/explorerUtils";
 import { isTauri } from "@tauri-apps/api/core";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
@@ -379,7 +380,12 @@ export default function App() {
     setLocked(false);
   };
 
-  const handleDisconnect = () => {
+  const handleDisconnect = async () => {
+    const confirmed = await confirmAction("Are you sure you want to disconnect from the current database?");
+
+    if (!confirmed) {
+      return;
+    }
     setConnection(EMPTY_CONNECTION);
     setSelectedConnectionName(null);
     setConnected(false);
@@ -816,7 +822,7 @@ export default function App() {
         </div>
       )}
 
-      <Header connected={connected} connectionName={connection.name} />
+      <Header connected={connected} connectionName={connection.name} onDisconnect={handleDisconnect} />
 
       <nav className="app-tabs">
         <button

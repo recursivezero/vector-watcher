@@ -1,7 +1,7 @@
 export const LANCE_STORAGE = {
   R2: "r2",
   S3: "s3",
-  LOCAL: "local",
+  LOCAL: "local"
 } as const;
 
 export type LanceStorageType = (typeof LANCE_STORAGE)[keyof typeof LANCE_STORAGE];
@@ -157,8 +157,8 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     ...options,
     headers: {
       "Content-Type": "application/json",
-      ...(options.headers ?? {}),
-    },
+      ...(options.headers ?? {})
+    }
   });
 
   let payload: unknown;
@@ -183,7 +183,9 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
 function toBackendConnection(connection: LanceConnectionState): LanceDataSource {
   const endpoint =
-    connection.storage === "r2" ? `https://${connection.accountId.trim()}.r2.cloudflarestorage.com` : connection.endpoint.trim();
+    connection.storage === "r2"
+      ? `https://${connection.accountId.trim()}.r2.cloudflarestorage.com`
+      : connection.endpoint.trim();
 
   return {
     name: connection.name,
@@ -194,21 +196,21 @@ function toBackendConnection(connection: LanceConnectionState): LanceDataSource 
     access_key_id: connection.accessKeyId,
     secret_access_key: connection.secretAccessKey,
     session_token: connection.sessionToken,
-    region: connection.region || "auto",
+    region: connection.region || "auto"
   };
 }
 
 export async function scanConnection(connection: LanceConnectionState): Promise<LanceTablesResponse> {
   return request<LanceTablesResponse>("/connections/scan", {
     method: "POST",
-    body: JSON.stringify(toBackendConnection(connection)),
+    body: JSON.stringify(toBackendConnection(connection))
   });
 }
 
 export async function getTableDetails(connection: LanceConnectionState, table: string): Promise<LanceTableDetails> {
   return request<LanceTableDetails>(`/connections/table-details?table=${encodeURIComponent(table)}`, {
     method: "POST",
-    body: JSON.stringify(toBackendConnection(connection)),
+    body: JSON.stringify(toBackendConnection(connection))
   });
 }
 
@@ -222,12 +224,12 @@ export async function getRows(
     tag?: string;
     sortBy?: LanceSortColumn | null;
     sortOrder?: LanceSortOrder;
-  },
+  }
 ): Promise<LanceRowsResponse> {
   const params = new URLSearchParams({
     table,
     page: String(options.page),
-    page_size: String(options.pageSize),
+    page_size: String(options.pageSize)
   });
 
   if (options.search?.trim()) {
@@ -248,14 +250,14 @@ export async function getRows(
 
   return request<LanceRowsResponse>(`/connections/rows?${params.toString()}`, {
     method: "POST",
-    body: JSON.stringify(toBackendConnection(connection)),
+    body: JSON.stringify(toBackendConnection(connection))
   });
 }
 
 export async function getRow(connection: LanceConnectionState, table: string, rowId: number): Promise<LanceRowDetail> {
   return request<LanceRowDetail>(`/connections/row?table=${encodeURIComponent(table)}&row_id=${rowId}`, {
     method: "POST",
-    body: JSON.stringify(toBackendConnection(connection)),
+    body: JSON.stringify(toBackendConnection(connection))
   });
 }
 

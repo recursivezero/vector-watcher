@@ -1,11 +1,69 @@
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { useEffect, useState } from "react";
+
+import { formatDiagnosticInfo, getAppInfo, type AppInfo } from "@/libs/appInfo";
 
 import "@/assets/styles/about.css";
 import { useNavigation } from "@/contexts/NavigationContext";
 
 export const About = () => {
   const { navigateHome } = useNavigation();
+
+  const [appInfo, setAppInfo] = useState<AppInfo | null>(null);
+  const [copyStatus, setCopyStatus] = useState("");
+
+  useEffect(() => {
+    const loadAppInfo = async () => {
+      try {
+        const info = await getAppInfo();
+
+        setAppInfo(info);
+      } catch {
+        setAppInfo({
+          version: "Unavailable",
+          platform: navigator.platform
+        });
+      }
+    };
+
+    void loadAppInfo();
+  }, []);
+
+  useEffect(() => {
+    const handleLoadAppInfo = async () => {
+      try {
+        const info = await getAppInfo();
+
+        setAppInfo(info);
+      } catch {
+        setAppInfo({
+          version: "Unavailable",
+          platform: navigator.platform
+        });
+      }
+    };
+
+    void handleLoadAppInfo();
+  }, []);
+
+  const handleCopyDiagnostics = async () => {
+    if (!appInfo) {
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(formatDiagnosticInfo(appInfo));
+
+      setCopyStatus("Copied");
+
+      window.setTimeout(() => {
+        setCopyStatus("");
+      }, 2000);
+    } catch {
+      setCopyStatus("Unable to copy");
+    }
+  };
 
   return (
     <div className="about-screen">
@@ -47,12 +105,12 @@ export const About = () => {
 
               <div className="about-detail">
                 <span className="about-detail__label">Version</span>
-                <span className="about-detail__value">Loading...</span>
+                <span className="about-detail__value">{appInfo?.version ?? "Loading..."}</span>
               </div>
 
               <div className="about-detail">
                 <span className="about-detail__label">Platform</span>
-                <span className="about-detail__value">{navigator.platform}</span>
+                <span className="about-detail__value">{appInfo?.platform ?? "Loading..."}</span>
               </div>
             </div>
           </section>
@@ -82,12 +140,30 @@ export const About = () => {
               </div>
             </div>
           </section>
+          <section className="about-section">
+            <div className="about-section__heading">
+              <div>
+                <h2>Diagnostics</h2>
+
+                <p>Copy application information when reporting an issue.</p>
+              </div>
+
+              <button type="button" className="button" onClick={() => void handleCopyDiagnostics()} disabled={!appInfo}>
+                {copyStatus || "Copy diagnostics"}
+              </button>
+            </div>
+          </section>
 
           <section className="about-section">
             <h2>Support</h2>
 
-            <p>Use the Help section for guidance on connecting and exploring LanceDB databases.</p>
+            <p>For help using Vector Watcher, visit the Help section or contact support.</p>
 
+            <div className="about-support">
+              <a className="about-support__email" href="mailto:support@recursivezero.com">
+                support@recursivezero.com
+              </a>
+            </div>
             <button type="button" className="button" onClick={navigateHome}>
               Go to Home
             </button>

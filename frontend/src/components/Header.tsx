@@ -6,9 +6,10 @@ import "@/assets/styles/header.css";
 interface AppHeaderProps {
   connected?: boolean;
   connectionName?: string;
+  onDisconnect?: () => void;
 }
 
-export function Header({ connected, connectionName }: AppHeaderProps) {
+export function Header({ connected, connectionName, onDisconnect }: AppHeaderProps) {
   const { activePage, navigateHome, navigate } = useNavigation();
   const hasConnectionStatus = typeof connected === "boolean";
 
@@ -54,6 +55,12 @@ export function Header({ connected, connectionName }: AppHeaderProps) {
           >
             About
           </button>
+          {connected && onDisconnect && (
+            <button type="button" className="app-header__disconnect" onClick={() => void onDisconnect()}>
+              <span className="app-header__disconnect-icon">⇥</span>
+              Disconnect
+            </button>
+          )}
 
           <ThemeToggle />
         </div>

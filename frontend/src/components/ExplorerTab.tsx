@@ -14,7 +14,7 @@ import LanceScanToolbar from "./LanceScanToolbar";
 import LanceSummaryCards from "./LanceSummaryCards";
 import VectorViewer from "./VectorViewer";
 
-import type { ExplorerQueryState } from "@/lib/explorerUtils";
+import type { ExplorerQueryState } from "@/libs/explorerUtils";
 
 interface ExplorerTabProps {
   source: LanceDataSource;
