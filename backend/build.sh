@@ -73,6 +73,7 @@ rm -rf build
 rm -rf dist
 
 echo ""
+
 echo "Building backend with PyInstaller..."
 
 poetry run pyinstaller \
@@ -85,7 +86,8 @@ poetry run pyinstaller \
   --exclude-module black \
   server.py
 
-BACKEND_EXECUTABLE="$SCRIPT_DIR/dist/$BACKEND_NAME"
+BACKEND_DIR="$SCRIPT_DIR/dist/$BACKEND_NAME"
+BACKEND_EXECUTABLE="$BACKEND_DIR/$BACKEND_NAME"
 
 echo ""
 echo "Checking PyInstaller output..."
@@ -106,14 +108,17 @@ echo "Creating Tauri binaries directory..."
 
 mkdir -p "$TAURI_BINARIES_DIR"
 
-echo ""
-echo "Copying backend sidecar..."
-
 TARGET_BINARY="$TAURI_BINARIES_DIR/$OUTPUT_BINARY_NAME"
+
+echo ""
+echo "Cleaning previous Tauri sidecar..."
 
 rm -f "$TARGET_BINARY"
 
-cp \
+echo ""
+echo "Copying backend executable..."
+
+cp -v \
   "$BACKEND_EXECUTABLE" \
   "$TARGET_BINARY"
 
