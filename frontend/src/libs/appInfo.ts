@@ -33,6 +33,7 @@ export function formatDiagnosticInfo(appInfo: AppInfo): string {
     "Vector Watcher Diagnostic Information",
     "",
     "Application: Vector Watcher",
+    `Date: ${new Date()}`,
     `Version: ${appInfo.version}`,
     `Platform: ${appInfo.platform}`,
     "",
