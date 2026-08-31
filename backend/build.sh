@@ -109,11 +109,13 @@ echo "Creating Tauri binaries directory..."
 mkdir -p "$TAURI_BINARIES_DIR"
 
 TARGET_BINARY="$TAURI_BINARIES_DIR/$OUTPUT_BINARY_NAME"
+TARGET_RUNTIME_DIR="$TAURI_BINARIES_DIR/_internal"
 
 echo ""
 echo "Cleaning previous Tauri sidecar..."
 
 rm -f "$TARGET_BINARY"
+rm -rf "$TARGET_RUNTIME_DIR"
 
 echo ""
 echo "Copying backend executable..."
@@ -121,6 +123,13 @@ echo "Copying backend executable..."
 cp -v \
   "$BACKEND_EXECUTABLE" \
   "$TARGET_BINARY"
+
+echo ""
+echo "Copying PyInstaller runtime..."
+
+cp -a \
+  "$BACKEND_DIR/_internal" \
+  "$TARGET_RUNTIME_DIR"
 
 echo ""
 echo "Making sidecar executable..."
@@ -135,7 +144,16 @@ if [ ! -f "$TARGET_BINARY" ]; then
   exit 1
 fi
 
+if [ ! -d "$TARGET_RUNTIME_DIR" ]; then
+  echo "ERROR: PyInstaller runtime directory was not copied successfully."
+  exit 1
+fi
+
 ls -lh "$TARGET_BINARY"
+
+echo ""
+echo "PyInstaller runtime:"
+ls -ld "$TARGET_RUNTIME_DIR" 
 
 echo ""
 echo "========================================"

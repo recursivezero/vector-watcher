@@ -5,6 +5,13 @@
         "externalBin": [
             "binaries/vector-watcher-backend"
         ],
+        "linux": {
+            "deb": {
+                "files": {
+                    "/usr/bin/_internal": "binaries/_internal/"
+                }
+            }
+        },
         "icon": [
             "icons/32x32.png",
             "icons/128x128.png",
