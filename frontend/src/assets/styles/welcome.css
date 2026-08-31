@@ -22,10 +22,41 @@
 	justify-content: space-between;
 }
 
+
 .welcome-topbar__brand {
 	color: var(--muted);
 	font-size: 1.25rem;
 	font-weight: 600;
+}
+
+.welcome-topbar__actions {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.welcome-topbar__link {
+	padding: 0.5rem 0.75rem;
+
+	border: 0;
+	border-radius: 0.5rem;
+
+	background: transparent;
+	color: var(--text-muted);
+
+	font: inherit;
+	font-size: 0.9rem;
+
+	cursor: pointer;
+
+	transition:
+		background 120ms ease,
+		color 120ms ease;
+}
+
+.welcome-topbar__link:hover {
+	background: var(--surface);
+	color: var(--text-primary);
 }
 
 .welcome-card {
@@ -120,30 +151,10 @@
 .welcome-actions {
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
+	align-items: center;
 	gap: 1rem;
 }
 
 .welcome-actions__start {
 	min-width: 180px;
-}
-
-.welcome-actions__secondary {
-	display: flex;
-	align-items: center;
-	gap: 0.75rem;
-	color: var(--muted);
-}
-
-.welcome-link {
-	padding: 0;
-	border: 0;
-	background: transparent;
-	color: inherit;
-	font: inherit;
-	cursor: pointer;
-}
-
-.welcome-link:hover {
-	color: var(--text);
 }

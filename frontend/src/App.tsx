@@ -15,7 +15,6 @@ import { getRow, getRows, getTableDetails, scanConnection } from "@/api/lancedbA
 import ConnectionTab from "@/components/ConnectionTab";
 import DatabaseTab from "@/components/DatabaseTab";
 import ExplorerTab from "@/components/ExplorerTab";
-import { Welcome } from "@/components/Welcome";
 
 import {
   deleteCredentials,
@@ -32,7 +31,7 @@ import {
 } from "@/lib/explorerUtils";
 import { isTauri } from "@tauri-apps/api/core";
 import { Footer } from "./components/Footer";
-import { ThemeToggle } from "./components/ThemeToggle";
+import { Header } from "./components/Header";
 
 type AppTab = "connection" | "database" | "explorer";
 
@@ -93,7 +92,6 @@ type CredentialAction =
     };
 
 export default function App() {
-  const [started, setStarted] = useState(false);
   const [activeTab, setActiveTab] = useState<AppTab>("connection");
   const [connection, setConnection] = useState<LanceConnectionState>(EMPTY_CONNECTION);
   const [savedConnections, setSavedConnections] = useState<SavedConnection[]>(() => getSavedConnections());
@@ -720,10 +718,6 @@ export default function App() {
     [credentialPassword, credentialPasswordConfirm, credentialUnlocking, pendingCredentialAction, runCredentialAction]
   );
 
-  if (!started) {
-    return <Welcome onStart={() => setStarted(true)} />;
-  }
-
   if (locked) {
     return (
       <div className="lock-screen">
@@ -821,21 +815,8 @@ export default function App() {
           </div>
         </div>
       )}
-      <header className="app-header">
-        <div className="brand">
-          <div className="brand-mark">◈</div>
-          <div>
-            <strong>Vector Watcher</strong>
-            <span>LanceDB explorer</span>
-          </div>
-        </div>
 
-        <div className="header-status">
-          <span className={`status-dot ${connected ? "is-connected" : ""}`} />
-          {connected ? connection.name : "No connection"}
-        </div>
-        <ThemeToggle />
-      </header>
+      <Header connected={connected} connectionName={connection.name} />
 
       <nav className="app-tabs">
         <button

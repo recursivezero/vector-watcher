@@ -1,0 +1,76 @@
+.app-header__right {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.app-header__actions {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.app-header__link {
+	padding: 0.5rem 0.75rem;
+
+	border: 0;
+	border-radius: 0.5rem;
+
+	background: transparent;
+	color: var(--text-muted);
+
+	font: inherit;
+	font-size: 0.9rem;
+
+	cursor: pointer;
+}
+
+.app-header__link:hover,
+.app-header__link--active {
+	background: var(--surface);
+	color: var(--text-primary);
+}
+
+.app-header__brand {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+
+	padding: 0;
+
+	border: 0;
+
+	background: transparent;
+	color: inherit;
+
+	font: inherit;
+	text-align: left;
+
+	cursor: pointer;
+}
+
+.app-header__brand-mark {
+	display: grid;
+	place-items: center;
+
+	width: 2.25rem;
+	height: 2.25rem;
+
+	border: 1px solid var(--border);
+	border-radius: 0.5rem;
+}
+
+.app-header__brand-content {
+	display: flex;
+	flex-direction: column;
+}
+
+.app-header__brand-content strong {
+	color: var(--text-primary);
+}
+
+.app-header__brand-content span {
+	color: var(--text-muted);
+
+	font-size: 0.75rem;
+}

@@ -1,23 +1,14 @@
+import { useNavigation } from "@/contexts/NavigationContext";
+
 import "@/assets/styles/help.css";
+import { Header } from "./Header";
 
-interface HelpProps {
-  onClose: () => void;
-}
+export const Help = () => {
+  const { navigateHome } = useNavigation();
 
-export function Help({ onClose }: HelpProps) {
   return (
     <div className="help-screen">
-      <header className="help-header">
-        <div>
-          <span className="eyebrow">Vector Watcher</span>
-          <h1>Help</h1>
-          <p>Everything you need to get started with Vector Watcher.</p>
-        </div>
-
-        <button type="button" className="button" onClick={onClose}>
-          Back
-        </button>
-      </header>
+      <Header />
 
       <main className="help-content">
         <section className="help-section">
@@ -98,9 +89,12 @@ export function Help({ onClose }: HelpProps) {
               For technical information about your installation, open the About page and copy the diagnostic
               information.
             </p>
+            <button type="button" className="button" onClick={navigateHome}>
+              Go to Home
+            </button>
           </div>
         </section>
       </main>
     </div>
   );
-}
+};

@@ -1,20 +1,15 @@
+import { useNavigation } from "@/contexts/NavigationContext";
 import { useEffect, useState } from "react";
-
-import { ThemeToggle } from "@/components//ThemeToggle";
-import { Help } from "@/components/Help";
 
 import "@/assets/styles/welcome.css";
 import { Footer } from "./Footer";
-
-interface WelcomeProps {
-  onStart: () => void;
-}
+import { Header } from "./Header";
 
 const getConnectionStatus = () => navigator.onLine;
 
-export function Welcome({ onStart }: WelcomeProps) {
+export const Welcome = () => {
+  const { navigate } = useNavigation();
   const [isOnline, setIsOnline] = useState(getConnectionStatus);
-  const [showHelp, setShowHelp] = useState(false);
 
   useEffect(() => {
     const handleOnline = () => {
@@ -34,17 +29,9 @@ export function Welcome({ onStart }: WelcomeProps) {
     };
   }, []);
 
-  if (showHelp) {
-    return <Help onClose={() => setShowHelp(false)} />;
-  }
-
   return (
     <div className="welcome-screen">
-      <header className="welcome-topbar">
-        <div className="welcome-topbar__brand">Vector Watcher</div>
-
-        <ThemeToggle />
-      </header>
+      <Header />
       <main className="welcome-main">
         <div className="welcome-card">
           <div className="welcome-brand">
@@ -78,25 +65,17 @@ export function Welcome({ onStart }: WelcomeProps) {
           </div>
 
           <div className="welcome-actions">
-            <button type="button" className="button button-primary welcome-actions__start" onClick={onStart}>
+            <button
+              type="button"
+              className="button button-primary welcome-actions__start"
+              onClick={() => navigate("explorer")}
+            >
               Start exploring
             </button>
-
-            <div className="welcome-actions__secondary">
-              <button type="button" className="welcome-link" onClick={() => setShowHelp(true)}>
-                Help
-              </button>
-
-              <span aria-hidden="true">·</span>
-
-              <button type="button" className="welcome-link">
-                About
-              </button>
-            </div>
           </div>
         </div>
       </main>
       <Footer />
     </div>
   );
-}
+};

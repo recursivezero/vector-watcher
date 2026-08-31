@@ -4,7 +4,7 @@ import type {
   LanceRowDetail,
   LanceRowSummary,
   LanceTableDetails,
-  LanceTableItem,
+  LanceTableItem
 } from "@/api/lancedbAdmin";
 
 import LanceFilterBar from "./LanceFilterBar";
@@ -83,7 +83,7 @@ export default function ExplorerTab({
   onCloseVector,
   onRetryVector,
   search,
-  onSearchChange,
+  onSearchChange
 }: ExplorerTabProps) {
   return (
     <div className="explorer-page">
@@ -110,7 +110,9 @@ export default function ExplorerTab({
                 {" · "}
                 {details?.schema.length ?? "—"} fields
                 {" · "}
-                {details?.vector_columns[0]?.dimension ? `${details.vector_columns[0].dimension}d vector` : "No vector detected"}
+                {details?.vector_columns[0]?.dimension
+                  ? `${details.vector_columns[0].dimension}d vector`
+                  : "No vector detected"}
               </p>
             </div>
           </div>
