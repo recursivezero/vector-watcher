@@ -21,6 +21,8 @@
 	--bg-input: #ffffff;
 	--bg-code: #111827;
 	--bg-error: #fff7f7;
+	--bg-disable: #dbd6df;
+
 
 	/* Brand */
 
@@ -34,6 +36,7 @@
 	--text-muted: #7a8490;
 	--text-subtle: #89929d;
 	--text-disabled: #a2aab4;
+	--text-active: #a82d76;
 
 	--text-on-brand: #ffffff;
 	--text-code: #e5e7eb;
@@ -83,9 +86,6 @@
 	--shadow-modal: rgba(0, 0, 0, 0.2);
 	--shadow-credential-modal: rgba(20, 27, 34, 0.18);
 	--shadow-toast: rgba(16, 24, 40, 0.18);
-
-	color: var(--text-primary);
-	background: var(--bg-page);
 }
 
 /* ==========================================================================
@@ -104,6 +104,7 @@
 	--bg-input: #121820;
 	--bg-code: #0b0f14;
 	--bg-error: #2a1719;
+	--bg-disable: #1e2d3c;
 
 	/* Brand */
 
@@ -117,6 +118,7 @@
 	--text-muted: #919ca8;
 	--text-subtle: #7f8a96;
 	--text-disabled: #68737e;
+	--text-active: #2d70a8;
 
 	--text-on-brand: #111827;
 	--text-code: #e5e7eb;

@@ -2,7 +2,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { useEffect, useState } from "react";
 
-import { formatDiagnosticInfo, getAppInfo, type AppInfo } from "@/libs/appInfo";
+import { formatDiagnosticInfo, getAppInfo, type AppInfo } from "@/libs/info";
 
 import "@/assets/styles/about.css";
 import { useNavigation } from "@/contexts/NavigationContext";

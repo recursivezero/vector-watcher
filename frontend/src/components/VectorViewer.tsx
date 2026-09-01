@@ -1,5 +1,5 @@
-import type { LanceRowDetail, LanceRowSummary } from "@/api/lancedbAdmin";
-import { completeRowCopyPayload } from "@/libs/explorerUtils";
+import type { LanceRowDetail, LanceRowSummary } from "@/api/lance";
+import { completeRowCopyPayload } from "@/libs/utils";
 import { useEffect, useRef } from "react";
 
 interface VectorViewerProps {

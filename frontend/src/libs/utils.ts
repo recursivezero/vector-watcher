@@ -4,8 +4,8 @@ import type {
   LanceRowSummary,
   LanceSortColumn,
   LanceSortOrder,
-  LanceStorageType,
-} from "@/api/lancedbAdmin";
+  LanceStorageSelectType,
+} from "@/api/lance";
 
 export interface ExplorerQueryState {
   search: string;
@@ -25,7 +25,7 @@ export const DEFAULT_EXPLORER_QUERY: ExplorerQueryState = {
   sortOrder: "asc",
 };
 
-export function validateBucketName(storage: LanceStorageType, bucket: string): string | null {
+export function validateBucketName(storage: LanceStorageSelectType, bucket: string): string | null {
   const value = bucket.trim();
 
   if (!value) {

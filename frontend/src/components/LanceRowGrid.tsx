@@ -1,5 +1,5 @@
-import type { LanceRowSummary } from "@/api/lancedbAdmin";
-import { compactValue, formatLanceMtime, rowCopyPayload } from "@/libs/explorerUtils";
+import type { LanceRowSummary } from "@/api/lance";
+import { compactValue, formatLanceMtime, rowCopyPayload } from "@/libs/utils";
 
 interface LanceRowGridProps {
   rows: LanceRowSummary[];

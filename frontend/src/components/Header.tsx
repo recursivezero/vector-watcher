@@ -35,7 +35,7 @@ export function Header({ connected, connectionName, onDisconnect }: AppHeaderPro
         <div className="app-header__actions">
           <button
             type="button"
-            className={`app-header__link ${activePage === "welcome" ? "app-header__link--active" : ""}`}
+            className={`app-header__link ${activePage === "welcome" || activePage === "explorer" ? "app-header__link--active" : ""}`}
             onClick={navigateHome}
           >
             Home

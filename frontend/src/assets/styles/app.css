@@ -2,23 +2,21 @@
  * GLOBAL
  * ========================================================================== */
 
-
-
 /* ==========================================================================
  * APP SHELL
  * ========================================================================== */
 
 .app-shell {
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .app-content {
-	width: min(1480px, calc(100% - 56px));
-	flex: 1;
-	margin: 0 auto;
-	padding: 34px 0 60px;
+  width: min(1480px, calc(100% - 56px));
+  flex: 1;
+  margin: 0 auto;
+  padding: 34px 0 60px;
 }
 
 /* ==========================================================================
@@ -26,97 +24,97 @@
  * ========================================================================== */
 
 .app-header {
-	position: sticky;
-	top: 0;
-	z-index: 20;
+  position: sticky;
+  top: 0;
+  z-index: 20;
 
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-	height: 72px;
-	padding: 0 28px;
+  height: 72px;
+  padding: 0 28px;
 
-	border-bottom: 1px solid var(--border);
-	background: var(--header-bg);
+  border-bottom: 1px solid var(--border);
+  background: var(--header-bg);
 
-	backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 
 .brand {
-	display: flex;
-	align-items: center;
-	gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .brand-mark {
-	display: grid;
-	width: 36px;
-	height: 36px;
-	place-items: center;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
 
-	border-radius: 10px;
+  border-radius: 10px;
 
-	background: var(--bg-brand);
-	color: var(--text-on-brand);
+  background: var(--bg-brand);
+  color: var(--text-on-brand);
 
-	font-size: 18px;
+  font-size: 18px;
 }
 
 .brand strong,
 .brand span {
-	display: block;
+  display: block;
 }
 
 .brand strong {
-	font-size: 15px;
-	letter-spacing: -0.01em;
+  font-size: 15px;
+  letter-spacing: -0.01em;
 }
 
 .brand span {
-	margin-top: 2px;
+  margin-top: 2px;
 
-	color: var(--text-muted);
+  color: var(--text-muted);
 
-	font-size: 12px;
+  font-size: 12px;
 }
 
 .header-status {
-	display: flex;
-	align-items: center;
-	gap: 9px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
 
-	min-height: 2.25rem;
-	padding: 0 0.75rem;
+  min-height: 2.25rem;
+  padding: 0 0.75rem;
 
-	color: var(--text-muted);
-	font-size: 0.9rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 .status-dot,
 .connection-status span {
-	width: 8px;
-	height: 8px;
+  width: 8px;
+  height: 8px;
 
-	border-radius: 50%;
+  border-radius: 50%;
 
-	background: var(--status-offline);
+  background: var(--status-offline);
 }
 
 .status-dot.is-connected,
 .connection-status.is-connected span {
-	background: var(--status-success);
+  background: var(--status-success);
 }
 
 .icon-button {
-	margin-left: 8px;
-	padding: 7px 11px;
+  margin-left: 8px;
+  padding: 7px 11px;
 
-	border: 1px solid var(--border-input);
-	border-radius: 7px;
+  border: 1px solid var(--border-input);
+  border-radius: 7px;
 
-	background: var(--bg-surface);
-	color: var(--button-text);
+  background: var(--bg-surface);
+  color: var(--button-text);
 }
 
 /* ==========================================================================
@@ -124,56 +122,56 @@
  * ========================================================================== */
 
 .app-tabs {
-	display: flex;
-	gap: 4px;
+  display: flex;
+  gap: 4px;
 
-	padding: 14px 28px 0;
+  padding: 14px 28px 0;
 
-	border-bottom: 1px solid var(--border);
-	background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-surface);
 }
 
 .app-tabs button {
-	position: relative;
+  position: relative;
 
-	display: flex;
-	align-items: center;
-	gap: 9px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
 
-	min-width: 150px;
-	padding: 13px 16px;
+  min-width: 150px;
+  padding: 13px 16px;
 
-	border: 0;
-	background: transparent;
+  border: 0;
+  background: transparent;
 
-	color: var(--text-muted);
+  color: var(--text-muted);
 
-	font-weight: 600;
-	text-align: left;
+  font-weight: 600;
+  text-align: left;
 }
 
 .app-tabs button span {
-	color: var(--text-disabled);
+  color: var(--text-disabled);
 
-	font-family: monospace;
-	font-size: 11px;
+  font-family: monospace;
+  font-size: 11px;
 }
 
 .app-tabs button.active {
-	color: var(--text-primary);
+  color: var(--text-primary);
 }
 
 .app-tabs button.active::after {
-	position: absolute;
-	right: 12px;
-	bottom: -1px;
-	left: 12px;
+  position: absolute;
+  right: 12px;
+  bottom: -1px;
+  left: 12px;
 
-	height: 2px;
+  height: 2px;
 
-	background: var(--bg-brand);
+  background: var(--bg-brand);
 
-	content: "";
+  content: "";
 }
 
 /* ==========================================================================
@@ -182,56 +180,56 @@
 
 .page-heading,
 .explorer-heading {
-	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-	gap: 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
 
-	margin-bottom: 26px;
+  margin-bottom: 26px;
 }
 
 .eyebrow {
-	display: block;
+  display: block;
 
-	margin-bottom: 7px;
+  margin-bottom: 7px;
 
-	color: var(--text-muted);
+  color: var(--text-muted);
 
-	font-size: 11px;
-	font-weight: 700;
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .page-heading h1,
 .explorer-heading h1 {
-	margin: 0;
+  margin: 0;
 
-	color: var(--text-heading);
+  color: var(--text-heading);
 
-	font-size: 30px;
-	line-height: 1.15;
-	letter-spacing: -0.035em;
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
 }
 
 .page-heading p,
 .explorer-heading p {
-	max-width: 680px;
-	margin: 9px 0 0;
+  max-width: 680px;
+  margin: 9px 0 0;
 
-	color: var(--text-secondary);
+  color: var(--text-secondary);
 
-	line-height: 1.6;
+  line-height: 1.6;
 }
 
 .section-heading {
-	margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .section-heading h2 {
-	margin: 0;
+  margin: 0;
 
-	font-size: 18px;
+  font-size: 18px;
 }
 
 /* ==========================================================================
@@ -239,14 +237,14 @@
  * ========================================================================== */
 
 .surface {
-	border: 1px solid var(--border);
-	border-radius: 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
 
-	background: var(--bg-surface);
+  background: var(--bg-surface);
 
-	box-shadow:
-		0 1px 2px var(--shadow-surface-1),
-		0 8px 24px var(--shadow-surface-2);
+  box-shadow:
+    0 1px 2px var(--shadow-surface-1),
+    0 8px 24px var(--shadow-surface-2);
 }
 
 /* ==========================================================================
@@ -256,52 +254,52 @@
 .button,
 .primary-button,
 .credential-modal button[type="submit"] {
-	min-height: 40px;
-	padding: 0 16px;
+  min-height: 40px;
+  padding: 0 16px;
 
-	border: 1px solid var(--button-primary-border);
-	border-radius: 8px;
+  border: 1px solid var(--button-primary-border);
+  border-radius: 8px;
 
-	background: var(--button-primary-background);
-	color: var(--button-primary-text);
+  background: var(--button-primary-background);
+  color: var(--button-primary-text);
 
-	font-size: 13px;
-	font-weight: 700;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .button-primary {
-	min-height: 40px;
-	padding: 0 16px;
+  min-height: 40px;
+  padding: 0 16px;
 
-	border: 1px solid var(--button-primary-border);
-	border-radius: 8px;
+  border: 1px solid var(--button-primary-border);
+  border-radius: 8px;
 
-	background: var(--button-primary-background);
-	color: var(--button-primary-text);
+  background: var(--button-primary-background);
+  color: var(--button-primary-text);
 
-	font-size: 13px;
-	font-weight: 700;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .button-secondary {
-	min-height: 40px;
-	padding: 0 16px;
+  min-height: 40px;
+  padding: 0 16px;
 
-	border: 1px solid var(--border-input);
-	border-radius: 8px;
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
 
-	background: var(--bg-surface);
-	color: var(--button-secondary-text);
+  background: var(--bg-surface);
+  color: var(--button-secondary-text);
 
-	font-size: 13px;
-	font-weight: 700;
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .button:not(:disabled):hover,
 .button-primary:not(:disabled):hover,
 .primary-button:not(:disabled):hover,
 .credential-modal button[type="submit"]:not(:disabled):hover {
-	filter: brightness(1.08);
+  filter: brightness(1.08);
 }
 
 /* ==========================================================================
@@ -309,88 +307,94 @@
  * ========================================================================== */
 
 .form-grid {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
 }
 
 .field {
-	display: flex;
-	flex-direction: column;
-	gap: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 
-	min-width: 0;
+  min-width: 0;
 }
 
 .field-full {
-	grid-column: 1 / -1;
+  grid-column: 1 / -1;
 }
 
-.field>span {
-	color: var(--text-primary);
+.field > span {
+  color: var(--text-primary);
 
-	font-size: 12px;
-	font-weight: 700;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .field small {
-	color: var(--text-subtle);
+  color: var(--text-subtle);
 }
 
 .field input,
 .field select,
 .secret-input input {
-	width: 100%;
-	height: 42px;
-	min-height: 42px;
-	padding: 0 12px;
+  width: 100%;
+  height: 42px;
+  min-height: 42px;
+  padding: 0 12px;
 
-	border: 1px solid var(--border-input);
-	border-radius: 8px;
-	outline: none;
+  border: 1px solid var(--border-input);
+  border-radius: 8px;
+  outline: none;
 
-	background-color: var(--bg-input);
-	color: var(--text-primary);
+  background-color: var(--bg-input);
+  color: var(--text-primary);
 
-	line-height: normal;
+  line-height: normal;
 
-	transition:
-		border-color 120ms ease,
-		box-shadow 120ms ease;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
 }
 
 .field select {
-	appearance: auto;
-	-webkit-appearance: auto;
+  appearance: auto;
+  -webkit-appearance: auto;
 }
 
 .field input:focus,
 .field select:focus,
 .secret-input input:focus {
-	border-color: var(--focus-border);
+  border-color: var(--focus-border);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
 
-	box-shadow: 0 0 0 3px var(--focus-ring);
+.field input:disabled,
+.field select:disabled
+{
+background-color: var(--bg-disable);
+cursor: not-allowed;
 }
 
 .field-with-action {
-	display: flex;
-	align-items: stretch;
-	gap: 8px;
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
 
-	width: 100%;
+  width: 100%;
 }
 
 .field-with-action input {
-	flex: 1;
-	min-width: 0;
+  flex: 1;
+  min-width: 0;
 }
 
 .field-with-action button {
-	flex: 0 0 auto;
+  flex: 0 0 auto;
 
-	min-width: 82px;
+  min-width: 82px;
 
-	white-space: nowrap;
+  white-space: nowrap;
 }
 
 /* ==========================================================================
@@ -398,66 +402,66 @@
  * ========================================================================== */
 
 .secret-input {
-	position: relative;
+  position: relative;
 
-	display: flex;
+  display: flex;
 }
 
 .secret-input input {
-	padding-right: 62px;
+  padding-right: 62px;
 }
 
 .secret-input button {
-	position: absolute;
-	top: 5px;
-	right: 5px;
-	bottom: 5px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  bottom: 5px;
 
-	padding: 0 9px;
+  padding: 0 9px;
 
-	border: 0;
-	border-radius: 6px;
+  border: 0;
+  border-radius: 6px;
 
-	background: var(--bg-surface-subtle);
-	color: var(--button-text);
+  background: var(--bg-surface-subtle);
+  color: var(--button-text);
 
-	font-size: 12px;
+  font-size: 12px;
 }
 
 .secret-input .credential-mask {
-	position: absolute;
-	top: 1px;
-	right: 62px;
-	bottom: 1px;
-	left: 1px;
+  position: absolute;
+  top: 1px;
+  right: 62px;
+  bottom: 1px;
+  left: 1px;
 
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
 
-	padding: 0 12px;
+  padding: 0 12px;
 
-	overflow: hidden;
+  overflow: hidden;
 
-	border-radius: 7px;
+  border-radius: 7px;
 
-	background: var(--bg-input);
-	color: var(--text-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
 
-	font-family: monospace;
-	letter-spacing: 0.02em;
-	white-space: nowrap;
+  font-family: monospace;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 
-	pointer-events: none;
+  pointer-events: none;
 }
 
 .secret-input input.credential-hidden {
-	color: transparent;
+  color: transparent;
 
-	caret-color: transparent;
+  caret-color: transparent;
 }
 
 .secret-input input.credential-hidden::selection {
-	background: transparent;
+  background: transparent;
 }
 
 /* ==========================================================================
@@ -465,42 +469,42 @@
  * ========================================================================== */
 
 .table-picker {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 
-	padding: 16px 18px;
-	margin-bottom: 18px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
 }
 
 .table-picker strong {
-	display: block;
+  display: block;
 }
 
 .table-picker select {
-	min-width: 280px;
-	min-height: 40px;
-	padding: 0 10px;
+  min-width: 280px;
+  min-height: 40px;
+  padding: 0 10px;
 
-	border: 1px solid var(--border-input);
-	border-radius: 7px;
+  border: 1px solid var(--border-input);
+  border-radius: 7px;
 
-	background: var(--bg-input);
-	color: var(--text-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
 }
 
 .database-panels {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
 
-	margin-top: 18px;
+  margin-top: 18px;
 }
 
 .explorer-controls {
-	margin-bottom: 18px;
-	padding: 14px 16px;
+  margin-bottom: 18px;
+  padding: 14px 16px;
 }
 
 /* ==========================================================================
@@ -508,47 +512,47 @@
  * ========================================================================== */
 
 .lock-screen {
-	display: grid;
-	min-height: 100vh;
-	place-items: center;
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
 
-	padding: 24px;
+  padding: 24px;
 
-	background: var(--bg-page);
+  background: var(--bg-page);
 }
 
 .lock-card {
-	width: min(420px, 100%);
-	padding: 40px;
+  width: min(420px, 100%);
+  padding: 40px;
 
-	border: 1px solid var(--border);
-	border-radius: 18px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
 
-	background: var(--bg-surface);
+  background: var(--bg-surface);
 
-	text-align: center;
+  text-align: center;
 
-	box-shadow: 0 20px 60px var(--shadow-surface-2);
+  box-shadow: 0 20px 60px var(--shadow-surface-2);
 }
 
 .lock-card .brand-mark {
-	margin: 0 auto 22px;
+  margin: 0 auto 22px;
 }
 
 .lock-card h1 {
-	margin: 0;
+  margin: 0;
 
-	color: var(--text-heading);
+  color: var(--text-heading);
 
-	font-size: 25px;
+  font-size: 25px;
 }
 
 .lock-card p {
-	margin: 10px 0 24px;
+  margin: 10px 0 24px;
 
-	color: var(--text-secondary);
+  color: var(--text-secondary);
 
-	line-height: 1.5;
+  line-height: 1.5;
 }
 
 /* ==========================================================================
@@ -556,38 +560,38 @@
  * ========================================================================== */
 
 .lance-admin-summary {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
 
-	margin-bottom: 18px;
+  margin-bottom: 18px;
 }
 
 .lance-admin-summary__card {
-	padding: 18px;
+  padding: 18px;
 
-	border: 1px solid var(--border);
-	border-radius: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
 
-	background: var(--bg-surface);
+  background: var(--bg-surface);
 }
 
 .lance-admin-summary__card span {
-	display: block;
+  display: block;
 
-	color: var(--text-muted);
+  color: var(--text-muted);
 
-	font-size: 12px;
+  font-size: 12px;
 }
 
 .lance-admin-summary__card strong {
-	display: block;
+  display: block;
 
-	margin-top: 6px;
+  margin-top: 6px;
 
-	color: var(--text-primary);
+  color: var(--text-primary);
 
-	font-size: 22px;
+  font-size: 22px;
 }
 
 /* ==========================================================================
@@ -596,32 +600,32 @@
 
 .lance-admin-panel,
 .lance-admin-rows {
-	overflow: hidden;
+  overflow: hidden;
 
-	border: 1px solid var(--border);
-	border-radius: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
 
-	background: var(--bg-surface);
+  background: var(--bg-surface);
 }
 
 .lance-admin-panel__heading,
 .lance-admin-rows__heading {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-	padding: 18px 20px;
+  padding: 18px 20px;
 
-	border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .lance-admin-panel__heading h2,
 .lance-admin-rows__heading h2 {
-	margin: 0;
+  margin: 0;
 
-	color: var(--text-primary);
+  color: var(--text-primary);
 
-	font-size: 16px;
+  font-size: 16px;
 }
 
 /* ==========================================================================
@@ -629,51 +633,51 @@
  * ========================================================================== */
 
 .lance-admin-schema-list {
-	padding: 8px 20px;
+  padding: 8px 20px;
 }
 
 .lance-admin-schema-row {
-	display: grid;
-	grid-template-columns: 1fr 1.5fr 100px;
-	align-items: center;
-	gap: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 100px;
+  align-items: center;
+  gap: 16px;
 
-	padding: 12px 0;
+  padding: 12px 0;
 
-	border-bottom: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
 
-	font-size: 12px;
+  font-size: 12px;
 }
 
 .lance-admin-schema-row:last-child {
-	border-bottom: 0;
+  border-bottom: 0;
 }
 
 .lance-admin-schema-row code {
-	overflow: hidden;
+  overflow: hidden;
 
-	color: var(--text-secondary);
+  color: var(--text-secondary);
 
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .lance-admin-badge,
 .lance-admin-tag {
-	display: inline-flex;
-	align-items: center;
+  display: inline-flex;
+  align-items: center;
 
-	width: fit-content;
-	margin-left: 8px;
-	padding: 3px 7px;
+  width: fit-content;
+  margin-left: 8px;
+  padding: 3px 7px;
 
-	border-radius: 5px;
+  border-radius: 5px;
 
-	background: var(--bg-surface-subtle);
-	color: var(--button-text);
+  background: var(--bg-surface-subtle);
+  color: var(--button-text);
 
-	font-size: 10px;
-	font-weight: 700;
+  font-size: 10px;
+  font-weight: 700;
 }
 
 /* ==========================================================================
@@ -681,32 +685,32 @@
  * ========================================================================== */
 
 .lance-admin-json-stack {
-	padding: 18px;
+  padding: 18px;
 }
 
-.lance-admin-json-group+.lance-admin-json-group {
-	margin-top: 16px;
+.lance-admin-json-group + .lance-admin-json-group {
+  margin-top: 16px;
 }
 
 .lance-admin-json-group h3 {
-	margin: 0 0 7px;
+  margin: 0 0 7px;
 
-	font-size: 12px;
+  font-size: 12px;
 }
 
 .lance-admin-json-group pre {
-	max-height: 220px;
-	margin: 0;
-	padding: 12px;
+  max-height: 220px;
+  margin: 0;
+  padding: 12px;
 
-	overflow: auto;
+  overflow: auto;
 
-	border-radius: 7px;
+  border-radius: 7px;
 
-	background: var(--bg-surface-subtle);
-	color: var(--text-secondary);
+  background: var(--bg-surface-subtle);
+  color: var(--text-secondary);
 
-	font-size: 11px;
+  font-size: 11px;
 }
 
 /* ==========================================================================
@@ -714,85 +718,87 @@
  * ========================================================================== */
 
 .lance-admin-filter {
-	display: grid;
-	grid-template-columns:
-		minmax(240px, 1.5fr) minmax(280px, 1.2fr) minmax(160px, 0.8fr) minmax(140px, 0.7fr) minmax(130px, 0.6fr);
-	align-items: end;
-	gap: 12px;
+  display: grid;
+  grid-template-columns: minmax(240px, 1.5fr) minmax(280px, 1.2fr) minmax(160px, 0.8fr) minmax(140px, 0.7fr) minmax(
+      130px,
+      0.6fr
+    );
+  align-items: end;
+  gap: 12px;
 }
 
 .lance-admin-filter__tag {
-	display: flex;
-	align-items: flex-end;
-	gap: 8px;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
 
-	align-self: end;
+  align-self: end;
 
-	min-width: 0;
+  min-width: 0;
 }
 
 .lance-admin-filter__tag .lance-admin-field {
-	flex: 1;
+  flex: 1;
 
-	min-width: 0;
+  min-width: 0;
 }
 
 .lance-admin-field {
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 
-	min-width: 0;
+  min-width: 0;
 }
 
 .lance-admin-field span {
-	color: var(--text-secondary);
+  color: var(--text-secondary);
 
-	font-size: 11px;
-	font-weight: 700;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .lance-admin-field input,
 .lance-admin-field select {
-	box-sizing: border-box;
+  box-sizing: border-box;
 
-	width: 100%;
-	min-width: 0;
-	height: 38px;
-	min-height: 38px;
-	padding: 0 7px;
+  width: 100%;
+  min-width: 0;
+  height: 38px;
+  min-height: 38px;
+  padding: 0 7px;
 
-	border: 1px solid var(--border-input);
-	border-radius: 7px;
-	outline: none;
+  border: 1px solid var(--border-input);
+  border-radius: 7px;
+  outline: none;
 
-	background: var(--bg-input);
-	color: var(--text-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
 
-	line-height: normal;
+  line-height: normal;
 }
 
 .lance-admin-filter__tag-actions {
-	display: flex;
-	flex-direction: column;
-	flex-shrink: 0;
-	gap: 6px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 6px;
 }
 
 .lance-admin-filter__action-label {
-	color: var(--text-secondary);
+  color: var(--text-secondary);
 
-	font-size: 11px;
-	font-weight: 700;
-	line-height: normal;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: normal;
 }
 
 .lance-admin-filter__tag-buttons {
-	display: flex;
-	align-items: center;
-	gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
-	height: 38px;
+  height: 38px;
 }
 
 /* ==========================================================================
@@ -800,49 +806,49 @@
  * ========================================================================== */
 
 .lance-admin-button {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
 
-	min-height: 36px;
-	padding: 0 11px;
+  min-height: 36px;
+  padding: 0 11px;
 
-	border: 1px solid var(--border-input);
-	border-radius: 7px;
+  border: 1px solid var(--border-input);
+  border-radius: 7px;
 
-	background: var(--bg-surface);
-	color: var(--button-text);
+  background: var(--bg-surface);
+  color: var(--button-text);
 
-	font-size: 11px;
-	font-weight: 700;
-	white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .lance-admin-button:hover:not(:disabled) {
-	border-color: var(--border-dashed);
+  border-color: var(--border-dashed);
 
-	background: var(--bg-surface-subtle);
+  background: var(--bg-surface-subtle);
 }
 
 .lance-admin-button--quiet {
-	border-color: transparent;
+  border-color: transparent;
 
-	background: transparent;
+  background: transparent;
 }
 
 .lance-admin-button--secondary {
-	background: var(--bg-surface-subtle);
+  background: var(--bg-surface-subtle);
 }
 
 .lance-admin-button--lock {
-	border-color: var(--border-dashed);
+  border-color: var(--border-dashed);
 }
 
 .lock-icon {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ==========================================================================
@@ -850,89 +856,89 @@
  * ========================================================================== */
 
 .lance-admin-toolbar {
-	display: flex;
-	align-items: center;
-	gap: 22px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
 
-	min-height: 70px;
-	padding: 12px 16px;
-	margin-bottom: 22px;
+  min-height: 70px;
+  padding: 12px 16px;
+  margin-bottom: 22px;
 
-	border: 1px solid var(--border);
-	border-radius: 11px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
 
-	background: var(--bg-surface);
+  background: var(--bg-surface);
 }
 
 .lance-admin-toolbar__source {
-	display: flex;
-	align-items: center;
-	gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
-	min-width: 0;
+  min-width: 0;
 }
 
 .lance-admin-toolbar__source span,
 .lance-admin-toolbar__table span {
-	color: var(--text-muted);
+  color: var(--text-muted);
 
-	font-size: 10px;
-	font-weight: 700;
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .lance-admin-toolbar__source strong {
-	color: var(--text-primary);
+  color: var(--text-primary);
 
-	font-size: 13px;
-	white-space: nowrap;
+  font-size: 13px;
+  white-space: nowrap;
 }
 
 .lance-admin-toolbar__source code {
-	max-width: 220px;
+  max-width: 220px;
 
-	overflow: hidden;
+  overflow: hidden;
 
-	color: var(--text-secondary);
+  color: var(--text-secondary);
 
-	font-size: 11px;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .lance-admin-toolbar__table {
-	display: flex;
-	align-items: center;
-	gap: 9px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
 
-	min-width: 230px;
+  min-width: 230px;
 }
 
 .lance-admin-toolbar__table select {
-	min-width: 180px;
-	height: 36px;
-	padding: 0 30px 0 10px;
+  min-width: 180px;
+  height: 36px;
+  padding: 0 30px 0 10px;
 
-	border: 1px solid var(--border-input);
-	border-radius: 7px;
+  border: 1px solid var(--border-input);
+  border-radius: 7px;
 
-	background: var(--bg-input);
-	color: var(--text-primary);
+  background: var(--bg-input);
+  color: var(--text-primary);
 
-	font-size: 12px;
+  font-size: 12px;
 }
 
 .lance-admin-toolbar__actions {
-	display: flex;
-	align-items: center;
-	gap: 7px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
 
-	margin-left: auto;
+  margin-left: auto;
 }
 
 .lance-admin-field--table {
-	min-width: 230px;
+  min-width: 230px;
 }
 
 /* ==========================================================================
@@ -940,59 +946,59 @@
  * ========================================================================== */
 
 .lance-admin-table-scroll {
-	overflow: auto;
+  overflow: auto;
 }
 
 .lance-admin-table {
-	width: 100%;
+  width: 100%;
 
-	border-collapse: collapse;
+  border-collapse: collapse;
 
-	font-size: 12px;
+  font-size: 12px;
 }
 
 .lance-admin-table th {
-	padding: 11px 12px;
+  padding: 11px 12px;
 
-	border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 
-	background: var(--bg-surface-muted);
-	color: var(--text-secondary);
+  background: var(--bg-surface-muted);
+  color: var(--text-secondary);
 
-	font-size: 10px;
-	letter-spacing: 0.04em;
-	text-align: left;
-	text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-align: left;
+  text-transform: uppercase;
 }
 
 .lance-admin-table td {
-	padding: 12px;
+  padding: 12px;
 
-	border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
 
-	vertical-align: middle;
+  vertical-align: middle;
 }
 
 .lance-admin-table code {
-	color: var(--text-secondary);
+  color: var(--text-secondary);
 }
 
 .lance-admin-row-actions {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
 .lance-admin-row-actions button {
-	padding: 5px 7px;
+  padding: 5px 7px;
 
-	border: 1px solid var(--border);
-	border-radius: 5px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
 
-	background: var(--bg-surface);
-	color: var(--button-text);
+  background: var(--bg-surface);
+  color: var(--button-text);
 
-	font-size: 10px;
+  font-size: 10px;
 }
 
 /* ==========================================================================
@@ -1000,42 +1006,42 @@
  * ========================================================================== */
 
 .lance-admin-pagination {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 
-	padding: 16px 4px;
+  padding: 16px 4px;
 
-	color: var(--text-secondary);
+  color: var(--text-secondary);
 
-	font-size: 12px;
+  font-size: 12px;
 }
 
-.lance-admin-pagination>div {
-	display: flex;
-	align-items: center;
-	gap: 10px;
+.lance-admin-pagination > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .lance-admin-pagination p {
-	margin: 0;
+  margin: 0;
 }
 
 .lance-admin-grid-state {
-	padding: 50px 20px;
+  padding: 50px 20px;
 
-	border: 1px solid var(--border);
-	border-radius: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
 
-	background: var(--bg-surface);
-	color: var(--text-secondary);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
 
-	text-align: center;
+  text-align: center;
 }
 
 .lance-admin-row-cards {
-	display: none;
+  display: none;
 }
 
 /* ==========================================================================
@@ -1043,113 +1049,113 @@
  * ========================================================================== */
 
 .lance-vector-modal {
-	position: fixed;
-	inset: 0;
-	z-index: 100;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
 
-	display: grid;
-	place-items: center;
+  display: grid;
+  place-items: center;
 
-	padding: 30px;
+  padding: 30px;
 
-	background: var(--modal-backdrop);
+  background: var(--modal-backdrop);
 }
 
 .lance-vector-modal__dialog {
-	width: min(900px, 100%);
-	max-height: calc(100vh - 60px);
+  width: min(900px, 100%);
+  max-height: calc(100vh - 60px);
 
-	overflow: auto;
+  overflow: auto;
 
-	border-radius: 16px;
+  border-radius: 16px;
 
-	background: var(--bg-surface);
+  background: var(--bg-surface);
 
-	box-shadow: 0 25px 80px var(--shadow-modal);
+  box-shadow: 0 25px 80px var(--shadow-modal);
 }
 
-.lance-vector-modal__dialog>header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+.lance-vector-modal__dialog > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-	padding: 20px 22px;
+  padding: 20px 22px;
 
-	border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .lance-vector-modal__dialog h2 {
-	margin: 0;
+  margin: 0;
 
-	color: var(--text-heading);
+  color: var(--text-heading);
 
-	font-size: 18px;
+  font-size: 18px;
 }
 
 .lance-vector-modal__close {
-	width: 34px;
-	height: 34px;
+  width: 34px;
+  height: 34px;
 
-	border: 1px solid var(--border);
-	border-radius: 7px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
 
-	background: var(--bg-surface);
-	color: var(--text-primary);
+  background: var(--bg-surface);
+  color: var(--text-primary);
 
-	font-size: 20px;
+  font-size: 20px;
 }
 
 .lance-vector-modal__summary {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 
-	padding: 18px 22px;
+  padding: 18px 22px;
 }
 
 .lance-vector-modal__summary div {
-	padding: 12px;
+  padding: 12px;
 
-	border-radius: 8px;
+  border-radius: 8px;
 
-	background: var(--bg-surface-subtle);
+  background: var(--bg-surface-subtle);
 }
 
 .lance-vector-modal__summary dt {
-	color: var(--text-muted);
+  color: var(--text-muted);
 
-	font-size: 10px;
-	text-transform: uppercase;
+  font-size: 10px;
+  text-transform: uppercase;
 }
 
 .lance-vector-modal__summary dd {
-	margin: 4px 0 0;
+  margin: 4px 0 0;
 
-	color: var(--text-primary);
+  color: var(--text-primary);
 
-	font-size: 13px;
+  font-size: 13px;
 }
 
 .lance-vector-modal__values {
-	max-height: 360px;
-	margin: 0 22px;
-	padding: 16px;
+  max-height: 360px;
+  margin: 0 22px;
+  padding: 16px;
 
-	overflow: auto;
+  overflow: auto;
 
-	border-radius: 8px;
+  border-radius: 8px;
 
-	background: var(--bg-code);
-	color: var(--text-code);
+  background: var(--bg-code);
+  color: var(--text-code);
 
-	font-size: 11px;
+  font-size: 11px;
 }
 
 .lance-vector-modal__actions {
-	display: flex;
-	gap: 8px;
+  display: flex;
+  gap: 8px;
 
-	padding: 18px 22px 22px;
+  padding: 18px 22px 22px;
 }
 
 /* ==========================================================================
@@ -1157,43 +1163,43 @@
  * ========================================================================== */
 
 .copy-toast {
-	position: fixed;
-	right: 24px;
-	bottom: 24px;
-	z-index: 200;
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 200;
 
-	display: flex;
-	align-items: center;
-	gap: 9px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
 
-	min-height: 42px;
-	padding: 0 14px;
+  min-height: 42px;
+  padding: 0 14px;
 
-	border: 1px solid var(--border-input);
-	border-radius: 9px;
+  border: 1px solid var(--border-input);
+  border-radius: 9px;
 
-	background: var(--bg-brand);
-	color: var(--text-on-brand);
+  background: var(--bg-brand);
+  color: var(--text-on-brand);
 
-	box-shadow: 0 10px 30px var(--shadow-toast);
+  box-shadow: 0 10px 30px var(--shadow-toast);
 
-	font-size: 12px;
-	font-weight: 600;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .copy-toast__icon {
-	display: grid;
-	width: 19px;
-	height: 19px;
-	place-items: center;
+  display: grid;
+  width: 19px;
+  height: 19px;
+  place-items: center;
 
-	border-radius: 50%;
+  border-radius: 50%;
 
-	background: var(--text-on-brand);
-	color: var(--bg-brand);
+  background: var(--text-on-brand);
+  color: var(--bg-brand);
 
-	font-size: 11px;
-	font-weight: 800;
+  font-size: 11px;
+  font-weight: 800;
 }
 
 /* ==========================================================================
@@ -1201,185 +1207,181 @@
  * ========================================================================== */
 
 .credential-modal-backdrop {
-	position: fixed;
-	inset: 0;
-	z-index: 1000;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
 
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-	padding: 24px;
+  padding: 24px;
 
-	background: var(--credential-modal-backdrop);
+  background: var(--credential-modal-backdrop);
 }
 
 .credential-modal {
-	width: min(440px, 100%);
-	padding: 24px;
+  width: min(440px, 100%);
+  padding: 24px;
 
-	border: 1px solid var(--border-input);
-	border-radius: 12px;
+  border: 1px solid var(--border-input);
+  border-radius: 12px;
 
-	background: var(--bg-surface);
+  background: var(--bg-surface);
 
-	box-shadow: 0 20px 60px var(--shadow-credential-modal);
+  box-shadow: 0 20px 60px var(--shadow-credential-modal);
 }
 
 .credential-modal__header {
-	margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .credential-modal__header h2 {
-	margin: 4px 0 8px;
+  margin: 4px 0 8px;
 
-	color: var(--text-heading);
+  color: var(--text-heading);
 }
 
 .credential-modal__header p {
-	margin: 0;
+  margin: 0;
 
-	color: var(--text-secondary);
+  color: var(--text-secondary);
 
-	line-height: 1.5;
+  line-height: 1.5;
 }
 
 .credential-modal__error {
-	margin: 8px 0 0;
+  margin: 8px 0 0;
 
-	color: var(--text-error);
+  color: var(--text-error);
 
-	font-size: 13px;
+  font-size: 13px;
 }
 
 .credential-modal__actions {
-	display: flex;
-	justify-content: flex-end;
-	gap: 8px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 
-	margin-top: 20px;
+  margin-top: 20px;
 }
 
 .credential-modal form {
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 /* ==========================================================================
  * FOOTER
  * ========================================================================== */
 
-
-
 /* ==========================================================================
  * RESPONSIVE
  * ========================================================================== */
 
 @media (max-width: 1200px) {
-	.lance-admin-filter {
-		grid-template-columns:
-			minmax(240px, 1fr) minmax(280px, 1fr) 160px;
-	}
+  .lance-admin-filter {
+    grid-template-columns: minmax(240px, 1fr) minmax(280px, 1fr) 160px;
+  }
 }
 
 @media (max-width: 1000px) {
+  .connection-layout,
+  .database-panels {
+    grid-template-columns: 1fr;
+  }
 
-	.connection-layout,
-	.database-panels {
-		grid-template-columns: 1fr;
-	}
+  .lance-admin-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-	.lance-admin-summary {
-		grid-template-columns: repeat(2, 1fr);
-	}
-
-	.lance-admin-filter {
-		grid-template-columns: 1fr 1fr;
-	}
+  .lance-admin-filter {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (max-width: 850px) {
-	.lance-admin-filter {
-		grid-template-columns: 1fr 1fr;
-	}
+  .lance-admin-filter {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (max-width: 700px) {
-	.app-header {
-		padding: 0 16px;
-	}
+  .app-header {
+    padding: 0 16px;
+  }
 
-	.app-tabs {
-		padding-right: 16px;
-		padding-left: 16px;
+  .app-tabs {
+    padding-right: 16px;
+    padding-left: 16px;
 
-		overflow-x: auto;
-	}
+    overflow-x: auto;
+  }
 
-	.app-content {
-		width: min(100% - 28px, 1480px);
-		padding-top: 24px;
-	}
+  .app-content {
+    width: min(100% - 28px, 1480px);
+    padding-top: 24px;
+  }
 
-	.form-grid {
-		grid-template-columns: 1fr;
-	}
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
 
-	.field-full {
-		grid-column: auto;
-	}
+  .field-full {
+    grid-column: auto;
+  }
 
-	.lance-admin-summary {
-		grid-template-columns: 1fr 1fr;
-	}
+  .lance-admin-summary {
+    grid-template-columns: 1fr 1fr;
+  }
 
-	.lance-admin-toolbar {
-		flex-wrap: wrap;
-		gap: 12px;
-	}
+  .lance-admin-toolbar {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 
-	.lance-admin-toolbar__source {
-		width: 100%;
-	}
+  .lance-admin-toolbar__source {
+    width: 100%;
+  }
 
-	.lance-admin-toolbar__table {
-		flex: 1;
-	}
+  .lance-admin-toolbar__table {
+    flex: 1;
+  }
 
-	.lance-admin-toolbar__actions {
-		margin-left: 0;
-	}
+  .lance-admin-toolbar__actions {
+    margin-left: 0;
+  }
 
-	.lance-admin-field--table {
-		flex: 1;
-	}
+  .lance-admin-field--table {
+    flex: 1;
+  }
 
-	.lance-admin-table {
-		min-width: 850px;
-	}
+  .lance-admin-table {
+    min-width: 850px;
+  }
 
-	.lance-admin-pagination {
-		flex-direction: column;
-		align-items: flex-start;
-	}
+  .lance-admin-pagination {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 600px) {
-	.lance-admin-filter {
-		grid-template-columns: 1fr;
-	}
+  .lance-admin-filter {
+    grid-template-columns: 1fr;
+  }
 
-	.lance-admin-filter__tag {
-		flex-wrap: wrap;
-	}
+  .lance-admin-filter__tag {
+    flex-wrap: wrap;
+  }
 
-	.app-footer {
-		flex-wrap: wrap;
-		gap: 6px;
+  .app-footer {
+    flex-wrap: wrap;
+    gap: 6px;
 
-		padding: 12px 16px;
+    padding: 12px 16px;
 
-		text-align: center;
-	}
+    text-align: center;
+  }
 }

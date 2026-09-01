@@ -1,4 +1,4 @@
-import type { LanceTableDetails } from "@/api/lancedbAdmin";
+import type { LanceTableDetails } from "@/api/lance";
 
 interface LanceSummaryCardsProps {
   tableCount: number;

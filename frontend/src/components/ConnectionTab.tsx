@@ -1,4 +1,4 @@
-import { LANCE_STORAGE, type LanceConnectionState, type LanceStorageType } from "@/api/lancedbAdmin";
+import { LANCE_STORAGE, type LanceConnectionState, type LanceStorageType } from "@/api/lance";
 import { isTauri } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 import { useEffect, useMemo, useState } from "react";
@@ -59,6 +59,8 @@ export default function ConnectionTab({
   const [showAccessKey, setShowAccessKey] = useState(false);
   const [showSecretKey, setShowSecretKey] = useState(false);
 
+  console.log({selectedConnectionName})
+
   useEffect(() => {
     if (!showSecretKey) {
       return;
@@ -73,7 +75,11 @@ export default function ConnectionTab({
     };
   }, [showSecretKey]);
 
-  const storageLabel = STORAGE_LABELS[connection.storage];
+  // const storageLabel = STORAGE_LABELS[connection.storage];
+
+  const storageLabel = connection.storage
+  ? STORAGE_LABELS[connection.storage]
+  : "";
 
   const handlePathChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     update({
@@ -221,9 +227,9 @@ export default function ConnectionTab({
                       void onLoadConnection(name);
                       event.currentTarget.value = "";
                     }}
-                    disabled={loading}
+                    disabled={loading || connected}
                   >
-                    <option value="">Select saved connection</option>
+                    <option value="">Select Saved Connection</option>
 
                     {savedConnections.map((saved) => (
                       <option key={saved.name} value={saved.name}>
@@ -236,7 +242,7 @@ export default function ConnectionTab({
                     type="button"
                     className="button button-secondary"
                     onClick={onNewConnection}
-                    disabled={loading}
+                    disabled={loading || connected}
                   >
                     New
                   </button>
@@ -249,9 +255,10 @@ export default function ConnectionTab({
               <select
                 value={connection.storage}
                 onChange={onStorageChange}
-                disabled={loading}
+                disabled={loading || selectedConnectionName !== null}
                 className="connection-select"
               >
+                <option value="">Select Storage Provider</option>
                 <option value={LANCE_STORAGE.R2}>Cloudflare R2</option>
                 <option value={LANCE_STORAGE.S3}>Amazon S3</option>
                 <option value={LANCE_STORAGE.LOCAL}>Local LanceDB</option>
@@ -309,13 +316,9 @@ export default function ConnectionTab({
                         path: event.target.value
                       })
                     }
-                    placeholder="table"
+                    placeholder="database folder name"
                     disabled={loading}
                   />
-
-                  <small>
-                    Example: <code>table</code>
-                  </small>
                 </label>
 
                 <label className="field">

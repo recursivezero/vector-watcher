@@ -1,4 +1,4 @@
-import type { LancePagination as PaginationState } from "@/api/lancedbAdmin";
+import type { LancePagination as PaginationState } from "@/api/lance";
 
 interface LancePaginationProps {
   pagination: PaginationState | null;

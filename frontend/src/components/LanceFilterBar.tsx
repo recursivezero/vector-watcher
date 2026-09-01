@@ -1,4 +1,4 @@
-import type { LanceSortColumn, LanceSortOrder } from "@/api/lancedbAdmin";
+import type { LanceSortColumn, LanceSortOrder } from "@/api/lance";
 import { type FormEvent, useState } from "react";
 
 interface LanceFilterBarProps {

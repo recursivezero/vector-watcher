@@ -1,4 +1,4 @@
-import type { LanceTableDetails, LanceTableItem } from "@/api/lancedbAdmin";
+import type { LanceTableDetails, LanceTableItem } from "@/api/lance";
 
 import LanceMetadataPanel from "./LanceMetadataPanel";
 import LanceSchemaPanel from "./LanceSchemaPanel";

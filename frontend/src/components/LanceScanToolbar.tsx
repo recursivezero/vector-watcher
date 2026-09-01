@@ -1,4 +1,4 @@
-import type { LanceDataSource, LanceTableItem } from "@/api/lancedbAdmin";
+import type { LanceDataSource, LanceTableItem } from "@/api/lance";
 
 interface LanceScanToolbarProps {
   source: LanceDataSource;

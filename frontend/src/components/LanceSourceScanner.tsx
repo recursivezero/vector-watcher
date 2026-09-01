@@ -1,4 +1,4 @@
-import type { LanceDataSource, LanceStorageType } from "@/api/lancedbAdmin";
+import type { LanceDataSource, LanceStorageType } from "@/api/lance";
 
 interface LanceSourceScannerProps {
   value: LanceDataSource;

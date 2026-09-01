@@ -1,5 +1,5 @@
 import { type FormEvent, useId, useState } from "react";
-import type { LanceExplorerCredentials } from "@/api/lancedbAdmin";
+import type { LanceExplorerCredentials } from "@/api/lance";
 
 interface LanceAdminGateProps {
   loading: boolean;

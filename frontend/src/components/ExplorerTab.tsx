@@ -5,7 +5,7 @@ import type {
   LanceRowSummary,
   LanceTableDetails,
   LanceTableItem
-} from "@/api/lancedbAdmin";
+} from "@/api/lance";
 
 import LanceFilterBar from "./LanceFilterBar";
 import LancePagination from "./LancePagination";
@@ -14,7 +14,7 @@ import LanceScanToolbar from "./LanceScanToolbar";
 import LanceSummaryCards from "./LanceSummaryCards";
 import VectorViewer from "./VectorViewer";
 
-import type { ExplorerQueryState } from "@/libs/explorerUtils";
+import type { ExplorerQueryState } from "@/libs/utils";
 
 interface ExplorerTabProps {
   source: LanceDataSource;

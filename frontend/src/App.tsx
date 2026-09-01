@@ -8,9 +8,9 @@ import type {
   LanceRowSummary,
   LanceTableDetails,
   LanceTableItem
-} from "@/api/lancedbAdmin";
+} from "@/api/lance";
 
-import { getRow, getRows, getTableDetails, scanConnection } from "@/api/lancedbAdmin";
+import { getRow, getRows, getTableDetails, scanConnection } from "@/api/lance";
 import { confirmAction } from "@/libs/confirm";
 
 import ConnectionTab from "@/components/ConnectionTab";
@@ -29,7 +29,7 @@ import {
   type ExplorerQueryState,
   getErrorMessage,
   writeTextToClipboard
-} from "@/libs/explorerUtils";
+} from "@/libs/utils";
 import { isTauri } from "@tauri-apps/api/core";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
@@ -40,8 +40,8 @@ const isDesktopApp = isTauri();
 
 const EMPTY_CONNECTION: LanceConnectionState = {
   name: "",
-  storage: "r2",
-  path: "table",
+  storage: "",
+  path: "",
   bucket: "",
   accountId: "",
   endpoint: "",
