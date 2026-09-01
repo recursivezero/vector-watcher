@@ -42,6 +42,11 @@ select {
 	color-scheme: light;
 }
 
+select,
+select::picker(select) {
+	appearance: base-select;
+}
+
 :root[data-theme="dark"] select {
 	color-scheme: dark;
 }

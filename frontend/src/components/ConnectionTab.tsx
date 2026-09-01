@@ -3,6 +3,8 @@ import { isTauri } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 import { useEffect, useMemo, useState } from "react";
 
+import "@/assets/styles/connection.css";
+
 type SavedConnection = Omit<LanceConnectionState, "accessKeyId" | "secretAccessKey" | "sessionToken">;
 
 interface ConnectionTabProps {
@@ -81,7 +83,7 @@ export default function ConnectionTab({
 
   const canConnect = useMemo(() => {
     if (connection.storage === LANCE_STORAGE.LOCAL) {
-      return Boolean(connection.path.trim());
+      return Boolean(connection.path.trim()) && Boolean(connection.name.trim());
     }
 
     if (!connection.name.trim()) {
@@ -241,6 +243,20 @@ export default function ConnectionTab({
                 </div>
               </div>
             )}
+            <label className="field field-full">
+              <span>Storage provider</span>
+
+              <select
+                value={connection.storage}
+                onChange={onStorageChange}
+                disabled={loading}
+                className="connection-select"
+              >
+                <option value={LANCE_STORAGE.R2}>Cloudflare R2</option>
+                <option value={LANCE_STORAGE.S3}>Amazon S3</option>
+                <option value={LANCE_STORAGE.LOCAL}>Local LanceDB</option>
+              </select>
+            </label>
 
             <label className="field field-full">
               <span>Connection name</span>
@@ -279,21 +295,6 @@ export default function ConnectionTab({
                   </button>
                 )}
               </div>
-            </label>
-
-            <label className="field field-full">
-              <span>Storage provider</span>
-
-              <select
-                value={connection.storage}
-                onChange={onStorageChange}
-                disabled={loading}
-                className="connection-select"
-              >
-                <option value={LANCE_STORAGE.R2}>Cloudflare R2</option>
-                <option value={LANCE_STORAGE.S3}>Amazon S3</option>
-                <option value={LANCE_STORAGE.LOCAL}>Local LanceDB</option>
-              </select>
             </label>
 
             {connection.storage !== LANCE_STORAGE.LOCAL && (
