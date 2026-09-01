@@ -11,70 +11,37 @@ TAURI_BINARIES_DIR="$PROJECT_ROOT/src-tauri/binaries"
 OS="$(uname -s)"
 ARCH="$(uname -m)"
 
-case "$OS" in
-  Darwin)
-    case "$ARCH" in
-      arm64)
-        TARGET_TRIPLE="aarch64-apple-darwin"
-        ;;
-      x86_64)
-        TARGET_TRIPLE="x86_64-apple-darwin"
-        ;;
-      *)
-        echo "ERROR: Unsupported macOS architecture: $ARCH"
-        exit 1
-        ;;
-    esac
+case "$OS:$ARCH" in
+  Darwin:arm64)
+    TARGET_TRIPLE="aarch64-apple-darwin"
     ;;
-
-  Linux)
-    case "$ARCH" in
-      x86_64)
-        TARGET_TRIPLE="x86_64-unknown-linux-gnu"
-        ;;
-      aarch64)
-        TARGET_TRIPLE="aarch64-unknown-linux-gnu"
-        ;;
-      *)
-        echo "ERROR: Unsupported Linux architecture: $ARCH"
-        exit 1
-        ;;
-    esac
+  Darwin:x86_64)
+    TARGET_TRIPLE="x86_64-apple-darwin"
     ;;
-
+  Linux:x86_64)
+    TARGET_TRIPLE="x86_64-unknown-linux-gnu"
+    ;;
+  Linux:aarch64)
+    TARGET_TRIPLE="aarch64-unknown-linux-gnu"
+    ;;
   *)
-    echo "ERROR: Unsupported operating system: $OS"
+    echo "ERROR: Unsupported platform: $OS / $ARCH"
     exit 1
     ;;
 esac
 
-OUTPUT_BINARY_NAME="${BACKEND_NAME}-${TARGET_TRIPLE}"
+OUTPUT_BINARY="$BACKEND_NAME-$TARGET_TRIPLE"
 
-echo "========================================"
-echo " Vector Watcher Backend Build"
-echo "========================================"
-echo ""
-echo "OS: $OS"
-echo "Architecture: $ARCH"
-echo "Tauri target: $TARGET_TRIPLE"
-echo ""
+echo "Building $BACKEND_NAME for $TARGET_TRIPLE..."
 
 cd "$SCRIPT_DIR"
 
-if [ ! -f "server.py" ]; then
-  echo "ERROR: server.py not found in:"
-  echo "$SCRIPT_DIR"
+[ -f server.py ] || {
+  echo "ERROR: server.py not found"
   exit 1
-fi
+}
 
-echo "Cleaning previous backend build..."
-
-rm -rf build
-rm -rf dist
-
-echo ""
-
-echo "Building backend with PyInstaller..."
+rm -rf build dist
 
 poetry run pyinstaller \
   --onedir \
@@ -89,76 +56,37 @@ poetry run pyinstaller \
 BACKEND_DIR="$SCRIPT_DIR/dist/$BACKEND_NAME"
 BACKEND_EXECUTABLE="$BACKEND_DIR/$BACKEND_NAME"
 
-echo ""
-echo "Checking PyInstaller output..."
-echo "Expected executable:"
-echo "$BACKEND_EXECUTABLE"
-
-if [ ! -f "$BACKEND_EXECUTABLE" ]; then
-  echo ""
-  echo "ERROR: Backend executable was not found."
-  echo ""
-  echo "Contents of dist:"
+[ -f "$BACKEND_EXECUTABLE" ] || {
+  echo "ERROR: Backend executable was not created"
   find "$SCRIPT_DIR/dist" -maxdepth 3 -print
   exit 1
-fi
-
-echo ""
-echo "Creating Tauri binaries directory..."
+}
 
 mkdir -p "$TAURI_BINARIES_DIR"
 
-TARGET_BINARY="$TAURI_BINARIES_DIR/$OUTPUT_BINARY_NAME"
+TARGET_BINARY="$TAURI_BINARIES_DIR/$OUTPUT_BINARY"
 TARGET_RUNTIME_DIR="$TAURI_BINARIES_DIR/_internal"
-
-echo ""
-echo "Cleaning previous Tauri sidecar..."
 
 rm -f "$TARGET_BINARY"
 rm -rf "$TARGET_RUNTIME_DIR"
 
-echo ""
-echo "Copying backend executable..."
-
-cp -v \
-  "$BACKEND_EXECUTABLE" \
-  "$TARGET_BINARY"
-
-echo ""
-echo "Copying PyInstaller runtime..."
-
-cp -a \
-  "$BACKEND_DIR/_internal" \
-  "$TARGET_RUNTIME_DIR"
-
-echo ""
-echo "Making sidecar executable..."
+cp "$BACKEND_EXECUTABLE" "$TARGET_BINARY"
+cp -a "$BACKEND_DIR/_internal" "$TARGET_RUNTIME_DIR"
 
 chmod +x "$TARGET_BINARY"
 
-echo ""
-echo "Verifying Tauri sidecar..."
-
-if [ ! -f "$TARGET_BINARY" ]; then
-  echo "ERROR: Sidecar was not copied successfully."
+[ -f "$TARGET_BINARY" ] || {
+  echo "ERROR: Sidecar was not copied"
   exit 1
-fi
+}
 
-if [ ! -d "$TARGET_RUNTIME_DIR" ]; then
-  echo "ERROR: PyInstaller runtime directory was not copied successfully."
+[ -d "$TARGET_RUNTIME_DIR" ] || {
+  echo "ERROR: PyInstaller runtime was not copied"
   exit 1
-fi
-
-ls -lh "$TARGET_BINARY"
+}
 
 echo ""
-echo "PyInstaller runtime:"
-ls -ld "$TARGET_RUNTIME_DIR" 
-
-echo ""
-echo "========================================"
-echo " Build completed successfully"
-echo "========================================"
-echo ""
-echo "Tauri sidecar:"
-echo "$TARGET_BINARY"
+echo "Build completed successfully"
+echo "Target: $TARGET_TRIPLE"
+echo "Sidecar: $TARGET_BINARY"
+echo "Runtime: $TARGET_RUNTIME_DIR"
