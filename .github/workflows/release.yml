@@ -10,15 +10,33 @@ on:
       - "feature/**"
 
 jobs:
-  build-linux:
-    name: Linux
-    runs-on: ubuntu-22.04
+  build-unix:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        include:
+          - name: Linux
+            os: ubuntu-22.04
+            build-command: npm run tauri:build:linux
+            artifact-name: vector-watcher-linux
+            artifact-path: src-tauri/target/release/bundle/deb/*.deb
+
+          - name: macOS
+            os: macos-latest
+            build-command: npm run tauri:build:mac
+            artifact-name: vector-watcher-macos
+            artifact-path: |
+              src-tauri/target/release/bundle/macos/*.app
+              src-tauri/target/release/bundle/dmg/*.dmg
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Install Linux dependencies
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -57,63 +75,15 @@ jobs:
         working-directory: frontend
         run: npm ci
 
-      - name: Build Linux application
+      - name: Build application
         working-directory: frontend
-        run: npm run tauri:build:linux
+        run: ${{ matrix.build-command }}
 
-      - name: Upload Linux package
+      - name: Upload application
         uses: actions/upload-artifact@v4
         with:
-          name: vector-watcher-linux
-          path: src-tauri/target/release/bundle/deb/*.deb
-
-  build-macos:
-    name: macOS
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Install Poetry
-        run: pip install poetry
-
-      - name: Install backend dependencies
-        working-directory: backend
-        run: poetry install --no-interaction
-
-      - name: Build backend sidecar
-        run: |
-          chmod +x backend/build.sh
-          ./backend/build.sh
-
-      - name: Install frontend dependencies
-        working-directory: frontend
-        run: npm ci
-
-      - name: Build macOS application
-        working-directory: frontend
-        run: npm run tauri:build:mac
-
-      - name: Upload macOS packages
-        uses: actions/upload-artifact@v4
-        with:
-          name: vector-watcher-macos
-          path: |
-            src-tauri/target/release/bundle/macos/*.app
-            src-tauri/target/release/bundle/dmg/*.dmg
+          name: ${{ matrix.artifact-name }}
+          path: ${{ matrix.artifact-path }}
 
   build-windows:
     name: Windows
@@ -137,36 +107,30 @@ jobs:
 
       - name: Install Poetry
         shell: powershell
-        run: |
-          pip install poetry
+        run: pip install poetry
 
       - name: Install backend dependencies
         working-directory: backend
         shell: powershell
-        run: |
-          poetry install --no-interaction
+        run: poetry install --no-interaction
 
       - name: Build Windows backend sidecar
         working-directory: backend
         shell: powershell
-        run: |
-          .\build-windows.ps1
+        run: .\build-windows.ps1
 
       - name: Install frontend dependencies
         working-directory: frontend
         shell: powershell
-        run: |
-          npm ci
+        run: npm ci
 
       - name: Build Windows application
         working-directory: frontend
         shell: powershell
-        run: |
-          npm run tauri:build:windows
+        run: npm run tauri:build:windows
 
       - name: Upload Windows installer
         uses: actions/upload-artifact@v4
         with:
           name: vector-watcher-windows
-          path: |
-            src-tauri/target/release/bundle/nsis/*.exe
+          path: src-tauri/target/release/bundle/nsis/*.exe
