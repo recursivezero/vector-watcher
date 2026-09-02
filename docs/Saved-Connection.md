@@ -8,7 +8,7 @@ This avoids entering the same connection information every time Vector Watcher i
 
 ## Saving a Connection
 
-![Save Connection](screenshots/save-connection.png)
+![Save Connection](screenshots/store-connection.png)
 
 After entering connection details, save the connection using the available save action.
 
@@ -18,7 +18,7 @@ it will ask to generate secret vault on your system and will store there so next
 
 ## Selecting a Saved Connection
 
-![Saved Connections](screenhots/store-connections.png)
+![Saved Connections](screenshots/save-connection.png)
 
 Select an existing saved connection from the available connection list.
 

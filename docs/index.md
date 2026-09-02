@@ -25,7 +25,7 @@ The Python backend runs locally and is started automatically when the Tauri appl
 
 ![Vector Watcher Main Window](screenshots/main-window.png)
 
-![Connection Screen](screenhots/connection-tab.png)
+![Connection Screen](screenshots/connection-tab.png)
 
 ![Database Screen](screenshots/database-tab.png)
 
