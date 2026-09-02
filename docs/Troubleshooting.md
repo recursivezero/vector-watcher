@@ -81,4 +81,7 @@ Failed to load Python shared library libpython3.12.dylib
 
 Verify that the PyInstaller \_internal directory is available together with the executable.
 
-See [[Backend Packaging]] and [[macOS]].
+See More at
+
+- [Backend Packaging](./Backend-Packaging.md)
+- [macOS](./macOS.md)

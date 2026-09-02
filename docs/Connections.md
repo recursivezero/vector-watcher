@@ -57,6 +57,6 @@ If a connection fails:
 
 ## Related Documentation
 
-- [[Saved Connections]]
-- [[Database Explorer]]
-- [[Troubleshooting]]
+- [Saved Connections](./Saved-Connection.md)
+- [Database Explorer](./Database-Explorer.md)
+- [Troubleshooting](./Troubleshooting.md)

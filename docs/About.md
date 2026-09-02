@@ -29,30 +29,26 @@ The About page can provide a link to the Vector Watcher documentation.
 
 The About page may also provide information useful when requesting support.
 
-Recommended information:
+Sample information:
 
 ```text
-Vector Watcher Version:
-Operating System:
-Architecture:
-Backend Status:
-Application Build:
+Vector Watcher Diagnostic Information
+
+Application: Vector Watcher
+Date: Thu Sep 03 2026 01:19:28 GMT+0530 (India Standard Time)
+Version: 0.1.6
+Platform: Linux x86_64
+
+Technology:
+Desktop: Tauri
+Frontend: React + TypeScript
+Backend: Python
+Database: LanceDB
+
 ```
 
 ---
 
-# Copy Support Information
+## Copy Support Information
 
 If the application provides a copy action, users should be able to copy the support information and include it in an issue or support request.
-
-> TODO: Document the exact support information format.
-
----
-
-# GitHub
-
-> TODO: Add the GitHub repository link.
-
-> TODO: Add the GitHub Issues link.
-
-> TODO: Add the GitHub Wiki link.

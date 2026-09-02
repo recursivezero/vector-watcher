@@ -33,5 +33,5 @@ Only include functionality that exists in the current release.
 
 ## Related Documentation
 
-- [[Database Explorer]]  
-- [[Search]]
+- [Database Explorer]('./Database-Explorer.md)
+- [Search]('./Search.md)

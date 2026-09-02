@@ -121,4 +121,4 @@ Learn where to find application and support information:
 
 If the application cannot communicate with its backend or fails to start correctly, see:
 
-[[Troubleshooting]]
+- [Troubleshooting](./Troubleshooting.md)

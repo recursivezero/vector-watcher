@@ -86,6 +86,6 @@ Correct single-line command:
 
 ### Related Documentation
 
-[[Backend Sidecar]]  
-[[Cross Platform Builds]]  
-[[macOS]]
+- [Backend Sidecar](./Backend-Sidecar.md)
+- [Cross Platform Builds](./Cross-Platform-Builds.md)
+- [macOS](./macOS.md)

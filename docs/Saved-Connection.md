@@ -47,5 +47,4 @@ credentials or sensitive connection information are stored in secret vault on yo
 
 ## Related Documentation
 
-- [[Connections]]
-- [[Settings]]
+- [Connections](./Connections.md)

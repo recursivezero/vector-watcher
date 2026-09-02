@@ -34,15 +34,3 @@ Before creating a release, verify the following.
 + [ ] Windows backend built  
 + [ ] NSIS or MSI installer generated  
 + [ ] Installed application launches
-
-## Future Release Checks
-
-TODO: Add version validation.
-
-TODO: Add Git tag validation.
-
-TODO: Add release notes checklist.
-
-TODO: Add checksum generation.
-
-TODO: Add code signing checks.

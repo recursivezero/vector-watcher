@@ -33,6 +33,6 @@ Platform-specific requirements may differ.
 
 See:
 
-[[Linux]]  
-[[macOS]]  
-[[Windows]]
+- [Linux](./Linux.md)  
+- [macOS](./macOS.md)
+- [Windows](./Windows.md)

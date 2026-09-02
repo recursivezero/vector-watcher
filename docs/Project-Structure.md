@@ -78,4 +78,4 @@ Contains the platform-specific backend sidecar binaries used during production b
 
 See
 
-[[Backend Sidecar]].
+- [Backend Sidecar](./Backend-Sidecar.md)

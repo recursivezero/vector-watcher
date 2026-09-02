@@ -103,5 +103,5 @@ Tauri Terminates Backend
 
 See also:
 
-[[Backend Sidecar]]  
-[[Backend Packaging]]
+- [Backend Sidecar](./Backend-Sidecar.md)
+- [Backend Packaging](./Backend-Packaging.md)

@@ -59,13 +59,3 @@ To build MSI instead:
 📷 Screenshot placeholder: Installed application
 
 📷 Screenshot placeholder: Windows application shortcut
-
-### Future Documentation
-
-TODO: Confirm supported Windows versions.
-
-TODO: Add installation instructions.
-
-TODO: Add Windows Defender / SmartScreen guidance.
-
-TODO: Add code signing documentation.

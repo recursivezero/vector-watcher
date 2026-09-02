@@ -46,6 +46,6 @@ you can click on rescan button to refresh the data
 
 ## Related Documentation
 
-- [[Connections]]
-- [[Tables]]
-- [[Search]]
+- [Connections](./Connections.md)
+- [Tables](./Tables.md)
+- [Search](./Search.md)
