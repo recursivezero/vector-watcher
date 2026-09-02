@@ -14,7 +14,7 @@
         },
         "macOS": {
             "files": {
-                "MacOS/_internal": "binaries/_internal/"
+                "Frameworks": "binaries/_internal/"
             }
         },
         "icon": [
