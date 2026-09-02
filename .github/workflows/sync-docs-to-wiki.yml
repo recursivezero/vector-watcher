@@ -14,11 +14,11 @@ jobs:
 
     steps:
       - name: Checkout main repo
-        uses: actions/checkout@v7
+        uses: actions/checkout@v5
 
       - name: Sync docs to wiki
         env:
-          WIKI_PAT: ${{ secrets.WIKI_PAT }}
+          WIKI_PAT: ${{ secrets['WIKI_PAT'] }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
