@@ -1,3 +1,7 @@
 theme: jekyll-theme-primer
 title: Vector Watcher Documentation
 description: Simple markdown docs
+
+kramdown:
+  input: GFM
+  wiki_links: true
