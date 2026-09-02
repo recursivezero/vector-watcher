@@ -2,15 +2,11 @@
 
 The Database Explorer allows you to inspect the resources available through the active connection.
 
-> 📷 Screenshot placeholder: Database Explorer
-
-<!--
-![Database Explorer](images/database-explorer.png)
--->
+![Database Explorer](screenshots/database-tab.png)
 
 ---
 
-# Connecting to a Database
+## Connecting to a Database
 
 Before browsing database resources, create or select a connection.
 
@@ -20,21 +16,21 @@ See:
 
 ---
 
-# Available Resources
+## Available Resources
 
 After connecting, the application may display available resources such as:
 
-* Databases
-* Tables
-* Collections
-* Records
-* Metadata
+- Databases
+- Tables
+- Collections
+- Records
+- Metadata
 
 > TODO: Replace this list with the exact Vector Watcher data model.
 
 ---
 
-# Opening a Resource
+## Opening a Resource
 
 Select an available resource to inspect its contents.
 
@@ -42,20 +38,14 @@ Select an available resource to inspect its contents.
 
 ---
 
-# Refreshing
+## Refreshing
 
-> TODO: Confirm whether Vector Watcher currently supports refreshing database metadata or resource lists.
-
-If refresh functionality exists, document:
-
-1. Where the refresh action is located.
-2. What information is refreshed.
-3. Whether active table data is also refreshed.
+you can click on rescan button to refresh the data
 
 ---
 
-# Related Documentation
+## Related Documentation
 
-* [[Connections]]
-* [[Tables]]
-* [[Search]]
+- [[Connections]]
+- [[Tables]]
+- [[Search]]

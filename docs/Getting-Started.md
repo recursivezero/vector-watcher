@@ -10,19 +10,19 @@ You do not need to install or start the Python backend separately when using the
 
 ---
 
-# Before You Start
+## Before You Start
 
 Make sure you have installed a Vector Watcher release for your operating system.
 
 See:
 
-* [[Linux]]
-* [[macOS]]
-* [[Windows]]
+- [[Linux]]
+- [[macOS]]
+- [[Windows]]
 
 ---
 
-# Starting Vector Watcher
+## Starting Vector Watcher
 
 After installation, open **Vector Watcher** from your operating system's application launcher.
 
@@ -36,21 +36,15 @@ The backend may take a few seconds to become available after the application ope
 
 ---
 
-# Main Application
+## Main Application
 
-> 📷 Screenshot placeholder: Vector Watcher main application window
-
-<!--
-![Vector Watcher Main Window](images/main-window.png)
--->
+![Vector Watcher Main Window](screenshots/main-window.png)
 
 The main application provides access to the available Vector Watcher features.
 
-> TODO: Add a short overview of the current application layout.
-
 ---
 
-# Typical Workflow
+## Typical Workflow
 
 A typical workflow is:
 
@@ -77,7 +71,7 @@ The exact workflow depends on the database and features available in the current
 
 ---
 
-# Documentation
+## Documentation
 
 ## Connections
 

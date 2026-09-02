@@ -2,43 +2,30 @@
 
 The About section contains information about the installed Vector Watcher application.
 
-> 📷 Screenshot placeholder: About page
-
-<!--
-![About](images/about.png)
--->
+![About](screenshots/about.png)
 
 ---
 
-# Application Information
+## Application Information
 
 The About page may display information such as:
 
-* Application name
-* Application version
-* Operating system
-* Build information
+- Application name
+- Application version
+- Operating system
+- Build information
 
 > TODO: Replace with the exact information currently displayed.
 
 ---
 
-# Documentation
+## Documentation
 
 The About page can provide a link to the Vector Watcher documentation.
 
-> TODO: Add the GitHub Wiki URL after the Wiki is published.
-
-Example:
-
-```text
-Documentation
-https://github.com/OWNER/REPOSITORY/wiki
-```
-
 ---
 
-# Support Information
+## Support Information
 
 The About page may also provide information useful when requesting support.
 

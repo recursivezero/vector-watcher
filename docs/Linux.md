@@ -18,12 +18,12 @@ cd backend
 From the project root:
 
 ```bash
-cd ..
 cd frontend
+npm run clean
 npm run tauri:build:linux
 ```
 
-Recommended *package.json* script:
+Recommended _package.json_ script:
 
 ```json
 {
@@ -35,7 +35,7 @@ Recommended *package.json* script:
 
 ### Generated Package
 
-The package is generated under: *src-tauri/target/release/bundle/deb/*
+The package is generated under: _src-tauri/target/release/bundle/deb/_
 
 Example: Vector Watcher_1.1.0_amd64.deb
 
@@ -64,13 +64,3 @@ You can also launch Vector Watcher from the Ubuntu application launcher.
 📷 Screenshot placeholder: Installed Vector Watcher application
 
 📷 Screenshot placeholder: Terminal installation command
-
-### Future Documentation
-
-TODO: Add supported Ubuntu versions.
-
-TODO: Add uninstall instructions.
-
-TODO: Add .deb troubleshooting.
-
-TODO: Add desktop launcher documentation.

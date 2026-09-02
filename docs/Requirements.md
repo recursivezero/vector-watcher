@@ -33,6 +33,6 @@ Platform-specific requirements may differ.
 
 See:
 
-[[Linux]]
-[[macOS]]
+[[Linux]]  
+[[macOS]]  
 [[Windows]]

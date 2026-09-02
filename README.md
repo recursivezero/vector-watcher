@@ -1,146 +1,149 @@
 # Vector Watcher
 
-Vector Watcher is a cross-platform desktop application built with **Tauri**, **React**, **TypeScript**, and a local **Python/FastAPI backend**.
+A modern, cross-platform desktop GUI for exploring and managing LanceDB vector databases.
 
-The application packages the frontend, Tauri application, and Python backend into a single desktop application for:
+<p align="center">
+  <img src="docs/screenshots/vector-watcher.png" alt="Vector Watcher - Cross-platform LanceDB GUI" width="100%" />
+</p>
 
-* Linux
-* macOS
-* Windows
-
-The Python backend runs locally and is started automatically when Vector Watcher launches.
-
----
-
-## Screenshots
-
-![Vector Watcher](docs/images/vector-watcher.png)
+<p align="center">
+  <a href="https://github.com/recursivezero/vector-watcher/releases"><img src="https://badgen.net/github/releases/recursivezero/vector-watcher" alt="Latest Release"></a>
+  <a href="https://github.com/recursivezero/vector-watcher/blob/main/LICENSE"><img src="https://badgen.net/github/license/recursivezero/vector-watcher" alt="License"></a>
+</p>
 
 ---
 
-## Features
+## Overview
 
-> TODO: Add the confirmed user-facing features.
+**Vector Watcher** simplifies working with local and remote vector embeddings. Built on top of **Tauri**, **React**, **TypeScript**, and a sidecar **Python/FastAPI** engine, it provides a light, responsive interface for vector inspection, similarity searches, and table management without memory overhead.
 
-Current documentation areas include:
+### Key Features
 
-* Database connections
-* Saved connections
-* Database exploration
-* Tables
-* Search
-
-See the full documentation in the **Wiki**.
-
----
-
-## Installation
-
-Download the latest release for your operating system from:
-
-> TODO: Add GitHub Releases link
-
----
-
-## Documentation
-
-Full documentation is available in the GitHub Wiki.
-
-```text
-https://github.com/recursivezero/vector-watcher/wiki
-```
-
-The Wiki includes:
-
-### User Documentation
-
-* Getting Started
-* Connections
-* Saved Connections
-* Database Explorer
-* Tables
-* Search
-* Settings
-* About
-
-### Developer Documentation
-
-* Architecture
-* Development Setup
-* Backend Packaging
-* Backend Sidecar
-* Linux Builds
-* macOS Builds
-* Windows Builds
-* Release Workflow
-* Troubleshooting
+- **Connection Manager:** Configure, persist, and quickly switch between multiple local or remote LanceDB instances.
+- **Schema & Table Inspector:** Browse vector datasets, structural schemas, metadata, and row counts seamlessly.
+- **Vector Similarity Search:** Execute distance queries (L2, Cosine, Dot Product) directly from the interface.
+- **Zero-Setup Sidecar:** Auto-managed local PyPI Python sidecar running over an isolated internal loopback socket (`127.0.0.1:8765`).
 
 ---
 
 ## Architecture
 
+Vector Watcher uses Tauri to launch an isolated Python backend as a sidecar binary, bridging low-latency IPC with high-performance vector calculations:
+
 ```text
-React / TypeScript
-        │
-        ▼
-Tauri Desktop Application
-        │
-        ▼
-Python Backend Sidecar
-        │
-        ▼
-FastAPI / Uvicorn
-        │
-        ▼
-127.0.0.1:8765
+┌─────────────────────────────────────────────────────────┐
+│ React / TypeScript (Tauri Webview Core)                 │
+└────────────────────────────┬────────────────────────────┘
+                             │ Local Webview IPC
+                             ▼
+┌─────────────────────────────────────────────────────────┐
+│ Tauri Native Host (Rust Core Engine)                    │
+└────────────────────────────┬────────────────────────────┘
+                             │ Manages Sidecar Process
+                             ▼
+┌─────────────────────────────────────────────────────────┐
+│ Python / FastAPI Engine (Uvicorn Sidecar)               │
+│ Bound locally to: [http://127.0.0.1:8765](http://127.0.0.1:8765)                 │
+└────────────────────────────┬────────────────────────────┘
+                             │ Native Bindings
+                             ▼
+┌─────────────────────────────────────────────────────────┐
+│ LanceDB Core (v0.30.2 Vector Index / Storage)           │
+└─────────────────────────────────────────────────────────┘
+
 ```
 
 ---
 
-## Development
+## Installation
 
-Frontend dependencies:
+Download the pre-compiled binary for your environment from the **[Releases Page](https://github.com/recursivezero/vector-watcher/releases)**:
+
+| OS Platform               | Target Arch           | Package Format       |
+| ------------------------- | --------------------- | -------------------- |
+| **Linux** (Ubuntu 24.04+) | `x86_64` / `arm64`    | `.AppImage`, `.deb`  |
+| **macOS**                 | Apple Silicon / Intel | `.dmg`               |
+| **Windows** (Windows 11)  | `x64`                 | `.msi`, Setup `.exe` |
+
+---
+
+## Development Setup
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v20+ LTS recommended)
+- [Rust](https://www.rust-lang.org/) (latest stable toolchain for Tauri)
+- [Python](https://www.python.org/) (v3.11+) with [Poetry](https://python-poetry.org/)
+
+### Monorepo Setup
+
+1. **Clone the repository:**
 
 ```bash
-npm install
+git clone https://github.com/recursivezero/vector-watcher.git
+cd vector-watcher
 ```
 
-Backend dependencies:
+2. **Setup Frontend:**
+
+```bash
+cd frontend
+npm install
+
+```
+
+3. **Setup Python Sidecar:**
 
 ```bash
 cd backend
-poetry install
+poetry install --all-extras --with dev
+
 ```
 
-For complete development and build instructions, see the Wiki.
+4. **Run Dev Environment:**
+
+```bash
+cd frontend
+npm run tauri:dev
+```
 
 ---
 
-## Building
+## Build Targets
 
-Platform-specific builds are documented in the Wiki:
+To package standalone installers for production manually:
 
-* Linux
-* macOS
-* Windows
+```bash
+cd frontend
+npm run tauri:build:[mac|linux|windows]
+```
+
+_For detailed platform-specific compilation instructions, consult the [Platform Build Guides](https://github.com/recursivezero/vector-watcher/wiki/Cross-Platform-Builds)._
 
 ---
 
-## License
+## Documentation & Wiki
 
-MIT
+For detailed guides, API schemas, and release strategies, visit the **[GitHub Wiki](https://github.com/recursivezero/vector-watcher/wiki)**:
+
+- 📘 [User Guide & Operations](https://github.com/recursivezero/vector-watcher/wiki/Getting-Started)
+- 🛠️ [Architecture & FastAPI Protocol](https://github.com/recursivezero/vector-watcher/wiki/Architecture)
+- 📦 [Packaging & Binary Sidecar Workflow](https://github.com/recursivezero/vector-watcher/wiki/Backend-Sidecar)
 
 ---
 
 ## Contributing
 
-* Keshav Mohta
-* Dhwani Khandelwal
+Created and maintained by
+
+- [Keshav Mohta](https://github.com/xkeshav)
+
+- [Dhwani Khandelwal](https://github.com/DhwaniKhandelwal-tech)
+
+Contributions are welcome! Please open an issue or pull request to start a discussion.
 
 ---
 
-## Support
+## License
 
-For bugs, feature requests, and support:
-
-[Issue Page](https://github.com/recursivezero/vector-watcher/issues)
+Distributed under the [MIT License](/LICENSE).

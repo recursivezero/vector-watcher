@@ -23,23 +23,17 @@ The Python backend runs locally and is started automatically when the Tauri appl
 
 ## Screenshots
 
-> 📷 Screenshot placeholder: Main application window
+![Vector Watcher Main Window](screenshots/main-window.png)
 
-<!--
-![Vector Watcher Main Window](images/main-window.png)
--->
+![Connection Screen](screenhots/connection-tab.png)
 
-> 📷 Screenshot placeholder: Connection screen
+![Database Screen](screenshots/database-tab.png)
 
-<!--
-![Connection Screen](images/connection-screen.png)
--->
+![Explorer Screen](screenshots/explorer-tab.png)
 
-> 📷 Screenshot placeholder: Search or main workspace
+![Help Screen](screenshots/help.png)
 
-<!--
-![Workspace](images/workspace.png)
--->
+![About Screen](screenshots/about.png)
 
 ---
 

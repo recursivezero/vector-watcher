@@ -1,4 +1,3 @@
-
 # Project Structure
 
 A simplified project structure:
@@ -12,11 +11,15 @@ vector-watcher/
 │   ├── pyproject.toml
 │   ├── poetry.lock
 │   ├── build.sh
+│   ├── start.sh
 │   │
 │   ├── build/
 │   └── dist/
 │
-├── src/
+├── frontend/
+│     ├── src/
+│     │──package.json
+│     └── dist/
 │
 ├── src-tauri/
 │   ├── binaries/
@@ -29,7 +32,7 @@ vector-watcher/
 │   │
 │   └── target/
 │
-└── package.json
+└──README.md
 ```
 
 ## Important Directories
@@ -50,13 +53,9 @@ build.sh
 
 The PyInstaller output is generated inside this area.
 
-#### src
+#### frontend/
 
 Contains the frontend application source.
-
-TODO: Add frontend architecture documentation.
-
-TODO: Add component structure documentation.
 
 #### src-tauri/
 
@@ -77,4 +76,6 @@ src-tauri/
 
 Contains the platform-specific backend sidecar binaries used during production builds.
 
-See [[Backend Sidecar]].
+See
+
+[[Backend Sidecar]].

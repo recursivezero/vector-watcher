@@ -38,6 +38,7 @@
 			"cdylib",
 			"cloudflarestorage",
 			"codegen",
+			"lancedb",
 			"libayatana",
 			"libpython",
 			"librsvg",

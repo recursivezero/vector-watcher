@@ -27,7 +27,7 @@ dist/
         └── other runtime files
 ```
 
-The executable depends on runtime libraries inside _internal.
+The executable depends on runtime libraries inside \_internal.
 
 A sidecar executable cannot always be copied by itself when using PyInstaller `--onedir`.
 
@@ -86,6 +86,6 @@ Correct single-line command:
 
 ### Related Documentation
 
-[[Backend Sidecar]]
-[[Cross Platform Builds]]
+[[Backend Sidecar]]  
+[[Cross Platform Builds]]  
 [[macOS]]

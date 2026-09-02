@@ -10,9 +10,7 @@ This page describes the general connection workflow.
 
 > 📷 Screenshot placeholder: Create connection screen
 
-<!--
-![Create Connection](images/create-connection.png)
--->
+![Create Connection](screenshots/connection-tab.png)
 
 To create a connection:
 
@@ -20,34 +18,26 @@ To create a connection:
 2. Enter the required connection information.
 3. Save or connect using the available action.
 
-> TODO: Document the exact fields currently supported by Vector Watcher.
-
 ---
 
 ## Connection Fields
 
 The application may require connection information such as:
 
-* Connection name
-* Database location or URI
-* Storage configuration
-* Endpoint
-* Credentials
-* Other connection-specific settings
-
-> TODO: Replace this section with the exact fields used by the current Vector Watcher UI.
+- Connection name
+- Database location or URI
+- Storage configuration
+- Endpoint
+- Credentials
+- Other connection-specific settings
 
 ---
 
-## Connecting
+## Storing Credentials in Vault
 
-After configuring a connection, select the connection and connect to the database.
+After configuring a connection, you can se the connection using master password and these credentials will be stoared in your system
 
-> 📷 Screenshot placeholder: Connected application state
-
-<!--
-![Connected State](images/connected-state.png)
--->
+![Save Connection Vault](screenshots/save-connection.png)
 
 When successfully connected, Vector Watcher should make the available database resources accessible through the application.
 
@@ -67,20 +57,6 @@ If a connection fails:
 
 ## Related Documentation
 
-* [[Saved Connections]]
-* [[Database Explorer]]
-* [[Troubleshooting]]
-
----
-
-## Future Documentation
-
-> TODO: Add supported database types.
-
-> TODO: Add local database examples.
-
-> TODO: Add cloud database examples.
-
-> TODO: Add connection validation behavior.
-
-> TODO: Add connection error reference.
+- [[Saved Connections]]
+- [[Database Explorer]]
+- [[Troubleshooting]]

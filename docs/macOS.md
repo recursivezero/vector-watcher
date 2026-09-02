@@ -20,10 +20,10 @@ cd backend
 
 ## Build the Application
 
-From the project frontend folder:
+From the project root :
 
 ```bash
-cd ../fronted/
+cd frontend
 npm run clean
 npm run tauri:build:mac
 ```
@@ -40,9 +40,9 @@ Recommended script:
 
 ### Generated Outputs
 
-- Application: *src-tauri/target/release/bundle/macos/Vector Watcher.app*  
+- Application: _src-tauri/target/release/bundle/macos/Vector Watcher.app_
 
-- DMG output: *src-tauri/target/release/bundle/dmg/*
+- DMG output: _src-tauri/target/release/bundle/dmg/_
 
 The `.app` can be tested directly.
 
@@ -59,17 +59,13 @@ the PyInstaller executable may have been packaged without the complete runtime.
 Expected PyInstaller structure:
 
 ```text
-
-dist/vector-watcher-backend/
-
-├── vector-watcher-backend
-
-└── _internal/
-
+dist/
+    ├── vector-watcher-backend
+    └── _internal/
     └── libpython3.12.dylib
 ```
 
-The executable depends on: *_internal/libpython3.12.dylib*
+The executable depends on: _\_internal/libpython3.12.dylib_
 
 Do not package only the executable without its required PyInstaller runtime.
 
@@ -82,13 +78,3 @@ Always test the packaged backend independently before assuming the Tauri fronten
 📷 Screenshot placeholder: macOS installation
 
 📷 Screenshot placeholder: DMG window
-
-### Future Documentation
-
-TODO: Add macOS Gatekeeper instructions.
-
-TODO: Add code signing documentation.
-
-TODO: Add notarization documentation.
-
-TODO: Add universal binary strategy if required.
