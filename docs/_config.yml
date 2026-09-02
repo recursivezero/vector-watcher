@@ -1,9 +1,13 @@
 theme: jekyll-theme-primer
 title: Vector Watcher
-description: Cross-platform desktop application for vector database monitoring and debugging.
+description: "Vector Watcher is a cross-platform desktop application for vector database monitoring, debugging, and analytics across Linux, macOS, and Windows."
+
+# Absolute URL settings (Required for WhatsApp & Social Cards)
+url: "https://recursivezero.github.io"
+baseurl: "/vector-watcher"
 
 # Open Graph & SEO Configuration
-logo: /screenshots/main-window.png # Used as default image preview
+logo: /screenshots/og-cover.png # Used as default image preview
 social:
   name: Recursive Zero
   links:
