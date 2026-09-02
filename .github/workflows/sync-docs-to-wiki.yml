@@ -1,0 +1,41 @@
+name: Sync docs to wiki
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+
+jobs:
+  sync-wiki:
+    name: Sync Docs to Wiki
+    environment: wiki
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main repo
+        uses: actions/checkout@v7
+
+      - name: Sync docs to wiki
+        env:
+          WIKI_PAT: ${{ secrets.WIKI_PAT }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Clone wiki using authenticated URL
+          git clone "https://x-access-token:${WIKI_PAT}@github.com/${github.repository}.wiki.git" wiki_dir
+
+          # Copy docs while excluding git files
+          rsync -av --delete --exclude='.git*' docs/ wiki_dir/
+
+          cd wiki_dir
+
+          # Check if there are changes to commit
+          if [ -n "$(git status --porcelain)" ]; then
+            git add .
+            git commit -m "docs: sync from main branch [skip ci]"
+            git push origin HEAD
+          else
+            echo "No changes detected in docs folder."
+          fi
