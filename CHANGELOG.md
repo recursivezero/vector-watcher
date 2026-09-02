@@ -8,6 +8,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 - Added basic setup
 - Working with R2 and S3 credentials
+- stored under v 1.0.0 under release
 
 ## [0.1.1] - 28-08-2026
 
@@ -35,6 +36,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 - Added Help and About page
 - Added for Windows desktop app
 
-## [0.1.5] - 02-09-2026
+## [0.1.6] - 02-09-2026
 
 - Fixed macos app issue
+- Added Wiki page with Documentations

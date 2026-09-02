@@ -5,6 +5,36 @@
   "author": "RecursiveZero",
   "version": "0.1.6",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/recursivezero/vector-watcher.git"
+  },
+  "bugs": {
+    "url": "https://github.com/recursivezero/vector-watcher/issues",
+    "email": "support@recursivezero.com"
+  },
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/xkeshav"
+  },
+  "contributors": [
+    {
+      "name": "Keshav Mohta",
+      "username": "@xkeshav"
+    },
+    {
+      "name": "Dhwani Khandewal",
+      "username": "@DhwaniKhandelwal-tech"
+    }
+  ],
+  "keywords": [
+    "vector-watcher",
+    "vector database",
+    "vector table viewer",
+    "lancedb",
+    "lance",
+    "vector search"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

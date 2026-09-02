@@ -9,6 +9,11 @@ A modern, cross-platform desktop GUI for exploring and managing LanceDB vector d
 <p align="center">
   <a href="https://github.com/recursivezero/vector-watcher/releases"><img src="https://badgen.net/github/releases/recursivezero/vector-watcher" alt="Latest Release"></a>
   <a href="https://github.com/recursivezero/vector-watcher/blob/main/LICENSE"><img src="https://badgen.net/github/license/recursivezero/vector-watcher" alt="License"></a>
+<a href="https://github.com/recursivezero/vector-watcher/issues"><img src="https://badgen.net/
+/github/issues/recursivezero/vector-watcher
+" alt="Open Issues"></a>
+<a href="https://github.com/recursivezero/vector-watcher/pulls"><img src="https://badgen.net/github/prs/recursivezero/vector-watcher
+" alt="Open PRs"></a>
 </p>
 
 ---
