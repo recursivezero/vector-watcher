@@ -1,3 +1,10 @@
+---
+layout: default
+title: Vector Watcher Documentation
+description: Cross-platform desktop monitoring app for Linux, macOS, and Windows.
+image: /screenshots/main-window.png
+---
+
 # Vector Watcher
 
 Vector Watcher is a cross-platform desktop application built with:

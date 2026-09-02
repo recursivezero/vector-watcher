@@ -1,7 +1,20 @@
 theme: jekyll-theme-primer
-title: Vector Watcher Documentation
-description: Simple markdown docs
+title: Vector Watcher
+description: Cross-platform desktop application for vector database monitoring and debugging.
 
+# Open Graph & SEO Configuration
+logo: /screenshots/main-window.png # Used as default image preview
+social:
+  name: Recursive Zero
+  links:
+    - https://github.com/recursivezero
+
+# Enable GitHub Pages built-in plugins
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# Enable GFM code highlighting and auto TOC support
 kramdown:
   input: GFM
-  wiki_links: true
+  syntax_highlighter: rouge

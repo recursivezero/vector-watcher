@@ -35,8 +35,13 @@ jobs:
           # Clone wiki
           git clone "https://x-access-token:${WIKI_PAT}@github.com/${{ github.repository }}.wiki.git" wiki_dir
 
-          # Copy docs folder contents
+          # Copy docs folder contents (including _Sidebar.md)
           rsync -av --delete --exclude='.git*' docs/ wiki_dir/
+
+          # Map index.md to Home.md for GitHub Wiki entrypoint
+          if [ -f "wiki_dir/index.md" ]; then
+            cp wiki_dir/index.md wiki_dir/Home.md
+          fi
 
           cd wiki_dir
 
