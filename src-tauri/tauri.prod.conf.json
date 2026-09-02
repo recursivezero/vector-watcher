@@ -10,7 +10,8 @@
         "linux": {
             "deb": {
                 "files": {
-                    "/usr/bin/_internal": "binaries/_internal/"
+                    "/usr/bin/_internal": "binaries/_internal/",
+                    "/usr/share/metainfo/com.recursivezero.vectorwatcher.metainfo.xml": "metainfo/com.recursivezero.vectorwatcher.metainfo.xml"
                 }
             }
         },

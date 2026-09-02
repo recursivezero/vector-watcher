@@ -43,6 +43,7 @@
 			"libpython",
 			"librsvg",
 			"libwebkit",
+			"metainfo",
 			"nsis",
 			"onedir",
 			"onefile",
