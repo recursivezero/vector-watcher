@@ -40,12 +40,25 @@ textarea {
 
 select {
 	color-scheme: light;
+	box-sizing: border-box;
+
+	width: 100%;
+	min-width: 0;
+	height: 38px;
+	min-height: 38px;
+	padding: 0 7px;
+
+	border: 1px solid var(--border-input);
+	border-radius: 7px;
+	outline: none;
+
+	background: var(--bg-input);
+	color: var(--text-primary);
+
+	line-height: normal;
 }
 
-select,
-select::picker(select) {
-	appearance: base-select;
-}
+
 
 select:disabled {
 	background-color: var(--bg-disable);

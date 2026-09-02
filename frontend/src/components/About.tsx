@@ -141,20 +141,6 @@ export const About = () => {
             </div>
           </section>
           <section className="about-section">
-            <div className="about-section__heading">
-              <div>
-                <h2>Diagnostics</h2>
-
-                <p>Copy application information when reporting an issue.</p>
-              </div>
-
-              <button type="button" className="button" onClick={() => void handleCopyDiagnostics()} disabled={!appInfo}>
-                {copyStatus || "Copy diagnostics"}
-              </button>
-            </div>
-          </section>
-
-          <section className="about-section">
             <h2>Support</h2>
 
             <p>For help using Vector Watcher, visit the Help section or contact support.</p>
@@ -167,6 +153,19 @@ export const About = () => {
             <button type="button" className="button" onClick={navigateHome}>
               Go to Home
             </button>
+          </section>
+          <section className="about-section">
+            <div className="about-section__heading">
+              <div>
+                <h2>Diagnostics</h2>
+
+                <p>Copy application information when reporting an issue.</p>
+              </div>
+
+              <button type="button" className="button" onClick={() => void handleCopyDiagnostics()} disabled={!appInfo}>
+                {copyStatus || "Copy diagnostics"}
+              </button>
+            </div>
           </section>
         </div>
       </main>

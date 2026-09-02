@@ -324,7 +324,7 @@
   grid-column: 1 / -1;
 }
 
-.field > span {
+.field>span {
   color: var(--text-primary);
 
   font-size: 12px;
@@ -370,10 +370,9 @@
 }
 
 .field input:disabled,
-.field select:disabled
-{
-background-color: var(--bg-disable);
-cursor: not-allowed;
+.field select:disabled {
+  background-color: var(--bg-disable);
+  cursor: not-allowed;
 }
 
 .field-with-action {
@@ -483,7 +482,7 @@ cursor: not-allowed;
 }
 
 .table-picker select {
-  min-width: 280px;
+  max-width: 80%;
   min-height: 40px;
   padding: 0 10px;
 
@@ -688,7 +687,7 @@ cursor: not-allowed;
   padding: 18px;
 }
 
-.lance-admin-json-group + .lance-admin-json-group {
+.lance-admin-json-group+.lance-admin-json-group {
   margin-top: 16px;
 }
 
@@ -719,10 +718,8 @@ cursor: not-allowed;
 
 .lance-admin-filter {
   display: grid;
-  grid-template-columns: minmax(240px, 1.5fr) minmax(280px, 1.2fr) minmax(160px, 0.8fr) minmax(140px, 0.7fr) minmax(
-      130px,
-      0.6fr
-    );
+  grid-template-columns: minmax(240px, 1.5fr) minmax(280px, 1.2fr) minmax(160px, 0.8fr) minmax(140px, 0.7fr) minmax(130px,
+      0.6fr);
   align-items: end;
   gap: 12px;
 }
@@ -1018,7 +1015,7 @@ cursor: not-allowed;
   font-size: 12px;
 }
 
-.lance-admin-pagination > div {
+.lance-admin-pagination>div {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1074,7 +1071,7 @@ cursor: not-allowed;
   box-shadow: 0 25px 80px var(--shadow-modal);
 }
 
-.lance-vector-modal__dialog > header {
+.lance-vector-modal__dialog>header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1287,6 +1284,7 @@ cursor: not-allowed;
 }
 
 @media (max-width: 1000px) {
+
   .connection-layout,
   .database-panels {
     grid-template-columns: 1fr;
