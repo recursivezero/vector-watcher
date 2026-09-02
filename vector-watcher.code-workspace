@@ -34,9 +34,13 @@
 		},
 		"peacock.color": "#42b883",
 		"cSpell.words": [
+			"appindicator",
 			"cdylib",
 			"cloudflarestorage",
 			"codegen",
+			"libayatana",
+			"librsvg",
+			"libwebkit",
 			"nsis",
 			"onedir",
 			"onefile",

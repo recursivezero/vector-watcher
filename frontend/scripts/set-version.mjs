@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
@@ -26,6 +27,12 @@ const packageJsonPath = path.join(frontendDir, "package.json");
 
 const tauriConfigPath = path.join(projectRoot, "src-tauri", "tauri.conf.json");
 
+const tauriProdConfigPath = path.join(
+  projectRoot,
+  "src-tauri",
+  "tauri.prod.conf.json",
+);
+
 const pyprojectPath = path.join(backendDir, "pyproject.toml");
 
 function readJson(filePath) {
@@ -47,13 +54,22 @@ function updatePackageJson() {
 }
 
 function updateTauriConfig() {
-  const tauriConfig = readJson(tauriConfigPath);
+  const tauriConfigPaths = [
+    tauriConfigPath,
+    tauriProdConfigPath,
+  ];
 
-  tauriConfig.version = version;
+  for (const configPath of tauriConfigPaths) {
+    const tauriConfig = readJson(configPath);
 
-  writeJson(tauriConfigPath, tauriConfig);
+    tauriConfig.version = version;
 
-  console.log(`✓ src-tauri/tauri.conf.json → ${version}`);
+    writeJson(configPath, tauriConfig);
+
+    console.log(
+      `✓ ${path.relative(projectRoot, configPath)} → ${version}`,
+    );
+  }
 }
 
 function updatePyproject() {

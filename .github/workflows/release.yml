@@ -1,16 +1,32 @@
 name: Build Vector Watcher
-
 on:
   workflow_dispatch:
+    inputs:
+      platform:
+        description: Platform to build
+        required: true
+        type: choice
+        default: all
+        options:
+          - macos
+          - linux
+          - windows
+          - all
+
 
   push:
     tags:
       - "v*"
     branches:
-      - "feature/**"
+      - "main"
 
 jobs:
   build-unix:
+    if: |
+      github.event_name != 'workflow_dispatch' ||
+      github.event.inputs.platform == 'all' ||
+      (github.event.inputs.platform == 'linux' && matrix.name == 'Linux') ||
+      (github.event.inputs.platform == 'macos' && matrix.name == 'macOS')
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
 
@@ -86,6 +102,10 @@ jobs:
           path: ${{ matrix.artifact-path }}
 
   build-windows:
+    if: |
+      github.event_name != 'workflow_dispatch' ||
+      github.event.inputs.platform == 'all' ||
+      github.event.inputs.platform == 'windows'
     name: Windows
     runs-on: windows-latest
 
