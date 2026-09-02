@@ -39,6 +39,7 @@
 			"cloudflarestorage",
 			"codegen",
 			"libayatana",
+			"libpython",
 			"librsvg",
 			"libwebkit",
 			"nsis",
