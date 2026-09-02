@@ -34,16 +34,53 @@
 		},
 		"peacock.color": "#42b883",
 		"cSpell.words": [
+			"appindicator",
+			"cdylib",
 			"cloudflarestorage",
-			"tauri"
+			"codegen",
+			"libayatana",
+			"librsvg",
+			"libwebkit",
+			"nsis",
+			"onedir",
+			"onefile",
+			"pyinstaller",
+			"pyproject",
+			"pytest",
+			"rlib",
+			"serde",
+			"staticlib",
+			"tauri",
+			"topbar",
+			"uvicorn",
+			"vectorwatcher"
 		],
 		"folder-color.pathColors": [],
 		"python.analysis.typeCheckingMode": "basic",
 		"python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/bin/python",
 		"files.exclude": {
 			"**/__pycache__": true,
-			"**/.venv": true
+			"**/.venv": true,
+			"**/*_cache": true,
+			"**/node_modules": true
 		},
-		"git.branchPrefix": "feature/TZV-26000X"
+		"breadcrumbs.showBooleans": false,
+		"breadcrumbs.showClasses": false,
+		"breadcrumbs.showConstants": false,
+		"breadcrumbs.showConstructors": false,
+		"breadcrumbs.showEnumMembers": false,
+		"breadcrumbs.showEnums": false,
+		"breadcrumbs.showEvents": false,
+		"breadcrumbs.showFields": false,
+		"breadcrumbs.showInterfaces": false,
+		"breadcrumbs.showObjects": false,
+		"breadcrumbs.showOperators": false,
+		"breadcrumbs.showPackages": false,
+		"js/ts.referencesCodeLens.showOnAllFunctions": true,
+		"[python]": {
+			"editor.defaultFormatter": "ms-python.black-formatter",
+			"editor.formatOnSave": true,
+			"editor.formatOnPaste": true
+  	}
 	}
 }

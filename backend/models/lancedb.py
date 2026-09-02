@@ -2,7 +2,6 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-
 SortColumn = Literal["image_uri", "tag", "hash", "mtime"]
 SortOrder = Literal["asc", "desc"]
 LanceStorageType = Literal["local", "s3", "r2"]

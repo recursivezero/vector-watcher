@@ -1,17 +1,17 @@
+import logging
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from models.lancedb import (
-	LanceConnection,
-	LanceRowDetailResponse,
-	LanceRowsResponse, 
-  LanceTableDetailsResponse, 
-  LanceTablesResponse,
-	SortColumn,
-	SortOrder
+    LanceConnection,
+    LanceRowDetailResponse,
+    LanceRowsResponse,
+    LanceTableDetailsResponse,
+    LanceTablesResponse,
+    SortColumn,
+    SortOrder,
 )
-
 from services.lancedb import (
     LanceDBError,
     LanceDBService,
@@ -21,20 +21,18 @@ from services.lancedb import (
 )
 
 load_dotenv()
-
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="Vector Watcher Backend",
-    version="0.1.0",
+    version="1.1.0",
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:1420",
-        "http://127.0.0.1:1420",
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -66,16 +64,18 @@ def scan_connection(
         ) from error
 
     except LanceDBUnavailable as error:
+        logger.exception("Unable to connect to LanceDB")
         raise HTTPException(
             status_code=502,
             detail=str(error),
-        ) from error
+        )
 
     except LanceDBError as error:
         raise HTTPException(
             status_code=500,
             detail=str(error),
         ) from error
+
 
 @app.post(
     "/connections/table-details",
@@ -112,6 +112,7 @@ def table_details(
             status_code=500,
             detail=str(error),
         ) from error
+
 
 @app.post(
     "/connections/rows",
@@ -163,6 +164,7 @@ def table_rows(
             status_code=500,
             detail=str(error),
         ) from error
+
 
 @app.post(
     "/connections/row",

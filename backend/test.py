@@ -1,4 +1,3 @@
-
 import os
 
 from dotenv import load_dotenv
@@ -123,6 +122,7 @@ def test_search_rows() -> None:
                 row.get("tag"),
                 row.get("hash"),
             )
+
 
 if __name__ == "__main__":
     test_row()

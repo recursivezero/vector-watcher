@@ -2,10 +2,16 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "Capability for the main window",
-  "windows": ["main"],
+  "windows": [
+    "main"
+  ],
   "permissions": [
     "core:default",
     "dialog:allow-open",
-    "opener:default"
+    "dialog:allow-ask",
+    "opener:default",
+    "stronghold:default",
+    "stronghold:allow-initialize",
+    "stronghold:allow-remove-store-record"
   ]
 }
