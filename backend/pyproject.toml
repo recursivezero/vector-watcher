@@ -1,17 +1,18 @@
 [project]
 name = "vector-watcher-backend"
-version = "0.1.0"
-description = "Local LanceDb backend for vector Watcher"
+version = "0.1.6"
+description = "Backend service for Vector Watcher, a desktop explorer for LanceDB vector datasets"
 authors = [
-    {name = "admin", email = "recursivezero@outlook.com"}
+    { name = "RecursiveZero" }
 ]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.16"
+
 dependencies = [
-    "fastapi (>=0.141.1,<0.142.0)",
-    "uvicorn (>=0.52.4,<0.53.0)",
-    "lancedb (>=0.37.1,<0.38.0)",
-    "python-dotenv (>=1.2.3,<2.0.0)"
+    "fastapi>=0.141.1,<0.142.0",
+    "uvicorn>=0.52.4,<0.53.0",
+    "lancedb>=0.37.1,<0.38.0",
+    "python-dotenv>=1.2.3,<2.0.0",
 ]
 
 [tool.poetry]
@@ -21,14 +22,18 @@ package-mode = false
 ruff = ">=0.12.0,<0.13.0"
 pyright = ">=1.1.400,<1.2.0"
 pytest = ">=8.0.0,<9.0.0"
-httpx2 = ">=2.12.0,<3.0.0"
+httpx = ">=0.28.0,<1.0.0"
+pyinstaller = ">=6.22.2,<7.0.0"
 
 [tool.ruff]
 target-version = "py312"
 line-length = 100
+
 extend-exclude = [
     "__pycache__",
     ".venv",
+    "build",
+    "dist",
 ]
 
 [tool.ruff.lint]
@@ -40,6 +45,7 @@ select = [
     "UP",
     "B",
 ]
+
 ignore = [
     "E501",
 ]
@@ -54,16 +60,20 @@ include = [
     "models",
     "services",
 ]
+
 exclude = [
     "**/__pycache__",
     ".venv",
+    "build",
+    "dist",
 ]
+
 typeCheckingMode = "standard"
 pythonVersion = "3.12"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-python_files = ["."]
+python_files = ["test_*.py"]
 addopts = "-ra"
 
 [build-system]

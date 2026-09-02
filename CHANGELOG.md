@@ -21,3 +21,20 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 - Added credentials save using vault
 - Added lint test tooling
+
+## [0.1.3] - 30-08-2026
+
+- Added build for linux as a package
+- Added Copyright footer
+- Added Dark theme
+- Fix Database tab vector metadata view schema
+- Added build package for linux and macOS
+
+## [0.1.4] - 31-08-2026
+
+- Added Help and About page
+- Added for Windows desktop app
+
+## [0.1.5] - 02-09-2026
+
+- Fixed macos app issue
