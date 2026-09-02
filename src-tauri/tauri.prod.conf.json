@@ -1,29 +1,31 @@
 {
-  "bundle": {
-    "active": true,
-    "targets": "all",
-    "externalBin": [
-      "binaries/vector-watcher-backend"
-    ],
-    "linux": {
-      "deb": {
-        "files": {
-          "/usr/bin/_internal": "binaries/_internal/"
-        }
-      }
+    "bundle": {
+        "active": true,
+        "targets": "all",
+        "externalBin": [
+            "binaries/vector-watcher-backend"
+        ],
+        "shortDescription": "A desktop explorer for LanceDB vector datasets",
+        "longDescription": "Vector Watcher is a desktop application for connecting to, exploring, and inspecting LanceDB vector datasets.",
+        "linux": {
+            "deb": {
+                "files": {
+                    "/usr/bin/_internal": "binaries/_internal/"
+                }
+            }
+        },
+        "macOS": {
+            "files": {
+                "Frameworks": "binaries/_internal/"
+            }
+        },
+        "icon": [
+            "icons/32x32.png",
+            "icons/128x128.png",
+            "icons/128x128@2x.png",
+            "icons/icon.icns",
+            "icons/icon.ico"
+        ]
     },
-    "macOS": {
-      "files": {
-        "Frameworks": "binaries/_internal/"
-      }
-    },
-    "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
-    ]
-  },
-  "version": "0.1.6"
+    "version": "0.1.6"
 }

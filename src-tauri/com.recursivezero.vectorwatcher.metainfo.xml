@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.recursivezero.vectorwatcher</id>
+
+  <name>Vector Watcher</name>
+
+  <summary>A desktop explorer for LanceDB vector datasets</summary>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+
+  <developer_name>Recursive Zero</developer_name>
+
+  <url type="homepage">https://github.com/recursivezero/vector-watcher</url>
+
+  <description>
+    <p>
+      Vector Watcher is a desktop application for connecting to,
+      exploring, and inspecting LanceDB vector datasets.
+    </p>
+  </description>
+
+  <screenshots>
+    <screenshot type="default">
+      <image type="source">
+        https://assets.threadzip.com/vector-watcher.png
+      </image>
+      <caption>Vector Watcher database explorer</caption>
+    </screenshot>
+  </screenshots>
+
+  <content_rating type="oars-1.1" />
+
+  <launchable type="desktop-id">
+    vector-watcher.desktop
+  </launchable>
+</component>

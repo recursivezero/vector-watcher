@@ -13,7 +13,14 @@ interface DatabaseTabProps {
   onRefresh: () => void;
 }
 
-export default function DatabaseTab({ tables, selectedTable, details, loading, onSelectTable, onRefresh }: DatabaseTabProps) {
+export default function DatabaseTab({
+  tables,
+  selectedTable,
+  details,
+  loading,
+  onSelectTable,
+  onRefresh
+}: DatabaseTabProps) {
   return (
     <div className="database-page">
       <div className="page-heading">
