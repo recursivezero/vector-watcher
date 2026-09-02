@@ -1,6 +1,9 @@
-import { LANCE_STORAGE, type LanceConnectionState, type LanceStorageType } from "@/api/lancedbAdmin";
+import { LANCE_STORAGE, type LanceConnectionState, type LanceStorageType } from "@/api/lance";
+import { isTauri } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 import { useEffect, useMemo, useState } from "react";
+
+import "@/assets/styles/connection.css";
 
 type SavedConnection = Omit<LanceConnectionState, "accessKeyId" | "secretAccessKey" | "sessionToken">;
 
@@ -23,7 +26,7 @@ interface ConnectionTabProps {
 const STORAGE_LABELS: Record<LanceStorageType, string> = {
   [LANCE_STORAGE.R2]: "Cloudflare R2",
   [LANCE_STORAGE.S3]: "Amazon S3",
-  [LANCE_STORAGE.LOCAL]: "Local LanceDB",
+  [LANCE_STORAGE.LOCAL]: "Local LanceDB"
 };
 
 function maskCredential(value: string): string {
@@ -51,10 +54,12 @@ export default function ConnectionTab({
   onLoadConnection,
   onDeleteConnection,
   onNewConnection,
-  selectedConnectionName,
+  selectedConnectionName
 }: ConnectionTabProps) {
   const [showAccessKey, setShowAccessKey] = useState(false);
   const [showSecretKey, setShowSecretKey] = useState(false);
+
+  console.log({selectedConnectionName})
 
   useEffect(() => {
     if (!showSecretKey) {
@@ -70,11 +75,25 @@ export default function ConnectionTab({
     };
   }, [showSecretKey]);
 
-  const storageLabel = STORAGE_LABELS[connection.storage];
+  // const storageLabel = STORAGE_LABELS[connection.storage];
+
+  const storageLabel = connection.storage
+  ? STORAGE_LABELS[connection.storage]
+  : "";
+
+  const handlePathChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    update({
+      path: event.target.value
+    });
+  };
 
   const canConnect = useMemo(() => {
     if (connection.storage === LANCE_STORAGE.LOCAL) {
-      return Boolean(connection.path.trim());
+      return Boolean(connection.path.trim()) && Boolean(connection.name.trim());
+    }
+
+    if (!connection.name.trim()) {
+      return false;
     }
 
     if (!connection.bucket.trim()) {
@@ -101,20 +120,23 @@ export default function ConnectionTab({
   const update = (patch: Partial<LanceConnectionState>) => {
     onChange({
       ...connection,
-      ...patch,
+      ...patch
     });
   };
 
   const handleBrowseLocal = async () => {
+    if (!isTauri()) {
+      return;
+    }
     const selected = await open({
       directory: true,
       multiple: false,
-      title: "Select LanceDB database",
+      title: "Select LanceDB database"
     });
 
     if (typeof selected === "string") {
       update({
-        path: selected,
+        path: selected
       });
     }
   };
@@ -137,7 +159,7 @@ export default function ConnectionTab({
         storage,
         endpoint: "",
         region: "auto",
-        accountId: "",
+        accountId: ""
       });
 
       return;
@@ -147,7 +169,7 @@ export default function ConnectionTab({
       update({
         storage,
         accountId: "",
-        region: "",
+        region: ""
       });
 
       return;
@@ -161,7 +183,7 @@ export default function ConnectionTab({
       accessKeyId: "",
       secretAccessKey: "",
       sessionToken: "",
-      region: "",
+      region: ""
     });
   };
   return (
@@ -195,7 +217,7 @@ export default function ConnectionTab({
 
                 <div className="field-with-action">
                   <select
-                    className="connection-select" 
+                    className="connection-select"
                     value={selectedConnectionName ?? ""}
                     onChange={(event) => {
                       const name = event.currentTarget.value;
@@ -205,9 +227,9 @@ export default function ConnectionTab({
                       void onLoadConnection(name);
                       event.currentTarget.value = "";
                     }}
-                    disabled={loading}
+                    disabled={loading || connected}
                   >
-                    <option value="">Select saved connection</option>
+                    <option value="">Select Saved Connection</option>
 
                     {savedConnections.map((saved) => (
                       <option key={saved.name} value={saved.name}>
@@ -216,12 +238,32 @@ export default function ConnectionTab({
                     ))}
                   </select>
 
-                  <button type="button" className="button button-secondary" onClick={onNewConnection} disabled={loading}>
+                  <button
+                    type="button"
+                    className="button button-secondary"
+                    onClick={onNewConnection}
+                    disabled={loading || connected}
+                  >
                     New
                   </button>
                 </div>
               </div>
             )}
+            <label className="field field-full">
+              <span>Storage provider</span>
+
+              <select
+                value={connection.storage}
+                onChange={onStorageChange}
+                disabled={loading || selectedConnectionName !== null}
+                className="connection-select"
+              >
+                <option value="">Select Storage Provider</option>
+                <option value={LANCE_STORAGE.R2}>Cloudflare R2</option>
+                <option value={LANCE_STORAGE.S3}>Amazon S3</option>
+                <option value={LANCE_STORAGE.LOCAL}>Local LanceDB</option>
+              </select>
+            </label>
 
             <label className="field field-full">
               <span>Connection name</span>
@@ -231,7 +273,7 @@ export default function ConnectionTab({
                   value={connection.name}
                   onChange={(event) =>
                     update({
-                      name: event.target.value,
+                      name: event.target.value
                     })
                   }
                   placeholder="e.g. Threadzip R2"
@@ -240,26 +282,26 @@ export default function ConnectionTab({
                   disabled={loading}
                 />
 
-                <button type="button" className="button button-secondary" onClick={onSaveConnection} disabled={loading || !canSave}>
+                <button
+                  type="button"
+                  className="button button-secondary"
+                  onClick={onSaveConnection}
+                  disabled={loading || !canSave}
+                >
                   {selectedConnectionName ? "Update Connection" : "Save Connection"}
                 </button>
 
                 {savedConnections.some((saved) => saved.name === connection.name.trim()) && (
-                  <button type="button" className="button button-secondary" onClick={handleDeleteConnection} disabled={loading}>
+                  <button
+                    type="button"
+                    className="button button-secondary"
+                    onClick={handleDeleteConnection}
+                    disabled={loading}
+                  >
                     Delete
                   </button>
                 )}
               </div>
-            </label>
-
-            <label className="field field-full">
-              <span>Storage provider</span>
-
-              <select value={connection.storage} onChange={onStorageChange} disabled={loading} className="connection-select" >
-                <option value={LANCE_STORAGE.R2}>Cloudflare R2</option>
-                <option value={LANCE_STORAGE.S3}>Amazon S3</option>
-                <option value={LANCE_STORAGE.LOCAL}>Local LanceDB</option>
-              </select>
             </label>
 
             {connection.storage !== LANCE_STORAGE.LOCAL && (
@@ -271,16 +313,12 @@ export default function ConnectionTab({
                     value={connection.path}
                     onChange={(event) =>
                       update({
-                        path: event.target.value,
+                        path: event.target.value
                       })
                     }
-                    placeholder="table"
+                    placeholder="database folder name"
                     disabled={loading}
                   />
-
-                  <small>
-                    Example: <code>table</code>
-                  </small>
                 </label>
 
                 <label className="field">
@@ -290,7 +328,7 @@ export default function ConnectionTab({
                     value={connection.bucket}
                     onChange={(event) =>
                       update({
-                        bucket: event.target.value,
+                        bucket: event.target.value
                       })
                     }
                     placeholder="your-bucket-name"
@@ -305,7 +343,7 @@ export default function ConnectionTab({
                     value={connection.region}
                     onChange={(event) =>
                       update({
-                        region: event.target.value,
+                        region: event.target.value
                       })
                     }
                     placeholder={connection.storage === LANCE_STORAGE.R2 ? "auto" : "ap-south-1"}
@@ -321,7 +359,7 @@ export default function ConnectionTab({
                       value={connection.accountId}
                       onChange={(event) =>
                         update({
-                          accountId: event.target.value,
+                          accountId: event.target.value
                         })
                       }
                       placeholder="Your Cloudflare Account ID"
@@ -347,7 +385,7 @@ export default function ConnectionTab({
                       value={connection.endpoint}
                       onChange={(event) =>
                         update({
-                          endpoint: event.target.value,
+                          endpoint: event.target.value
                         })
                       }
                       placeholder="https://s3.amazonaws.com"
@@ -365,7 +403,7 @@ export default function ConnectionTab({
                       value={connection.accessKeyId}
                       onChange={(event) =>
                         update({
-                          accessKeyId: event.target.value,
+                          accessKeyId: event.target.value
                         })
                       }
                       autoComplete="off"
@@ -394,7 +432,7 @@ export default function ConnectionTab({
                       value={connection.secretAccessKey}
                       onChange={(event) =>
                         update({
-                          secretAccessKey: event.target.value,
+                          secretAccessKey: event.target.value
                         })
                       }
                       autoComplete="off"
@@ -424,7 +462,7 @@ export default function ConnectionTab({
                       placeholder="Used only with temporary S3 credentials."
                       onChange={(event) =>
                         update({
-                          sessionToken: event.target.value,
+                          sessionToken: event.target.value
                         })
                       }
                       autoComplete="off"
@@ -440,9 +478,20 @@ export default function ConnectionTab({
                 <span>Local LanceDB database</span>
 
                 <div className="field-with-action">
-                  <input value={connection.path} readOnly placeholder="Select a LanceDB database folder" disabled={loading} />
+                  <input
+                    value={connection.path}
+                    placeholder="Select a LanceDB database folder"
+                    readOnly={isTauri()}
+                    disabled={loading}
+                    onChange={handlePathChange}
+                  />
 
-                  <button type="button" onClick={() => void handleBrowseLocal()} disabled={loading}>
+                  <button
+                    type="button"
+                    onClick={() => void handleBrowseLocal()}
+                    disabled={loading || !isTauri()}
+                    title={!isTauri() ? "Folder browsing is available in the desktop application" : undefined}
+                  >
                     Browse
                   </button>
                 </div>
@@ -465,7 +514,12 @@ export default function ConnectionTab({
               </button>
             )}
 
-            <button type="button" className="button button-primary" onClick={onConnect} disabled={!canConnect || loading}>
+            <button
+              type="button"
+              className="button button-primary"
+              onClick={onConnect}
+              disabled={!canConnect || loading}
+            >
               {loading ? "Connecting…" : connected ? "Reconnect" : "Connect"}
             </button>
           </div>
@@ -488,7 +542,10 @@ export default function ConnectionTab({
           <div className="surface security-card">
             <span className="eyebrow">Security</span>
             <h3>Credentials are securely stored</h3>
-            <p>Storage credentials are stored separately from connection settings and protected by your credential vault password.</p>
+            <p>
+              Storage credentials are stored separately from connection settings and protected by your credential vault
+              password.
+            </p>
           </div>
         </aside>
       </div>

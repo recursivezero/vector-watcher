@@ -1,0 +1,70 @@
+.help-screen {
+	min-height: 100vh;
+
+	display: flex;
+	flex-direction: column;
+}
+
+.help-content {
+	width: min(100%, 900px);
+
+	flex: 1;
+
+	display: flex;
+	flex-direction: column;
+
+	gap: 2rem;
+
+	margin: 0 auto;
+
+	padding: 96px 2rem 2rem;
+}
+
+.help-section {
+	display: grid;
+
+	grid-template-columns: 3rem minmax(0, 1fr);
+
+	gap: 1rem;
+}
+
+.help-section__number {
+	display: grid;
+	place-items: center;
+
+	width: 2.5rem;
+	height: 2.5rem;
+
+	border: 1px solid var(--border);
+	border-radius: 0.65rem;
+
+	color: var(--text-muted);
+
+	font-size: 0.8rem;
+}
+
+.help-section h2 {
+	margin: 0 0 0.6rem;
+
+	font-size: 1.1rem;
+}
+
+.help-section p {
+	margin: 0 0 0.6rem;
+
+	max-width: 70ch;
+
+	color: var(--text-muted);
+
+	line-height: 1.6;
+}
+
+.help-section p:last-child {
+	margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+	.help-content {
+		padding: 88px 1rem 1.5rem;
+	}
+}

@@ -1,4 +1,4 @@
-import type { LanceDataSource, LanceStorageType } from "@/api/lancedbAdmin";
+import type { LanceDataSource, LanceStorageSelectType } from "@/api/lance";
 
 interface LanceSourceScannerProps {
   value: LanceDataSource;
@@ -9,7 +9,7 @@ interface LanceSourceScannerProps {
   onLock: () => void;
 }
 
-function sourceCopy(storage: LanceStorageType) {
+function sourceCopy(storage: LanceStorageSelectType) {
   if (storage === "local") {
     return {
       label: null,
@@ -36,7 +36,7 @@ function sourceCopy(storage: LanceStorageType) {
 export default function LanceSourceScanner({ value, loading, error, onChange, onScan, onLock }: LanceSourceScannerProps) {
   const copy = sourceCopy(value.storage);
 
-  const setStorage = (storage: LanceStorageType) => {
+  const setStorage = (storage: LanceStorageSelectType) => {
     onChange({
       ...value,
       storage,
@@ -63,7 +63,7 @@ export default function LanceSourceScanner({ value, loading, error, onChange, on
       <div className="lance-source-card__grid">
         <label className="lance-admin-field">
           <span>Storage</span>
-          <select value={value.storage} onChange={(event) => setStorage(event.target.value as LanceStorageType)} disabled={loading}>
+          <select value={value.storage} onChange={(event) => setStorage(event.target.value as LanceStorageSelectType)} disabled={loading}>
             <option value="local">Local database</option>
             <option value="s3">Amazon S3</option>
             <option value="r2">Cloudflare R2</option>

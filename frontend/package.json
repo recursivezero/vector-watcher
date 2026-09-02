@@ -3,13 +3,14 @@
   "private": true,
   "description": "A desktop explorer for LanceDB vector datasets",
   "author": "RecursiveZero",
-  "version": "1.1.5",
+  "version": "0.1.6",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri:dev": "tauri dev",
+    "tauri:dev": "cd .. && tauri dev",
+    "clean": "node scripts/clean.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "version:set": "node scripts/set-version.mjs",
@@ -18,9 +19,10 @@
     "tauri:build:windows": "cd .. && tauri build --config ./src-tauri/tauri.prod.conf.json --bundles nsis"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2",
+    "@tauri-apps/api": "^2.11.1",
     "@tauri-apps/plugin-dialog": "^2.7.2",
     "@tauri-apps/plugin-opener": "^2",
+    "@tauri-apps/plugin-os": "^2.3.2",
     "@tauri-apps/plugin-shell": "^2.3.5",
     "@tauri-apps/plugin-stronghold": "^2.3.1",
     "react": "^19.1.0",

@@ -1,0 +1,176 @@
+.about-screen {
+	min-height: 100vh;
+
+	display: flex;
+	flex-direction: column;
+}
+
+.about-main {
+	flex: 1;
+
+	padding: 96px 2rem 2rem;
+}
+
+.about-content {
+	width: min(100%, 800px);
+
+	margin: 0 auto;
+}
+
+.about-hero {
+	display: flex;
+	align-items: center;
+	gap: 1.25rem;
+
+	padding-bottom: 2rem;
+
+	border-bottom: 1px solid var(--border);
+}
+
+.about-hero__mark {
+	width: 4rem;
+	height: 4rem;
+
+	display: grid;
+	place-items: center;
+
+	flex: 0 0 auto;
+
+	border: 1px solid var(--border);
+	border-radius: 0.75rem;
+
+	background: var(--surface);
+
+	font-size: 2rem;
+}
+
+.about-hero h1 {
+	margin: 0.25rem 0;
+
+	color: var(--text-primary);
+
+	font-size: 2rem;
+}
+
+.about-hero p {
+	margin: 0;
+
+	color: var(--text-muted);
+
+	line-height: 1.6;
+}
+
+.about-section {
+	padding: 2rem 0;
+
+	border-bottom: 1px solid var(--border);
+}
+
+.about-section:last-child {
+	border-bottom: 0;
+}
+
+.about-section h2 {
+	margin: 0 0 1rem;
+
+	color: var(--text-primary);
+
+	font-size: 1.15rem;
+}
+
+.about-section p {
+	max-width: 70ch;
+
+	margin: 0 0 0.75rem;
+
+	color: var(--text-muted);
+
+	line-height: 1.6;
+}
+
+.about-section p:last-of-type {
+	margin-bottom: 1.25rem;
+}
+
+.about-details {
+	display: flex;
+	flex-direction: column;
+
+	border: 1px solid var(--border);
+	border-radius: 0.75rem;
+
+	overflow: hidden;
+}
+
+.about-detail {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	gap: 2rem;
+
+	padding: 0.9rem 1rem;
+
+	border-bottom: 1px solid var(--border);
+}
+
+.about-detail:last-child {
+	border-bottom: 0;
+}
+
+.about-detail__label {
+	color: var(--text-muted);
+
+	font-size: 0.9rem;
+}
+
+.about-detail__value {
+	color: var(--text-primary);
+
+	font-size: 0.9rem;
+	font-weight: 500;
+
+	text-align: right;
+}
+
+.about-support {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	flex-wrap: wrap;
+
+	margin-top: 1rem;
+}
+
+.about-support__email {
+	color: var(--text-primary);
+	font-weight: 500;
+	margin-bottom: 1rem;
+	text-decoration: dashed;
+}
+
+.about-support__email:hover {
+	text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+	.about-main {
+		padding:
+			88px 1rem 1.5rem;
+	}
+
+	.about-hero {
+		align-items: flex-start;
+	}
+
+	.about-detail {
+		align-items: flex-start;
+		flex-direction: column;
+
+		gap: 0.35rem;
+	}
+
+	.about-detail__value {
+		text-align: left;
+	}
+}

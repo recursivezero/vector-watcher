@@ -1,5 +1,5 @@
-import type { LanceRowSummary } from "@/api/lancedbAdmin";
-import { compactValue, formatLanceMtime, rowCopyPayload } from "@/lib/explorerUtils";
+import type { LanceRowSummary } from "@/api/lance";
+import { compactValue, formatLanceMtime, rowCopyPayload } from "@/libs/utils";
 
 interface LanceRowGridProps {
   rows: LanceRowSummary[];
@@ -39,7 +39,14 @@ function RowActions({ row, onCopy, onViewVector }: RowActionsProps) {
   );
 }
 
-export default function LanceRowGrid({ rows, loading, appliedTag, onCopy, onViewVector, onClearFilter }: LanceRowGridProps) {
+export default function LanceRowGrid({
+  rows,
+  loading,
+  appliedTag,
+  onCopy,
+  onViewVector,
+  onClearFilter
+}: LanceRowGridProps) {
   if (loading) {
     return (
       <div className="lance-admin-grid-state" role="status" aria-live="polite">

@@ -1,5 +1,5 @@
-import type { LanceRowDetail, LanceRowSummary } from "@/api/lancedbAdmin";
-import { completeRowCopyPayload } from "@/lib/explorerUtils";
+import type { LanceRowDetail, LanceRowSummary } from "@/api/lance";
+import { completeRowCopyPayload } from "@/libs/utils";
 import { useEffect, useRef } from "react";
 
 interface VectorViewerProps {
@@ -13,7 +13,16 @@ interface VectorViewerProps {
   onRetry: () => void;
 }
 
-export default function VectorViewer({ row, detail, loading, error, returnFocusElement, onClose, onCopy, onRetry }: VectorViewerProps) {
+export default function VectorViewer({
+  row,
+  detail,
+  loading,
+  error,
+  returnFocusElement,
+  onClose,
+  onCopy,
+  onRetry
+}: VectorViewerProps) {
   const dialogRef = useRef<HTMLElement | null>(null);
   const closeRef = useRef<HTMLButtonElement | null>(null);
 
@@ -35,8 +44,8 @@ export default function VectorViewer({ row, detail, loading, error, returnFocusE
 
       const focusable = Array.from(
         dialogRef.current?.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-        ) ?? [],
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        ) ?? []
       ).filter((element) => !element.hasAttribute("hidden"));
 
       if (focusable.length === 0) {
@@ -83,7 +92,13 @@ export default function VectorViewer({ row, detail, loading, error, returnFocusE
             <p className="lance-admin-eyebrow">Lazy row detail</p>
             <h2 id="lance-vector-title">Vector for row {row.row_id + 1}</h2>
           </div>
-          <button ref={closeRef} type="button" className="lance-vector-modal__close" onClick={onClose} aria-label="Close vector viewer">
+          <button
+            ref={closeRef}
+            type="button"
+            className="lance-vector-modal__close"
+            onClick={onClose}
+            aria-label="Close vector viewer"
+          >
             ×
           </button>
         </header>

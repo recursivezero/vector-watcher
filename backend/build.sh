@@ -25,6 +25,8 @@ case "$OS" in
         exit 1
         ;;
     esac
+
+    PYINSTALLER_MODE="onedir"
     ;;
 
   Linux)
@@ -40,6 +42,8 @@ case "$OS" in
         exit 1
         ;;
     esac
+
+    PYINSTALLER_MODE="onedir"
     ;;
 
   *)
@@ -49,6 +53,8 @@ case "$OS" in
 esac
 
 OUTPUT_BINARY_NAME="${BACKEND_NAME}-${TARGET_TRIPLE}"
+TARGET_BINARY="$TAURI_BINARIES_DIR/$OUTPUT_BINARY_NAME"
+TARGET_RUNTIME_DIR="$TAURI_BINARIES_DIR/_internal"
 
 echo "========================================"
 echo " Vector Watcher Backend Build"
@@ -57,13 +63,13 @@ echo ""
 echo "OS: $OS"
 echo "Architecture: $ARCH"
 echo "Tauri target: $TARGET_TRIPLE"
+echo "PyInstaller mode: $PYINSTALLER_MODE"
 echo ""
 
 cd "$SCRIPT_DIR"
 
 if [ ! -f "server.py" ]; then
-  echo "ERROR: server.py not found in:"
-  echo "$SCRIPT_DIR"
+  echo "ERROR: server.py not found in: $SCRIPT_DIR"
   exit 1
 fi
 
@@ -73,11 +79,10 @@ rm -rf build
 rm -rf dist
 
 echo ""
-
 echo "Building backend with PyInstaller..."
 
 poetry run pyinstaller \
-  --onedir \
+  "--$PYINSTALLER_MODE" \
   --name "$BACKEND_NAME" \
   --clean \
   --exclude-module pytest \
@@ -86,30 +91,10 @@ poetry run pyinstaller \
   --exclude-module black \
   server.py
 
-BACKEND_DIR="$SCRIPT_DIR/dist/$BACKEND_NAME"
-BACKEND_EXECUTABLE="$BACKEND_DIR/$BACKEND_NAME"
-
-echo ""
-echo "Checking PyInstaller output..."
-echo "Expected executable:"
-echo "$BACKEND_EXECUTABLE"
-
-if [ ! -f "$BACKEND_EXECUTABLE" ]; then
-  echo ""
-  echo "ERROR: Backend executable was not found."
-  echo ""
-  echo "Contents of dist:"
-  find "$SCRIPT_DIR/dist" -maxdepth 3 -print
-  exit 1
-fi
-
 echo ""
 echo "Creating Tauri binaries directory..."
 
 mkdir -p "$TAURI_BINARIES_DIR"
-
-TARGET_BINARY="$TAURI_BINARIES_DIR/$OUTPUT_BINARY_NAME"
-TARGET_RUNTIME_DIR="$TAURI_BINARIES_DIR/_internal"
 
 echo ""
 echo "Cleaning previous Tauri sidecar..."
@@ -117,22 +102,43 @@ echo "Cleaning previous Tauri sidecar..."
 rm -f "$TARGET_BINARY"
 rm -rf "$TARGET_RUNTIME_DIR"
 
-echo ""
-echo "Copying backend executable..."
+if [ "$PYINSTALLER_MODE" = "onefile" ]; then
 
-cp -v \
-  "$BACKEND_EXECUTABLE" \
-  "$TARGET_BINARY"
+  BACKEND_EXECUTABLE="$SCRIPT_DIR/dist/$BACKEND_NAME"
 
-echo ""
-echo "Copying PyInstaller runtime..."
+  if [ ! -f "$BACKEND_EXECUTABLE" ]; then
+    echo "ERROR: Backend executable was not found: $BACKEND_EXECUTABLE"
+    exit 1
+  fi
 
-cp -a \
-  "$BACKEND_DIR/_internal" \
-  "$TARGET_RUNTIME_DIR"
+  echo "Copying onefile backend..."
 
-echo ""
-echo "Making sidecar executable..."
+  cp "$BACKEND_EXECUTABLE" "$TARGET_BINARY"
+
+else
+
+  BACKEND_DIR="$SCRIPT_DIR/dist/$BACKEND_NAME"
+  BACKEND_EXECUTABLE="$BACKEND_DIR/$BACKEND_NAME"
+
+  if [ ! -f "$BACKEND_EXECUTABLE" ]; then
+    echo "ERROR: Backend executable was not found: $BACKEND_EXECUTABLE"
+    exit 1
+  fi
+
+  if [ ! -d "$BACKEND_DIR/_internal" ]; then
+    echo "ERROR: PyInstaller runtime directory was not found."
+    exit 1
+  fi
+
+  echo "Copying backend executable..."
+
+  cp "$BACKEND_EXECUTABLE" "$TARGET_BINARY"
+
+  echo "Copying PyInstaller runtime..."
+
+  cp -a "$BACKEND_DIR/_internal" "$TARGET_RUNTIME_DIR"
+
+fi
 
 chmod +x "$TARGET_BINARY"
 
@@ -144,16 +150,21 @@ if [ ! -f "$TARGET_BINARY" ]; then
   exit 1
 fi
 
-if [ ! -d "$TARGET_RUNTIME_DIR" ]; then
-  echo "ERROR: PyInstaller runtime directory was not copied successfully."
-  exit 1
-fi
-
+echo ""
 ls -lh "$TARGET_BINARY"
 
 echo ""
-echo "PyInstaller runtime:"
-ls -ld "$TARGET_RUNTIME_DIR" 
+echo "Cleaning PyInstaller intermediate files..."
+
+rm -rf "$SCRIPT_DIR/build"
+
+echo "PyInstaller intermediate files cleaned."
+
+if [ "$PYINSTALLER_MODE" = "onedir" ]; then
+  echo ""
+  echo "PyInstaller runtime:"
+  ls -ld "$TARGET_RUNTIME_DIR"
+fi
 
 echo ""
 echo "========================================"

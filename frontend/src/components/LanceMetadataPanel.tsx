@@ -1,4 +1,4 @@
-import type { LanceEmbeddingFunction, LanceVectorColumn } from "@/api/lancedbAdmin";
+import type { LanceEmbeddingFunction, LanceVectorColumn } from "@/api/lance";
 
 interface LanceMetadataPanelProps {
   metadata: Record<string, unknown>;

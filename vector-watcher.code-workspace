@@ -34,13 +34,24 @@
 		},
 		"peacock.color": "#42b883",
 		"cSpell.words": [
+			"appindicator",
+			"cdylib",
 			"cloudflarestorage",
 			"codegen",
+			"libayatana",
+			"librsvg",
+			"libwebkit",
 			"nsis",
 			"onedir",
 			"onefile",
+			"pyinstaller",
+			"pyproject",
+			"pytest",
+			"rlib",
 			"serde",
+			"staticlib",
 			"tauri",
+			"topbar",
 			"uvicorn",
 			"vectorwatcher"
 		],
@@ -51,7 +62,7 @@
 			"**/__pycache__": true,
 			"**/.venv": true,
 			"**/*_cache": true,
-			"node_modules": true
+			"**/node_modules": true
 		},
 		"breadcrumbs.showBooleans": false,
 		"breadcrumbs.showClasses": false,

@@ -1,4 +1,4 @@
-import type { LanceSchemaField } from "@/api/lancedbAdmin";
+import type { LanceSchemaField } from "@/api/lance";
 
 interface LanceSchemaPanelProps {
   fields: LanceSchemaField[];
