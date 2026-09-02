@@ -1,6 +1,7 @@
 name: Sync docs to wiki
 
 on:
+  workflow_dispatch: # Allows manual trigger from Actions tab
   push:
     branches: [main]
     paths:
@@ -14,28 +15,36 @@ jobs:
 
     steps:
       - name: Checkout main repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
+
+      - name: Verify docs folder
+        run: |
+          if [ ! -d "docs" ]; then
+            echo "::error:: The 'docs' directory does not exist in the root of the repository!"
+            exit 1
+          fi
+          ls -la docs/
 
       - name: Sync docs to wiki
         env:
-          WIKI_PAT: ${{ secrets['WIKI_PAT'] }}
+          WIKI_PAT: ${{ secrets.WIKI_PAT }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Clone wiki using authenticated URL
-          git clone "https://x-access-token:${WIKI_PAT}@github.com/${github.repository}.wiki.git" wiki_dir
+          # Clone wiki
+          git clone "https://x-access-token:${WIKI_PAT}@github.com/${{ github.repository }}.wiki.git" wiki_dir
 
-          # Copy docs while excluding git files
+          # Copy docs folder contents
           rsync -av --delete --exclude='.git*' docs/ wiki_dir/
 
           cd wiki_dir
 
-          # Check if there are changes to commit
           if [ -n "$(git status --porcelain)" ]; then
             git add .
-            git commit -m "docs: sync from main branch [skip ci]"
+            git commit -m "docs: sync from main branch"
             git push origin HEAD
+            echo "Successfully updated Wiki!"
           else
-            echo "No changes detected in docs folder."
+            echo "No changes to sync."
           fi
