@@ -9,11 +9,8 @@ A modern, cross-platform desktop GUI for exploring and managing LanceDB vector d
 <p align="center">
   <a href="https://github.com/recursivezero/vector-watcher/releases"><img src="https://badgen.net/github/releases/recursivezero/vector-watcher" alt="Latest Release"></a>
   <a href="https://github.com/recursivezero/vector-watcher/blob/main/LICENSE"><img src="https://badgen.net/github/license/recursivezero/vector-watcher" alt="License"></a>
-<a href="https://github.com/recursivezero/vector-watcher/issues"><img src="https://badgen.net/
-/github/issues/recursivezero/vector-watcher
-" alt="Open Issues"></a>
-<a href="https://github.com/recursivezero/vector-watcher/pulls"><img src="https://badgen.net/github/prs/recursivezero/vector-watcher
-" alt="Open PRs"></a>
+  <a href="https://github.com/recursivezero/vector-watcher/issues"><img src="https://badgen.net/github/issues/recursivezero/vector-watcher" alt="Open Issues"></a>
+  <a href="https://github.com/recursivezero/vector-watcher/pulls"><img src="https://badgen.net/github/prs/recursivezero/vector-watcher" alt="Open PRs"></a>
 </p>
 
 ---
@@ -48,7 +45,7 @@ Vector Watcher uses Tauri to launch an isolated Python backend as a sidecar bina
                              ▼
 ┌─────────────────────────────────────────────────────────┐
 │ Python / FastAPI Engine (Uvicorn Sidecar)               │
-│ Bound locally to: [http://127.0.0.1:8765](http://127.0.0.1:8765)                 │
+│ Bound locally to: http://127.0.0.1:8765                │
 └────────────────────────────┬────────────────────────────┘
                              │ Native Bindings
                              ▼
