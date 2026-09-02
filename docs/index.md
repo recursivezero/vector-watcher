@@ -41,25 +41,25 @@ The Python backend runs locally and is started automatically when the Tauri appl
 
 ### Getting Started
 
-- [[Requirements]]
-- [[Development]]
-- [[Project Structure]]
+- [Requirements](./Requirements.md)
+- [Development](./Development.md)
+- [Project Structure](./Project-Structure.md)
 
 ### Architecture
 
-- [[Architecture]]
-- [[Backend Packaging]]
-- [[Backend Sidecar]]
-- [[Cross Platform Builds]]
+- [Architecture](./Architecture.md)
+- [Backend Packaging](./Backend-Packaging.md)
+- [Backend Sidecar](./Backend-Sidecar.md)
+- [Cross Platform Builds](./Cross-Platform-Builds.md)
 
 ### Building Releases
 
-- [[Linux]]
-- [[macOS]]
-- [[Windows]]
-- [[Release Workflow]]
-- [[Release Checklist]]
+- [Linux](./Linux.md)
+- [macOS](./macOS.md)
+- [Windows](./Windows.md)
+- [Release Workflow](./Release-Workflow.md)
+- [Release Checklist](./Release-Checklist.md)
 
 ### Help
 
-- [[Troubleshooting]]
+- [Troubleshooting](./Troubleshooting.md)
