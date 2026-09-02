@@ -1,4 +1,5 @@
 name: Build Vector Watcher
+
 on:
   workflow_dispatch:
     inputs:
@@ -13,7 +14,6 @@ on:
           - windows
           - all
 
-
   push:
     tags:
       - "v*"
@@ -21,38 +21,19 @@ on:
       - "main"
 
 jobs:
-  build-unix:
+  build-linux:
     if: |
       github.event_name != 'workflow_dispatch' ||
       github.event.inputs.platform == 'all' ||
-      (github.event.inputs.platform == 'linux' && matrix.name == 'Linux') ||
-      (github.event.inputs.platform == 'macos' && matrix.name == 'macOS')
-    name: ${{ matrix.name }}
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        include:
-          - name: Linux
-            os: ubuntu-22.04
-            build-command: npm run tauri:build:linux
-            artifact-name: vector-watcher-linux
-            artifact-path: src-tauri/target/release/bundle/deb/*.deb
-
-          - name: macOS
-            os: macos-latest
-            build-command: npm run tauri:build:mac
-            artifact-name: vector-watcher-macos
-            artifact-path: |
-              src-tauri/target/release/bundle/macos/*.app
-              src-tauri/target/release/bundle/dmg/*.dmg
+      github.event.inputs.platform == 'linux'
+    name: Linux
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Install Linux dependencies
-        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -93,13 +74,65 @@ jobs:
 
       - name: Build application
         working-directory: frontend
-        run: ${{ matrix.build-command }}
+        run: npm run tauri:build:linux
 
       - name: Upload application
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact-name }}
-          path: ${{ matrix.artifact-path }}
+          name: vector-watcher-linux
+          path: src-tauri/target/release/bundle/deb/*.deb
+
+  build-macos:
+    if: |
+      github.event_name != 'workflow_dispatch' ||
+      github.event.inputs.platform == 'all' ||
+      github.event.inputs.platform == 'macos'
+    name: macOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: poetry install --no-interaction
+
+      - name: Build backend sidecar
+        run: |
+          chmod +x backend/build.sh
+          ./backend/build.sh
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build application
+        working-directory: frontend
+        run: npm run tauri:build:mac
+
+      - name: Upload application
+        uses: actions/upload-artifact@v4
+        with:
+          name: vector-watcher-macos
+          path: |
+            src-tauri/target/release/bundle/macos/*.app
+            src-tauri/target/release/bundle/dmg/*.dmg
 
   build-windows:
     if: |
