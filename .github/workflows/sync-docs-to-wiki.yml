@@ -35,13 +35,19 @@ jobs:
           # Clone wiki
           git clone "https://x-access-token:${WIKI_PAT}@github.com/${{ github.repository }}.wiki.git" wiki_dir
 
-          # Copy docs folder contents (including _Sidebar.md)
+          # Copy docs folder contents
           rsync -av --delete --exclude='.git*' docs/ wiki_dir/
 
-          # Map index.md to Home.md for GitHub Wiki entrypoint
+          # Map index.md to Home.md for GitHub Wiki
           if [ -f "wiki_dir/index.md" ]; then
             cp wiki_dir/index.md wiki_dir/Home.md
           fi
+
+          # Strip Front Matter (--- ... ---) from all .md files in wiki_dir
+          find wiki_dir -name "*.md" -type f -exec sed -i '/^---$/,/^---$/d' {} +
+
+          # Strip .md extensions from links for Wiki routing
+          find wiki_dir -name "*.md" -type f -exec sed -i -E 's/\(\.\/([^)]*)\.md\)/(\1)/g; s/\(([^)]*)\.md\)/(\1)/g' {} +
 
           cd wiki_dir
 

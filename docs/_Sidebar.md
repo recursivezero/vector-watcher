@@ -1,36 +1,36 @@
 ### Vector Watcher
 
-* [Home](./index.md)
+* [Home](Home)
 
 ---
 
 ### Getting Started
 
-* [Requirements](./Requirements.md)
-* [Development](./Development.md)
-* [Project Structure](./Project-Structure.md)
+* [Requirements](Requirements)
+* [Development](Development)
+* [Project Structure](Project-Structure)
 
 ---
 
 ### Architecture
 
-* [Architecture](./Architecture.md)
-* [Backend Packaging](./Backend-Packaging.md)
-* [Backend Sidecar](./Backend-Sidecar.md)
-* [Cross Platform Builds](./Cross-Platform-Builds.md)
+* [Architecture](Architecture)
+* [Backend Packaging](Backend-Packaging)
+* [Backend Sidecar](Backend-Sidecar)
+* [Cross Platform Builds](Cross-Platform-Builds)
 
 ---
 
 ### Building Releases
 
-* [Linux](./Linux.md)
-* [macOS](./macOS.md)
-* [Windows](./Windows.md)
-* [Release Workflow](./Release-Workflow.md)
-* [Release Checklist](./Release-Checklist.md)
+* [Linux](Linux)
+* [macOS](macOS)
+* [Windows](Windows)
+* [Release Workflow](Release-Workflow)
+* [Release Checklist](Release-Checklist)
 
 ---
 
 ### Help
 
-* [Troubleshooting](./Troubleshooting.md)
+* [Troubleshooting](Troubleshooting)
