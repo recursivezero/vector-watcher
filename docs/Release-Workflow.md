@@ -51,6 +51,7 @@ The output contains:
 Build the backend:
 
 ```bash
+cd backend
 .\build.ps1
 ```
 

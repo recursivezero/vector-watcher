@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Vector Watcher Documentation
-description: Cross-platform desktop monitoring app for Linux, macOS, and Windows.
+description: A cross-platform desktop application for vector database monitoring, debugging, and analytics across Linux, macOS, and Windows.
 image: /screenshots/og-cover.png
 ---
 
@@ -33,6 +33,8 @@ The Python backend runs locally and is started automatically when the Tauri appl
 ![Vector Watcher Main Window](screenshots/main-window.png)
 
 ![Connection Screen](screenshots/connection-tab.png)
+
+![Connection Save Screen](screenshots/saved-connection.png)
 
 ![Database Screen](screenshots/database-tab.png)
 
@@ -70,3 +72,19 @@ The Python backend runs locally and is started automatically when the Tauri appl
 ### Help
 
 - [Troubleshooting](./Troubleshooting.md)
+
+---
+
+<table width="100%">
+  <tr>
+    <td align="left">
+      <a href="Requirements">← Previous: Requirements</a>
+    </td>
+    <td align="center">
+      <a href="Home">Index</a>
+    </td>
+    <td align="right">
+      <a href="Project-Structure">Next: Project Structure →</a>
+    </td>
+  </tr>
+</table>

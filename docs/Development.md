@@ -61,16 +61,18 @@ During development, the Python backend can run directly through Poetry and Uvico
 
 This avoids packaging the backend every time frontend code changes.
 
+```text
 Development Environment
-│
-├── React / TypeScript
-│
-├── Tauri
-│
-└── Poetry
-│
-▼
-FastAPI / Uvicorn
-│
-▼
-127.0.0.1:8765
+     │
+     ├── React / TypeScript
+     │
+     ├── Tauri
+     │
+     └── Poetry
+        │
+        ▼
+        FastAPI / Uvicorn
+        │
+        ▼
+        127.0.0.1:8765
+```

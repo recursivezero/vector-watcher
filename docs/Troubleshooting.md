@@ -79,7 +79,7 @@ Example:
 
 Failed to load Python shared library libpython3.12.dylib
 
-Verify that the PyInstaller \_internal directory is available together with the executable.
+Verify that the PyInstaller `\_internal` directory is available together with the executable.
 
 See More at
 

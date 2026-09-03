@@ -42,15 +42,6 @@ Windows
 
 Do not copy a PyInstaller backend built on one platform into another platform's release.
 
-For example:
-
-macOS backend
-    ✕
-Linux release
-Linux backend
-    ✕
-Windows release
-
 Each release must be built for its target operating system and architecture.
 
 ### Sidecar Target Examples

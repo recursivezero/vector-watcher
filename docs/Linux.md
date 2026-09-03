@@ -59,7 +59,7 @@ You can also launch Vector Watcher from the Ubuntu application launcher.
 
 ### Screenshots
 
-📷 Screenshot placeholder: Vector Watcher in Ubuntu application launcher
+![Linux Install](screenshots/linux-install.png)
 
 📷 Screenshot placeholder: Installed Vector Watcher application
 

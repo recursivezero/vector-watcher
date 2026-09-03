@@ -26,8 +26,6 @@ After connecting, the application may display available resources such as:
 - Records
 - Metadata
 
-> TODO: Replace this list with the exact Vector Watcher data model.
-
 ---
 
 ## Opening a Resource
