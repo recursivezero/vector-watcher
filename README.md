@@ -86,7 +86,7 @@ git clone https://github.com/recursivezero/vector-watcher.git
 cd vector-watcher
 ```
 
-2. **Setup Frontend:**
+1. **Setup Frontend:**
 
 ```bash
 cd frontend
@@ -94,15 +94,16 @@ npm install
 
 ```
 
-3. **Setup Python Sidecar:**
+1. **Setup Python Sidecar:**
 
 ```bash
 cd backend
 poetry install --all-extras --with dev
+bash ./start.sh
 
 ```
 
-4. **Run Dev Environment:**
+1. **Run Dev Environment:**
 
 ```bash
 cd frontend
@@ -116,6 +117,8 @@ npm run tauri:dev
 To package standalone installers for production manually:
 
 ```bash
+cd backend
+bash ./build.sh
 cd frontend
 npm run tauri:build:[mac|linux|windows]
 ```
