@@ -72,7 +72,9 @@ export const About = () => {
       <main className="about-main">
         <div className="about-content">
           <section className="about-hero">
-            <div className="about-hero__mark">◈</div>
+            <div className="about-hero__mark">
+              <img src="/logo.svg" alt="Vector Watcher" />
+            </div>
 
             <div>
               <span className="eyebrow">Recursive Zero</span>

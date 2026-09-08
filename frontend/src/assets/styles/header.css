@@ -99,11 +99,14 @@
 	display: grid;
 	place-items: center;
 
-	width: 2.25rem;
-	height: 2.25rem;
-
 	border: 1px solid var(--border);
 	border-radius: 0.5rem;
+}
+
+.app-header__brand-mark img {
+	width: 36px;
+	height: 36px;
+	display: block;
 }
 
 .app-header__brand-content {

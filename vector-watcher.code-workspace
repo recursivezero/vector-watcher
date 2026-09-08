@@ -86,6 +86,7 @@
 			"editor.formatOnPaste": true
 		},
 		"editor.formatOnSave": true,
-		"editor.formatOnPaste": true
+		"editor.formatOnPaste": true,
+		"git.branchPrefix": "feature/TZV-26000X"
 	}
 }

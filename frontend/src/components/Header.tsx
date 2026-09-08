@@ -16,7 +16,9 @@ export function Header({ connected, connectionName, onDisconnect }: AppHeaderPro
   return (
     <header className="app-header">
       <button type="button" className="app-header__brand" onClick={navigateHome}>
-        <span className="app-header__brand-mark">◈</span>
+        <span className="app-header__brand-mark">
+          <img src="/logo.svg" alt="Vector Watcher" />
+        </span>
 
         <span className="app-header__brand-content">
           <strong>Vector Watcher</strong>
