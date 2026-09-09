@@ -40,3 +40,7 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 - Fixed macos app issue
 - Added Wiki page with Documentations
+
+## [0.1.6] - 08-09-2026
+
+- Add new logo

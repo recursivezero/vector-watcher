@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" title="Vector Watcher logo" aria-label="Vector Watcher logo">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F0C20" />
+      <stop offset="100%" stop-color="#15102A" />
+    </linearGradient>
+    <linearGradient id="vectorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F2FE" />
+      <stop offset="100%" stop-color="#4FACFE" />
+    </linearGradient>
+    <linearGradient id="watcherGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7F00FF" />
+      <stop offset="100%" stop-color="#FF007F" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+
+  <!-- Watcher Elements -->
+  <circle cx="256" cy="236" r="90" fill="none" stroke="url(#watcherGrad)" stroke-width="4" stroke-dasharray="16,12" opacity="0.4" />
+  <circle cx="256" cy="236" r="65" fill="none" stroke="url(#watcherGrad)" stroke-width="2" opacity="0.6" />
+  <circle cx="256" cy="236" r="40" fill="none" stroke="url(#vectorGrad)" stroke-width="2" stroke-dasharray="4,4" opacity="0.5" />
+
+  <!-- Core V Paths (Simulated glow using overlapping paths with varied opacity instead of filters) -->
+  <path d="M 120,150 L 256,380" fill="none" stroke="#00F2FE" stroke-width="20" stroke-linecap="round" opacity="0.15" />
+  <path d="M 392,150 L 256,380" fill="none" stroke="#00F2FE" stroke-width="20" stroke-linecap="round" opacity="0.15" />
+  
+  <path d="M 120,150 L 256,380" fill="none" stroke="url(#vectorGrad)" stroke-width="12" stroke-linecap="round" />
+  <path d="M 392,150 L 256,380" fill="none" stroke="url(#vectorGrad)" stroke-width="12" stroke-linecap="round" />
+
+  <!-- Nodes & Handles -->
+  <circle cx="256" cy="380" r="14" fill="#15102A" stroke="#00F2FE" stroke-width="6" />
+  <rect x="251" y="375" width="10" height="10" fill="#00F2FE" />
+
+  <circle cx="120" cy="150" r="12" fill="#00F2FE" />
+  <line x1="120" y1="150" x2="160" y2="100" stroke="#00F2FE" stroke-width="3" stroke-dasharray="2,2" />
+  <circle cx="160" cy="100" r="6" fill="#7F00FF" />
+
+  <circle cx="392" cy="150" r="12" fill="#00F2FE" />
+  <line x1="392" y1="150" x2="352" y2="100" stroke="#00F2FE" stroke-width="3" stroke-dasharray="2,2" />
+  <circle cx="352" cy="100" r="6" fill="#7F00FF" />
+
+  <circle cx="256" cy="236" r="10" fill="#00F2FE" />
+</svg>

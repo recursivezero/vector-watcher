@@ -1,19 +1,16 @@
 .about-screen {
 	min-height: 100vh;
-
 	display: flex;
 	flex-direction: column;
 }
 
 .about-main {
 	flex: 1;
-
 	padding: 96px 2rem 2rem;
 }
 
 .about-content {
 	width: min(100%, 800px);
-
 	margin: 0 auto;
 }
 
@@ -21,48 +18,40 @@
 	display: flex;
 	align-items: center;
 	gap: 1.25rem;
-
 	padding-bottom: 2rem;
-
 	border-bottom: 1px solid var(--border);
 }
 
 .about-hero__mark {
-	width: 4rem;
-	height: 4rem;
-
 	display: grid;
 	place-items: center;
-
 	flex: 0 0 auto;
-
 	border: 1px solid var(--border);
 	border-radius: 0.75rem;
-
 	background: var(--surface);
-
 	font-size: 2rem;
+}
+
+.about-hero__mark img {
+	width: 4rem;
+	height: 4rem;
+	display: block;
 }
 
 .about-hero h1 {
 	margin: 0.25rem 0;
-
 	color: var(--text-primary);
-
 	font-size: 2rem;
 }
 
 .about-hero p {
 	margin: 0;
-
 	color: var(--text-muted);
-
 	line-height: 1.6;
 }
 
 .about-section {
 	padding: 2rem 0;
-
 	border-bottom: 1px solid var(--border);
 }
 

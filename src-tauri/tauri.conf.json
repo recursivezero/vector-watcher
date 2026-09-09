@@ -1,12 +1,12 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "vector-watcher",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "identifier": "com.recursivezero.vectorwatcher",
   "build": {
-    "beforeDevCommand": "npm run dev",
+    "beforeDevCommand": "cd frontend && npm run dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "npm run build",
+    "beforeBuildCommand": "cd frontend && npm run build",
     "frontendDist": "../frontend/dist"
   },
   "app": {

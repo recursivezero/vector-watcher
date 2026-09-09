@@ -72,7 +72,7 @@
 	gap: 1rem;
 }
 
-.welcome-brand__mark {
+/*.welcome-brand__mark {
 	width: 3.5rem;
 	height: 3.5rem;
 	display: grid;
@@ -81,6 +81,18 @@
 	border-radius: 0.75rem;
 	background: var(--surface);
 	border: 1px solid var(--border);
+}*/
+
+.welcome-brand__mark {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.welcome-brand__mark img {
+	width: 48px;
+	height: 48px;
+	display: block;
 }
 
 .welcome-brand h1 {

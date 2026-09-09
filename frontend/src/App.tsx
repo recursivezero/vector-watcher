@@ -24,12 +24,7 @@ import {
   saveCredentials,
   unlockCredentials
 } from "@/libs/credentials";
-import {
-  DEFAULT_EXPLORER_QUERY,
-  type ExplorerQueryState,
-  getErrorMessage,
-  writeTextToClipboard
-} from "@/libs/utils";
+import { DEFAULT_EXPLORER_QUERY, type ExplorerQueryState, getErrorMessage, writeTextToClipboard } from "@/libs/utils";
 import { isTauri } from "@tauri-apps/api/core";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
@@ -728,7 +723,9 @@ export default function App() {
     return (
       <div className="lock-screen">
         <div className="lock-card">
-          <div className="brand-mark">◈</div>
+          <div className="brand-mark">
+            <img src="/logo.svg" alt="Vector Watcher" />
+          </div>
           <span className="eyebrow">Vector Watcher</span>
           <h1>Explorer locked</h1>
           <p>Your session is still connected, but the explorer is hidden.</p>

@@ -35,7 +35,9 @@ export const Welcome = () => {
       <main className="welcome-main">
         <div className="welcome-card">
           <div className="welcome-brand">
-            <div className="welcome-brand__mark">◈</div>
+            <div className="welcome-brand__mark">
+              <img src="/logo.svg" alt="Vector Watcher" />
+            </div>
 
             <div>
               <span className="eyebrow">Recursive Zero</span>
