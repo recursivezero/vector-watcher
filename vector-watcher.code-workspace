@@ -95,6 +95,7 @@
 			"editor.defaultFormatter": "nimpsch.gh-formatter-vscode",
 			"editor.formatOnSave": true
 		},
-		"vsicons.presets.yamlOfficial": true
+		"vsicons.presets.yamlOfficial": true,
+		"window.zoomLevel": 1.5
 	}
 }
