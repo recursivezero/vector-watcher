@@ -13,32 +13,83 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
-      - name: Install Snapcraft
-        run: |
-          sudo snap install snapcraft --classic
+      - name: Download Linux artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: vector-watcher-linux
+          path: release/linux
 
-      - name: Verify Snapcraft
+      - name: Verify Linux artifact
+        shell: bash
         run: |
-          snapcraft --version
+          set -eux
+
+          echo "Downloaded Linux artifacts:"
+          find release/linux -type f -exec ls -lh {} \;
+
+          DEB_COUNT=$(find release/linux -type f -name "*.deb" | wc -l)
+
+          if [ "$DEB_COUNT" -ne 1 ]; then
+            echo "ERROR: Expected exactly one .deb, found $DEB_COUNT"
+            find release/linux -type f -print
+            exit 1
+          fi
+
+      - name: Prepare Snap input
+        shell: bash
+        run: |
+          set -eux
+
+          mkdir -p src-tauri/target/release/bundle/deb
+
+          DEB_FILE=$(find release/linux -type f -name "*.deb" -print -quit)
+
+          echo "Using Debian package:"
+          echo "$DEB_FILE"
+
+          cp "$DEB_FILE" \
+            src-tauri/target/release/bundle/deb/vector-watcher_0.1.7_amd64.deb
+
+          echo "Snap input:"
+          ls -lh src-tauri/target/release/bundle/deb/
+
+      - name: Verify Snap input
+        shell: bash
+        run: |
+          set -eux
+
+          test -f \
+            src-tauri/target/release/bundle/deb/vector-watcher_0.1.7_amd64.deb
+
+          dpkg-deb --info \
+            src-tauri/target/release/bundle/deb/vector-watcher_0.1.7_amd64.deb
 
       - name: Setup LXD
-        uses: canonical/setup-lxd@main
+        uses: canonical/setup-lxd@v1
         with:
           channel: 5.21/stable
 
       - name: Build Snap
-        run: |
-          snapcraft pack
+        id: snapcraft
+        uses: snapcore/action-build@v1
 
       - name: Verify Snap artifact
+        shell: bash
         run: |
-          find . -maxdepth 2 -type f -name "*.snap" -exec ls -lh {} \;
+          set -eux
+
+          echo "Snapcraft output:"
+          echo "${{ steps.snapcraft.outputs.snap }}"
+
+          test -f "${{ steps.snapcraft.outputs.snap }}"
+
+          ls -lh "${{ steps.snapcraft.outputs.snap }}"
 
       - name: Upload Snap artifact
         uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
           name: vector-watcher-snap
-          path: "*.snap"
+          path: ${{ steps.snapcraft.outputs.snap }}
