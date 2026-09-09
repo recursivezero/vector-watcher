@@ -24,6 +24,8 @@ jobs:
 
   build_snap:
     name: Build Snap
+    needs:
+      - build_linux
     uses: ./.github/workflows/build-snap.yml
 
   publish:
@@ -81,7 +83,7 @@ jobs:
             -name "*.deb" -o \
             -name "*.AppImage" -o \
             -name "*.dmg" -o \
-            -name "*.exe" \
+            -name "*.exe" -o \
             -name "*.snap" \
           \))
 
