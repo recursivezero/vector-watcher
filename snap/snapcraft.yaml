@@ -1,10 +1,10 @@
 name: vector-watcher
-
 title: Vector Watcher
-
 version: '0.1.7'
-
 summary: Desktop explorer for LanceDB vector datasets
+license: MIT
+website: https://github.com/recursivezero/vector-watcher
+issues: https://github.com/recursivezero/vector-watcher/issues
 
 description: |
   Vector Watcher is a desktop application for connecting to,
