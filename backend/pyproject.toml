@@ -1,6 +1,6 @@
 [project]
 name = "vector-watcher-backend"
-version = "0.1.7"
+version = "0.1.8"
 description = "Backend service for Vector Watcher, a desktop explorer for LanceDB vector datasets"
 authors = [
     { name = "RecursiveZero" }
