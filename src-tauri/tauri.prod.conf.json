@@ -20,6 +20,13 @@
         "Frameworks": "binaries/_internal/"
       }
     },
+    "windows": {
+      "nsis": {
+        "files": {
+          "_internal": "binaries/_internal/"
+        }
+      }
+    },
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
