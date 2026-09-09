@@ -1,0 +1,105 @@
+name: Publish Vector Watcher Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-linux:
+    name: Build Linux
+    uses: ./.github/workflows/build-linux.yml
+
+  build-macos:
+    name: Build macOS
+    uses: ./.github/workflows/build-macos.yml
+
+  build-windows:
+    name: Build Windows
+    uses: ./.github/workflows/build-windows.yml
+
+  publish:
+    name: Publish GitHub Release
+    runs-on: ubuntu-24.04
+
+    needs:
+      - build-linux
+      - build-macos
+      - build-windows
+
+    steps:
+      - name: Download Linux artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: vector-watcher-linux
+          path: release/linux
+
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: vector-watcher-macos
+          path: release/macos
+
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: vector-watcher-windows
+          path: release/windows
+
+      - name: Verify release artifacts
+        run: |
+          echo "=== Linux ==="
+          find release/linux -type f -exec ls -lh {} \;
+
+          echo "=== macOS ==="
+          find release/macos -type f -exec ls -lh {} \;
+
+          echo "=== Windows ==="
+          find release/windows -type f -exec ls -lh {} \;
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --title "Vector Watcher ${GITHUB_REF_NAME}" \
+            --generate-notes \
+            release/linux/*.deb \
+            release/linux/*.AppImage \
+            release/macos/*.dmg \
+            release/windows/*.exe
+
+      - name: Release Summary
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          {
+            echo "## Vector Watcher Release"
+            echo
+            echo "| Item | Details |"
+            echo "|---|---|"
+            echo "| Version | \`${RELEASE_TAG}\` |"
+            echo "| Repository | \`${REPOSITORY}\` |"
+            echo "| Status | Published successfully |"
+            echo
+            echo "### Platforms"
+            echo
+            echo "- **Linux** — .deb, AppImage"
+            echo "- **macOS** — .dmg"
+            echo "- **Windows** — .exe"
+            echo
+            echo "### Build Jobs"
+            echo
+            echo "- Linux: passed"
+            echo "- macOS: passed"
+            echo "- Windows: passed"
+            echo
+            echo "### Release"
+            echo
+            echo "GitHub Release \`${RELEASE_TAG}\` was created with generated release notes and all platform artifacts."
+          } >> "$GITHUB_STEP_SUMMARY"
