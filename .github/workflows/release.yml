@@ -6,27 +6,25 @@ on:
       platform:
         description: Platform to build
         required: true
-        type: choice
         default: all
+        type: choice
         options:
           - macos
           - linux
           - windows
           - all
-
   push:
     tags:
       - "v*"
 
 jobs:
-  build-linux:
-    if: |
-      github.event_name != 'workflow_dispatch' ||
-      github.event.inputs.platform == 'all' ||
-      github.event.inputs.platform == 'linux'
+  build_linux:
     name: Linux
+    if: |-
+      ${{ github.event_name != 'workflow_dispatch' ||
+      github.event.inputs.platform == 'all' ||
+      github.event.inputs.platform == 'linux' }}
     runs-on: ubuntu-22.04
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -45,9 +43,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
           cache: npm
           cache-dependency-path: frontend/package-lock.json
+          node-version: 22
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -80,14 +78,13 @@ jobs:
           name: vector-watcher-linux
           path: src-tauri/target/release/bundle/deb/*.deb
 
-  build-macos:
-    if: |
-      github.event_name != 'workflow_dispatch' ||
+  build_macos:
+    name: MacOS
+    if: |-
+      ${{ github.event_name != 'workflow_dispatch' ||
       github.event.inputs.platform == 'all' ||
-      github.event.inputs.platform == 'macos'
-    name: macOS
+      github.event.inputs.platform == 'macos' }}
     runs-on: macos-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -95,9 +92,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
           cache: npm
           cache-dependency-path: frontend/package-lock.json
+          node-version: 22
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -132,14 +129,13 @@ jobs:
             src-tauri/target/release/bundle/macos/*.app
             src-tauri/target/release/bundle/dmg/*.dmg
 
-  build-windows:
-    if: |
-      github.event_name != 'workflow_dispatch' ||
-      github.event.inputs.platform == 'all' ||
-      github.event.inputs.platform == 'windows'
+  build_windows:
     name: Windows
+    if: |-
+      ${{ github.event_name != 'workflow_dispatch' ||
+      github.event.inputs.platform == 'all' ||
+      github.event.inputs.platform == 'windows' }}
     runs-on: windows-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -147,9 +143,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
           cache: npm
           cache-dependency-path: frontend/package-lock.json
+          node-version: 22
 
       - name: Setup Python
         uses: actions/setup-python@v5

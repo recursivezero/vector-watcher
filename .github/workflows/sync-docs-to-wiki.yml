@@ -3,16 +3,16 @@ name: Sync docs to wiki
 on:
   workflow_dispatch: # Allows manual trigger from Actions tab
   push:
-    branches: [main]
+    branches:
+      - main
     paths:
       - "docs/**"
 
 jobs:
-  sync-wiki:
+  sync_wiki:
     name: Sync Docs to Wiki
-    environment: wiki
     runs-on: ubuntu-latest
-
+    environment: wiki
     steps:
       - name: Checkout main repo
         uses: actions/checkout@v4

@@ -32,7 +32,6 @@
 			"statusBar.debuggingBackground": "#42b883",
 			"statusBar.debuggingForeground": "#15202b"
 		},
-		"peacock.color": "#42b883",
 		"cSpell.words": [
 			"appindicator",
 			"cdylib",
@@ -87,6 +86,15 @@
 		},
 		"editor.formatOnSave": true,
 		"editor.formatOnPaste": true,
-		"git.branchPrefix": "feature/TZV-26000X"
+		"git.branchPrefix": "feature/TZV-26000X",
+		"[yaml]": {
+			"editor.defaultFormatter": "nimpsch.gh-formatter-vscode",
+			"editor.formatOnSave": true
+		},
+		"[github-actions-workflow]": {
+			"editor.defaultFormatter": "nimpsch.gh-formatter-vscode",
+			"editor.formatOnSave": true
+		},
+		"vsicons.presets.yamlOfficial": true
 	}
 }

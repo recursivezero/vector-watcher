@@ -1,8 +1,9 @@
 name: Check PAT Secret
+
 on: workflow_dispatch
 
 jobs:
-  test-pat:
+  test_pat:
     runs-on: ubuntu-latest
     steps:
       - name: Test if PAT works

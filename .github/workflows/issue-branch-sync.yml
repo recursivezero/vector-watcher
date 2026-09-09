@@ -1,4 +1,5 @@
 name: Issue Sync with Branch
+
 run-name: notify whenever a branch created using issue title
 
 on:
@@ -10,7 +11,7 @@ permissions:
 
 jobs:
   notify:
-    if: github.event.ref_type == 'branch'
+    if: ${{ github.event.ref_type == 'branch' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -19,5 +20,5 @@ jobs:
       - name: Link Branch to Issue
         uses: recursivezero/action-club/.github/actions/branch-notify@v0.2.67
         with:
-          issue_prefix: ${{ vars.PROJECT_PREFIX }}
           branch_name: ${{ github.event.ref }}
+          issue_prefix: ${{ vars.PROJECT_PREFIX }}

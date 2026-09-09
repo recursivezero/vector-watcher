@@ -5,10 +5,9 @@ on:
   workflow_call:
 
 jobs:
-  build-windows:
+  build_windows:
     name: Windows
     runs-on: windows-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -16,9 +15,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: 24
           cache: npm
           cache-dependency-path: frontend/package-lock.json
+          node-version: 24
 
       - name: Setup Python
         uses: actions/setup-python@v7

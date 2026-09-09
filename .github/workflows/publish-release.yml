@@ -9,27 +9,25 @@ permissions:
   contents: write
 
 jobs:
-  build-linux:
+  build_linux:
     name: Build Linux
     uses: ./.github/workflows/build-linux.yml
 
-  build-macos:
+  build_macos:
     name: Build macOS
     uses: ./.github/workflows/build-macos.yml
 
-  build-windows:
+  build_windows:
     name: Build Windows
     uses: ./.github/workflows/build-windows.yml
 
   publish:
     name: Publish GitHub Release
-    runs-on: ubuntu-24.04
-
     needs:
-      - build-linux
-      - build-macos
-      - build-windows
-
+      - build_linux
+      - build_macos
+      - build_windows
+    runs-on: ubuntu-24.04
     steps:
       - name: Download Linux artifacts
         uses: actions/download-artifact@v5
@@ -64,14 +62,27 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          RELEASE_FILES=$(find release -type f \( \
+            -name "*.deb" -o \
+            -name "*.AppImage" -o \
+            -name "*.dmg" -o \
+            -name "*.exe" \
+          \))
+
+          if [ -z "$RELEASE_FILES" ]; then
+            echo "ERROR: No release installers were found."
+            find release -type f -print
+            exit 1
+          fi
+
+          echo "Release files:"
+          echo "$RELEASE_FILES"
+
           gh release create "${GITHUB_REF_NAME}" \
             --repo "${GITHUB_REPOSITORY}" \
             --title "Vector Watcher ${GITHUB_REF_NAME}" \
             --generate-notes \
-            release/linux/*.deb \
-            release/linux/*.AppImage \
-            release/macos/*.dmg \
-            release/windows/*.exe
+            $RELEASE_FILES
 
       - name: Release Summary
         env:
