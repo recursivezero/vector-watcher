@@ -22,12 +22,17 @@ jobs:
     name: Build Windows
     uses: ./.github/workflows/build-windows.yml
 
+  build_snap:
+    name: Build Snap
+    uses: ./.github/workflows/build-snap.yml
+
   publish:
     name: Publish GitHub Release
     needs:
       - build_linux
       - build_macos
       - build_windows
+      - build_snap
     runs-on: ubuntu-24.04
     steps:
       - name: Download Linux artifacts
@@ -48,6 +53,12 @@ jobs:
           name: vector-watcher-windows
           path: release/windows
 
+      - name: Download Snap artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: vector-watcher-snap
+          path: release/snap
+
       - name: Verify release artifacts
         run: |
           echo "=== Linux ==="
@@ -59,6 +70,9 @@ jobs:
           echo "=== Windows ==="
           find release/windows -type f -exec ls -lh {} \;
 
+          echo "=== Snap ==="
+          find release/snap -type f -exec ls -lh {} \;
+
       - name: Publish GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -68,6 +82,7 @@ jobs:
             -name "*.AppImage" -o \
             -name "*.dmg" -o \
             -name "*.exe" \
+            -name "*.snap" \
           \))
 
           if [ -z "$RELEASE_FILES" ]; then
