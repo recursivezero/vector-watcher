@@ -1,7 +1,6 @@
 name: Build Linux Snap
 
 on:
-  workflow_dispatch:
   workflow_call:
 
 permissions:
@@ -14,6 +13,29 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+
+      - name: Set release version
+        shell: bash
+        run: |
+          set -eux
+
+          if [[ "${GITHUB_REF_TYPE}" != "tag" ]]; then
+            echo "ERROR: Snap release build must be triggered by a tag."
+            echo "GITHUB_REF_TYPE=${GITHUB_REF_TYPE}"
+            echo "GITHUB_REF_NAME=${GITHUB_REF_NAME}"
+            exit 1
+          fi
+
+          VERSION="${GITHUB_REF_NAME#v}"
+
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "ERROR: Invalid release version: $VERSION"
+            exit 1
+          fi
+
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+          echo "Building Snap version: $VERSION"
 
       - name: Download Linux artifacts
         uses: actions/download-artifact@v5
@@ -29,7 +51,10 @@ jobs:
           echo "Downloaded Linux artifacts:"
           find release/linux -type f -exec ls -lh {} \;
 
-          DEB_COUNT=$(find release/linux -type f -name "*.deb" | wc -l)
+          DEB_COUNT=$(find release/linux \
+            -type f \
+            -name "*.deb" \
+            | wc -l)
 
           if [ "$DEB_COUNT" -ne 1 ]; then
             echo "ERROR: Expected exactly one .deb, found $DEB_COUNT"
@@ -44,13 +69,17 @@ jobs:
 
           mkdir -p src-tauri/target/release/bundle/deb
 
-          DEB_FILE=$(find release/linux -type f -name "*.deb" -print -quit)
+          DEB_FILE=$(find release/linux \
+            -type f \
+            -name "*.deb" \
+            -print \
+            -quit)
 
           echo "Using Debian package:"
           echo "$DEB_FILE"
 
           cp "$DEB_FILE" \
-            src-tauri/target/release/bundle/deb/vector-watcher_0.1.7_amd64.deb
+            "src-tauri/target/release/bundle/deb/"
 
           echo "Snap input:"
           ls -lh src-tauri/target/release/bundle/deb/
@@ -60,11 +89,31 @@ jobs:
         run: |
           set -eux
 
-          test -f \
-            src-tauri/target/release/bundle/deb/vector-watcher_0.1.7_amd64.deb
+          DEB_FILE=$(find src-tauri/target/release/bundle/deb \
+            -maxdepth 1 \
+            -type f \
+            -name "*.deb" \
+            -print \
+            -quit)
 
-          dpkg-deb --info \
-            src-tauri/target/release/bundle/deb/vector-watcher_0.1.7_amd64.deb
+          test -n "$DEB_FILE"
+
+          echo "Verifying:"
+          echo "$DEB_FILE"
+
+          dpkg-deb --info "$DEB_FILE"
+
+      - name: Set Snap version
+        shell: bash
+        run: |
+          set -eux
+
+          sed -i \
+            -E "s/^version:.*/version: '$VERSION'/" \
+            snap/snapcraft.yaml
+
+          echo "Snapcraft version:"
+          grep '^version:' snap/snapcraft.yaml
 
       - name: Setup LXD
         uses: canonical/setup-lxd@v1
@@ -85,6 +134,7 @@ jobs:
 
           test -f "${{ steps.snapcraft.outputs.snap }}"
 
+          echo "Built Snap:"
           ls -lh "${{ steps.snapcraft.outputs.snap }}"
 
       - name: Upload Snap artifact

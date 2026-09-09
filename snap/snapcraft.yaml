@@ -1,5 +1,7 @@
 name: vector-watcher
+
 title: Vector Watcher
+
 version: '0.1.7'
 
 summary: Desktop explorer for LanceDB vector datasets
@@ -13,7 +15,9 @@ description: |
   PyArrow, and NumPy.
 
 base: core26
+
 grade: devel
+
 confinement: strict
 
 platforms:
@@ -33,13 +37,26 @@ parts:
     override-build: |
       set -eux
 
+      DEB_FILE=$(find "$CRAFT_PROJECT_DIR/src-tauri/target/release/bundle/deb" \
+        -maxdepth 1 \
+        -type f \
+        -name "*.deb" \
+        -print \
+        -quit)
+
+      test -n "$DEB_FILE"
+
+      echo "Using Debian package:"
+      echo "$DEB_FILE"
+
       dpkg -x \
-        "$CRAFT_PROJECT_DIR/src-tauri/target/release/bundle/deb/vector-watcher_0.1.7_amd64.deb" \
+        "$DEB_FILE" \
         "$CRAFT_PART_INSTALL"
 
 apps:
   vector-watcher:
     command: usr/bin/vector-watcher
+
     desktop: usr/share/applications/vector-watcher.desktop
 
     plugs:
