@@ -23,6 +23,16 @@ jobs:
         run: |
           snapcraft --version
 
+      - name: Install Snapcraft and LXD
+        run: |
+          sudo snap install snapcraft --classic
+          sudo snap install lxd --channel=5.21/stable
+
+      - name: Configure LXD
+        run: |
+          sudo usermod -aG lxd "$USER"
+          sudo lxd init --auto
+
       - name: Build Snap
         run: |
           snapcraft pack
