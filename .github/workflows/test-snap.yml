@@ -1,0 +1,123 @@
+name: Test Linux Snap
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build_linux:
+    name: Build Linux
+    uses: ./.github/workflows/build-linux.yml
+
+  build_snap:
+    name: Build Snap
+    needs:
+      - build_linux
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Download Linux artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: vector-watcher-linux
+          path: release/linux
+
+      - name: Verify Linux artifact
+        shell: bash
+        run: |
+          set -eux
+
+          echo "Downloaded Linux artifacts:"
+          find release/linux -type f -exec ls -lh {} \;
+
+          DEB_COUNT=$(find release/linux \
+            -type f \
+            -name "*.deb" \
+            | wc -l)
+
+          if [ "$DEB_COUNT" -ne 1 ]; then
+            echo "ERROR: Expected exactly one .deb, found $DEB_COUNT"
+            find release/linux -type f -print
+            exit 1
+          fi
+
+      - name: Prepare Snap input
+        shell: bash
+        run: |
+          set -eux
+
+          mkdir -p src-tauri/target/release/bundle/deb
+
+          DEB_FILE=$(find release/linux \
+            -type f \
+            -name "*.deb" \
+            -print \
+            -quit)
+
+          test -n "$DEB_FILE"
+
+          echo "Using Debian package:"
+          echo "$DEB_FILE"
+
+          cp "$DEB_FILE" \
+            src-tauri/target/release/bundle/deb/
+
+          ls -lh src-tauri/target/release/bundle/deb/
+
+      - name: Verify Snap input
+        shell: bash
+        run: |
+          set -eux
+
+          DEB_FILE=$(find src-tauri/target/release/bundle/deb \
+            -maxdepth 1 \
+            -type f \
+            -name "*.deb" \
+            -print \
+            -quit)
+
+          test -n "$DEB_FILE"
+
+          dpkg-deb --info "$DEB_FILE"
+
+      - name: Setup LXD
+        uses: canonical/setup-lxd@v1
+        with:
+          channel: 5.21/stable
+
+      - name: Build Snap
+        id: snapcraft
+        uses: snapcore/action-build@v1
+
+      - name: Verify Snap
+        shell: bash
+        run: |
+          set -eux
+
+          SNAP_FILE="${{ steps.snapcraft.outputs.snap }}"
+
+          test -f "$SNAP_FILE"
+
+          echo "Built Snap:"
+          ls -lh "$SNAP_FILE"
+
+          echo
+          echo "Snap metadata:"
+          unsquashfs -cat "$SNAP_FILE" meta/snap.yaml
+
+          echo
+          echo "Checking required libraries:"
+          unsquashfs -l "$SNAP_FILE" | grep -E \
+            'usr/lib/.*/(libgdk-3|libgtk-3|libwebkit2gtk-4.1|libjavascriptcoregtk-4.1)' \
+            || true
+
+      - name: Upload test Snap
+        uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          name: vector-watcher-snap-test
+          path: ${{ steps.snapcraft.outputs.snap }}
