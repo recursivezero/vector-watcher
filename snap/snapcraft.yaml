@@ -1,0 +1,52 @@
+name: vector-watcher
+title: Vector Watcher
+version: '0.1.7'
+
+summary: Desktop explorer for LanceDB vector datasets
+
+description: |
+  Vector Watcher is a desktop application for connecting to,
+  exploring, and inspecting LanceDB vector datasets.
+
+  It provides a native desktop interface built with Tauri and
+  includes a bundled Python backend powered by LanceDB,
+  PyArrow, and NumPy.
+
+base: core26
+grade: devel
+confinement: strict
+
+platforms:
+  amd64:
+    build-on:
+      - amd64
+    build-for:
+      - amd64
+
+parts:
+  vector-watcher:
+    plugin: nil
+
+    build-packages:
+      - dpkg
+
+    override-build: |
+      set -eux
+
+      dpkg -x \
+        "$CRAFT_PROJECT_DIR/src-tauri/target/release/bundle/deb/vector-watcher_0.1.7_amd64.deb" \
+        "$CRAFT_PART_INSTALL"
+
+apps:
+  vector-watcher:
+    command: usr/bin/vector-watcher
+    desktop: usr/share/applications/vector-watcher.desktop
+
+    plugs:
+      - desktop
+      - desktop-legacy
+      - home
+      - network
+      - opengl
+      - wayland
+      - x11
