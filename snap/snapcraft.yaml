@@ -48,7 +48,7 @@ parts:
       - libgstreamer-plugins-base1.0-0
       - libgstreamer-gl1.0-0
       - libsecret-1-0
-      - libicu78
+      - libicu74
 
     override-build: |
       set -eux
