@@ -14,7 +14,7 @@ description: |
   includes a bundled Python backend powered by LanceDB,
   PyArrow, and NumPy.
 
-base: core26
+base: core24
 
 grade: stable
 
