@@ -154,12 +154,22 @@ export interface LanceConnectionState {
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://127.0.0.1:8765";
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+  console.log("[API] Request:", {
+    url: `${API_BASE_URL}${path}`,
+    method: options.method ?? "GET"
+  });
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
       ...(options.headers ?? {})
     }
+  });
+
+  console.log("[API] Response:", {
+    url: `${API_BASE_URL}${path}`,
+    status: response.status,
+    ok: response.ok
   });
 
   let payload: unknown;

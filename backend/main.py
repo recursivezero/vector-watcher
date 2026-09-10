@@ -46,6 +46,37 @@ def health() -> dict[str, str]:
     }
 
 
+# @app.post(
+#    "/connections/scan",
+#    response_model=LanceTablesResponse,
+# )
+# def scan_connection(
+#    connection: LanceConnection,
+# ) -> LanceTablesResponse:
+#    try:
+#        service = LanceDBService(connection)
+#        return service.list_tables()
+
+#    except LanceDBValidationError as error:
+#        raise HTTPException(
+#            status_code=400,
+#            detail=str(error),
+#        ) from error
+
+#    except LanceDBUnavailable as error:
+#        logger.exception("Unable to connect to LanceDB: %s", error)
+#        raise HTTPException(
+#            status_code=502,
+#            detail=str(error),
+#        )
+
+#    except LanceDBError as error:
+#        raise HTTPException(
+#            status_code=500,
+#            detail=str(error),
+#        ) from error
+
+
 @app.post(
     "/connections/scan",
     response_model=LanceTablesResponse,
@@ -53,27 +84,55 @@ def health() -> dict[str, str]:
 def scan_connection(
     connection: LanceConnection,
 ) -> LanceTablesResponse:
+    logger.info(
+        "SCAN request received: storage=%s name=%s bucket=%s endpoint=%s region=%s",
+        connection.storage,
+        connection.name,
+        connection.bucket,
+        connection.endpoint,
+        connection.region,
+    )
+
     try:
+        logger.info("Creating LanceDBService...")
         service = LanceDBService(connection)
-        return service.list_tables()
+
+        logger.info("LanceDBService created. Calling list_tables()...")
+        result = service.list_tables()
+
+        logger.info(
+            "SCAN successful: found %d tables",
+            len(result.tables),
+        )
+
+        return result
 
     except LanceDBValidationError as error:
+        logger.exception("SCAN validation error: %s", error)
         raise HTTPException(
             status_code=400,
             detail=str(error),
         ) from error
 
     except LanceDBUnavailable as error:
-        logger.exception("Unable to connect to LanceDB")
+        logger.exception("SCAN LanceDB unavailable: %s", error)
         raise HTTPException(
             status_code=502,
             detail=str(error),
-        )
+        ) from error
 
     except LanceDBError as error:
+        logger.exception("SCAN LanceDB error: %s", error)
         raise HTTPException(
             status_code=500,
             detail=str(error),
+        ) from error
+
+    except Exception as error:
+        logger.exception("SCAN unexpected error: %s", error)
+        raise HTTPException(
+            status_code=500,
+            detail="Unexpected backend error while scanning LanceDB.",
         ) from error
 
 
