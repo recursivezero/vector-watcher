@@ -28,8 +28,8 @@ platforms:
       - amd64
 
 layout:
-  /usr/lib/x86_64-linux-gnu/webkit2gtk-4.1:
-    bind: $SNAP/usr/lib/x86_64-linux-gnu/webkit2gtk-4.1
+  /usr/lib/$CRAFT_ARCH_TRIPLET/webkit2gtk-4.1:
+    bind: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/webkit2gtk-4.1
 
 parts:
   vector-watcher:
@@ -74,6 +74,9 @@ apps:
     command: usr/bin/vector-watcher
 
     desktop: usr/share/applications/vector-watcher.desktop
+
+    extensions:
+      - gpu
 
     plugs:
       - desktop
