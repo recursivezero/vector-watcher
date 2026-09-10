@@ -158,19 +158,23 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     url: `${API_BASE_URL}${path}`,
     method: options.method ?? "GET"
   });
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers ?? {})
-    }
-  });
+  try {
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers ?? {})
+      }
+    });
 
-  console.log("[API] Response:", {
-    url: `${API_BASE_URL}${path}`,
-    status: response.status,
-    ok: response.ok
-  });
+    console.log("[API] Response:", {
+      url: `${API_BASE_URL}${path}`,
+      status: response.status,
+      ok: response.ok
+    });
+  } catch (error) {
+    console.error("[API] Error:", error);
+  }
 
   let payload: unknown;
 
@@ -212,6 +216,9 @@ function toBackendConnection(connection: LanceConnectionState): LanceDataSource 
 }
 
 export async function scanConnection(connection: LanceConnectionState): Promise<LanceTablesResponse> {
+  console.log("[SCAN CONNECTION] entered");
+  console.log("[SCAN CONNECTION] storage:", connection.storage);
+  console.log("[SCAN CONNECTION] name:", connection.name);
   return request<LanceTablesResponse>("/connections/scan", {
     method: "POST",
     body: JSON.stringify(toBackendConnection(connection))

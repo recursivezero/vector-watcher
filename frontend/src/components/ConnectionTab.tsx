@@ -59,7 +59,7 @@ export default function ConnectionTab({
   const [showAccessKey, setShowAccessKey] = useState(false);
   const [showSecretKey, setShowSecretKey] = useState(false);
 
-  console.log({selectedConnectionName})
+  console.log({ selectedConnectionName });
 
   useEffect(() => {
     if (!showSecretKey) {
@@ -77,9 +77,7 @@ export default function ConnectionTab({
 
   // const storageLabel = STORAGE_LABELS[connection.storage];
 
-  const storageLabel = connection.storage
-  ? STORAGE_LABELS[connection.storage]
-  : "";
+  const storageLabel = connection.storage ? STORAGE_LABELS[connection.storage] : "";
 
   const handlePathChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     update({
@@ -517,7 +515,10 @@ export default function ConnectionTab({
             <button
               type="button"
               className="button button-primary"
-              onClick={onConnect}
+              onClick={() => {
+                console.log("[CONNECT BUTTON] clicked");
+                onConnect();
+              }}
               disabled={!canConnect || loading}
             >
               {loading ? "Connecting…" : connected ? "Reconnect" : "Connect"}

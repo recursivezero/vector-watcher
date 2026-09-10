@@ -192,10 +192,13 @@ export default function App() {
 
   const scan = useCallback(
     async (goToExplorer = true) => {
+      console.log("[SCAN] Scan started for connection:", connection);
       setLoading(true);
       setError(null);
       try {
+        console.log("[SCAN] Calling scanConnection");
         const response = await scanConnection(connection);
+        console.log("[SCAN] scanConnection response", response);
         setTables(response.tables);
         setConnected(true);
         const firstTable = response.tables[0]?.name ?? null;
@@ -210,6 +213,7 @@ export default function App() {
           setActiveTab(firstTable ? "explorer" : "database");
         }
       } catch (err) {
+        console.error("[SCAN] FAILED", err);
         setConnected(false);
         setError(getErrorMessage(err));
       } finally {
