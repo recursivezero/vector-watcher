@@ -158,6 +158,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     url: `${API_BASE_URL}${path}`,
     method: options.method ?? "GET"
   });
+
   try {
     const response = await fetch(`${API_BASE_URL}${path}`, {
       ...options,
@@ -172,28 +173,29 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
       status: response.status,
       ok: response.ok
     });
+
+    let payload: unknown;
+
+    try {
+      payload = await response.json();
+    } catch {
+      payload = null;
+    }
+
+    if (!response.ok) {
+      const message =
+        typeof payload === "object" && payload !== null && "detail" in payload
+          ? String(payload.detail)
+          : `Request failed with status ${response.status}.`;
+
+      throw new Error(message);
+    }
+
+    return payload as T;
   } catch (error) {
     console.error("[API] Error:", error);
+    throw error;
   }
-
-  let payload: unknown;
-
-  try {
-    payload = await response.json();
-  } catch {
-    payload = null;
-  }
-
-  if (!response.ok) {
-    const message =
-      typeof payload === "object" && payload !== null && "detail" in payload
-        ? String(payload.detail)
-        : `Request failed with status ${response.status}.`;
-
-    throw new Error(message);
-  }
-
-  return payload as T;
 }
 
 function toBackendConnection(connection: LanceConnectionState): LanceDataSource {
