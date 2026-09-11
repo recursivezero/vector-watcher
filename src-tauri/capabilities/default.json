@@ -12,6 +12,7 @@
     "opener:default",
     "stronghold:default",
     "stronghold:allow-initialize",
-    "stronghold:allow-remove-store-record"
+    "stronghold:allow-remove-store-record",
+    "log:allow-log"
   ]
 }

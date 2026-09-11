@@ -519,7 +519,7 @@ export default function ConnectionTab({
                 console.log("[CONNECT BUTTON] clicked");
                 onConnect();
               }}
-              disabled={!canConnect || loading}
+              disabled={false}
             >
               {loading ? "Connecting…" : connected ? "Reconnect" : "Connect"}
             </button>
