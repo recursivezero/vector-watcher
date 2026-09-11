@@ -191,6 +191,17 @@ export default function App() {
     [connection]
   );
 
+  const testFetch = () => {
+    fetch("http://127.0.0.1:8765/health")
+      .then(async (response) => {
+        console.log("[FETCH TEST]", response.status, await response.text());
+      })
+      .catch((error) => {
+        console.error("[FETCH TEST ERROR]", error);
+      });
+  };
+  testFetch();
+
   const scan = useCallback(
     async (goToExplorer = true) => {
       await info("[SCAN] Scan started");
