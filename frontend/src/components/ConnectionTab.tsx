@@ -1,7 +1,7 @@
 import { LANCE_STORAGE, type LanceConnectionState, type LanceStorageType } from "@/api/lance";
 import { isTauri } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import "@/assets/styles/connection.css";
 
@@ -85,33 +85,35 @@ export default function ConnectionTab({
     });
   };
 
-  const canConnect = useMemo(() => {
-    if (connection.storage === LANCE_STORAGE.LOCAL) {
-      return Boolean(connection.path.trim()) && Boolean(connection.name.trim());
-    }
+  //const canConnect = useMemo(() => {
+  //  if (connection.storage === LANCE_STORAGE.LOCAL) {
+  //    return Boolean(connection.path.trim()) && Boolean(connection.name.trim());
+  //  }
 
-    if (!connection.name.trim()) {
-      return false;
-    }
+  //  if (!connection.name.trim()) {
+  //    return false;
+  //  }
 
-    if (!connection.bucket.trim()) {
-      return false;
-    }
+  //  if (!connection.bucket.trim()) {
+  //    return false;
+  //  }
 
-    if (!connection.accessKeyId.trim()) {
-      return false;
-    }
+  //  if (!connection.accessKeyId.trim()) {
+  //    return false;
+  //  }
 
-    if (!connection.secretAccessKey.trim()) {
-      return false;
-    }
+  //  if (!connection.secretAccessKey.trim()) {
+  //    return false;
+  //  }
 
-    if (connection.storage === LANCE_STORAGE.R2) {
-      return Boolean(connection.accountId.trim());
-    }
+  //  if (connection.storage === LANCE_STORAGE.R2) {
+  //    return Boolean(connection.accountId.trim());
+  //  }
 
-    return Boolean(connection.region.trim());
-  }, [connection]);
+  //  return Boolean(connection.region.trim());
+  //}, [connection]);
+
+  //console.log(canConnect, connection);
 
   const canSave = Boolean(connection.name.trim());
 
