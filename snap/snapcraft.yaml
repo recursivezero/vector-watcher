@@ -55,6 +55,26 @@ parts:
         "$DEB_FILE" \
         "$CRAFT_PART_INSTALL"
 
+      # Tauri starts the packaged backend as a sidecar by the
+      # externalBin name vector-watcher-backend. The Debian artifact
+      # places that executable in usr/bin, but the Tauri runtime
+      # launcher resolves a binaries/ tree during a production bundle.
+      # Mirror the requested sidecar shape inside the Snap payload so
+      # the app can start the Python backend during a Snap launch.
+      mkdir -p "$CRAFT_PART_INSTALL/binaries"
+
+      if [ -f "$CRAFT_PART_INSTALL/usr/bin/vector-watcher-backend" ]; then
+        cp -a "$CRAFT_PART_INSTALL/usr/bin/vector-watcher-backend" \
+          "$CRAFT_PART_INSTALL/binaries/vector-watcher-backend"
+        chmod +x "$CRAFT_PART_INSTALL/binaries/vector-watcher-backend"
+      fi
+
+      if [ -d "$CRAFT_PART_INSTALL/usr/bin/_internal" ]; then
+        rm -rf "$CRAFT_PART_INSTALL/binaries/_internal"
+        cp -a "$CRAFT_PART_INSTALL/usr/bin/_internal" \
+          "$CRAFT_PART_INSTALL/binaries/_internal"
+      fi
+
 apps:
   vector-watcher:
     command: usr/bin/vector-watcher
