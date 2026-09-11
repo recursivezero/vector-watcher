@@ -1,11 +1,7 @@
 name: vector-watcher
-
 title: Vector Watcher
-
 version: 0.1.7
-
 summary: Desktop explorer for LanceDB vector datasets
-
 description: |
   Vector Watcher is a desktop application for connecting to,
   exploring, and inspecting LanceDB vector datasets.
@@ -13,11 +9,8 @@ description: |
   It provides a native desktop interface built with Tauri and
   includes a bundled Python backend powered by LanceDB,
   PyArrow, and NumPy.
-
 base: core24
-
 grade: stable
-
 confinement: strict
 
 platforms:
@@ -27,6 +20,9 @@ platforms:
     build-for:
       - amd64
 
+layout:
+  /usr/lib/$CRAFT_ARCH_TRIPLET/webkit2gtk-4.1:
+    bind: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/webkit2gtk-4.1
 
 parts:
   vector-watcher:
