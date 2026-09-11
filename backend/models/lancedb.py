@@ -1,6 +1,6 @@
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field
 
 SortColumn = Literal["image_uri", "tag", "hash", "mtime"]
 SortOrder = Literal["asc", "desc"]
@@ -8,8 +8,6 @@ LanceStorageType = Literal["local", "s3", "r2"]
 
 
 class LanceConnection(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
     name: str = Field(min_length=1, max_length=128)
     storage: LanceStorageType
     path: str = Field(default="", max_length=2048)
@@ -21,25 +19,6 @@ class LanceConnection(BaseModel):
     region: str = Field(default="", max_length=128)
     bucket: str = Field(default="", max_length=255)
     endpoint: str = Field(default="", max_length=2048)
-
-    @model_validator(mode="before")
-    @classmethod
-    def normalize_frontend_field_names(cls, data: Any) -> Any:
-        if not isinstance(data, dict):
-            return data
-
-        normalized = dict(data)
-
-        if "accessKeyId" in normalized and "access_key_id" not in normalized:
-            normalized["access_key_id"] = normalized.pop("accessKeyId")
-
-        if "secretAccessKey" in normalized and "secret_access_key" not in normalized:
-            normalized["secret_access_key"] = normalized.pop("secretAccessKey")
-
-        if "sessionToken" in normalized and "session_token" not in normalized:
-            normalized["session_token"] = normalized.pop("sessionToken")
-
-        return normalized
 
 
 class LanceTableItem(BaseModel):

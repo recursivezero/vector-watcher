@@ -191,16 +191,17 @@ export default function App() {
     [connection]
   );
 
-  const testFetch = () => {
-    fetch("http://127.0.0.1:8765/health")
-      .then(async (response) => {
-        console.log("[FETCH TEST]", response.status, await response.text());
-      })
-      .catch((error) => {
-        console.error("[FETCH TEST ERROR]", error);
-      });
+  const testFetch = async () => {
+    const response = await fetch("http://127.0.0.1:8765/health");
+    const body = await response.text();
+
+    await info(`[FETCH TEST] ${response.status} ${body}`);
   };
-  testFetch();
+
+  testFetch().catch((err) => {
+    console.error("[FETCH TEST] Error:", err);
+    info(`[FETCH TEST] Error: ${String(err)}`);
+  });
 
   const scan = useCallback(
     async (goToExplorer = true) => {

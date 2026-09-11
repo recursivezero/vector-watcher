@@ -69,6 +69,8 @@ apps:
       - desktop-legacy
       - home
       - network
+      - network-bind
+      - browser-support
       - opengl
       - wayland
       - x11
