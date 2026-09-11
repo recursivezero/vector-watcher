@@ -708,9 +708,7 @@ export default function App() {
         setError(null);
       } catch (err) {
         console.error("Credential vault error:", err);
-
         const message = err instanceof Error ? err.message : String(err);
-
         if (message.includes("BadFileKey") || message.includes("failed to decode/decrypt")) {
           setCredentialModalError("Incorrect master password. Please try again.");
         } else {

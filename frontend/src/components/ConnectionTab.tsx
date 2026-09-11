@@ -264,7 +264,7 @@ export default function ConnectionTab({
             </label>
 
             <label className="field field-full">
-              <span>Connection name 1.100</span>
+              <span>Connection name 1.1000</span>
 
               <div className="field-with-action">
                 <input
