@@ -1,3 +1,5 @@
+import { info } from "@tauri-apps/plugin-log";
+
 export const LANCE_STORAGE = {
   R2: "r2",
   S3: "s3",
@@ -159,6 +161,8 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     method: options.method ?? "GET"
   });
 
+  await info(`[API] Request: ${options.method ?? "GET"} ${API_BASE_URL}${path}`);
+
   try {
     const response = await fetch(`${API_BASE_URL}${path}`, {
       ...options,
@@ -194,6 +198,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     return payload as T;
   } catch (error) {
     console.error("[API] Error:", error);
+    await info(`[API] Error: ${String(error)}`);
     throw error;
   }
 }

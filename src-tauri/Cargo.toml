@@ -26,6 +26,7 @@ tauri-plugin-dialog = "2.7.2"
 tauri-plugin-stronghold = "2"
 argon2 = "0.5"
 tauri-plugin-shell = "2"
+tauri-plugin-log = "2"
 
 [profile.dev.package.scrypt]
 opt-level = 3

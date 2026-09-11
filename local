@@ -1,0 +1,13 @@
+
+curl -v -X POST "http://127.0.0.1:8765/connections/rows?table=fabric_table&page=1&page_size=25&sort_order=asc" \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"test","storage":"r2","path":"table","bucket":"threadzip-bucket","endpoint":"https://7c03fd82e2424d3128efbaafe163e7c5.r2.cloudflarestorage.com","access_key_id":"36659895bcd9e2a40cec4b401203965e","secret_access_key":"16dfc67676717c1172c6a01a74fbe612e5bba4d75a538f934964b91cb04276b2","session_token":"","region":"auto"}'
+
+  curl -v -X POST "http://127.0.0.1:8765/connections/table-details?table=fabric_table" \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"test","storage":"r2","path":"table","bucket":"YOUR_BUCKET","endpoint":"https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com","access_key_id":"YOUR_ACCESS_KEY","secret_access_key":"YOUR_SECRET_KEY","session_token":"","region":"auto"}'
+
+
+  curl -v -X POST "<http://127.0.0.1:8765/connections/rows?table=fabric_table&page=1&page_size=25&sort_order=asc>" \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"test","storage":"r2","path":"table","bucket":"YOUR_BUCKET","endpoint":"<https://YOUR_ACCOUNT_ID.r2.cloudflarestorage.com","access_key_id":"YOUR_ACCESS_KEY","secret_access_key":"YOUR_SECRET_KEY","session_token":"","region":"auto"}>'

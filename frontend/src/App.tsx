@@ -26,6 +26,7 @@ import {
 } from "@/libs/credentials";
 import { DEFAULT_EXPLORER_QUERY, type ExplorerQueryState, getErrorMessage, writeTextToClipboard } from "@/libs/utils";
 import { isTauri } from "@tauri-apps/api/core";
+import { info } from "@tauri-apps/plugin-log";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 
@@ -192,13 +193,13 @@ export default function App() {
 
   const scan = useCallback(
     async (goToExplorer = true) => {
-      console.log("[SCAN] Scan started for connection:", connection);
+      await info("[SCAN] Scan started");
       setLoading(true);
       setError(null);
       try {
-        console.log("[SCAN] Calling scanConnection");
+        await info("[SCAN] Calling scanConnection");
         const response = await scanConnection(connection);
-        console.log("[SCAN] scanConnection response", response);
+        await info(`[SCAN] scanConnection response: ${JSON.stringify(response)}`);
         setTables(response.tables);
         setConnected(true);
         const firstTable = response.tables[0]?.name ?? null;
@@ -213,7 +214,7 @@ export default function App() {
           setActiveTab(firstTable ? "explorer" : "database");
         }
       } catch (err) {
-        console.error("[SCAN] FAILED", err);
+        await info(`[SCAN] FAILED: ${String(err)}`);
         setConnected(false);
         setError(getErrorMessage(err));
       } finally {
