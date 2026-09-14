@@ -40,6 +40,12 @@ jobs:
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci
+      
+      - name: Debug xattr
+        run: |
+          which xattr
+          xattr -h
+          xattr -l src-tauri || true
 
       - name: Build application
         working-directory: frontend
