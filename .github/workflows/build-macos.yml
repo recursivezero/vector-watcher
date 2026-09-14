@@ -50,19 +50,41 @@ jobs:
         working-directory: frontend
         run: npm run tauri:build:mac
 
+      - name: Verify generated application path
+        run: |
+          set -euo pipefail
+
+          APP="src-tauri/target/release/bundle/macos/vector-watcher.app"
+
+          echo "Expected application:"
+          echo "$APP"
+
+          if [ ! -d "$APP" ]; then
+            echo "ERROR: Tauri did not create the application bundle."
+            echo ""
+            echo "Available bundle output:"
+            find src-tauri/target/release/bundle -maxdepth 3 -print 2>/dev/null || true
+            exit 1
+          fi
+
+          echo ""
+          echo "Application found:"
+          ls -la "$APP"
+
+          echo ""
+          echo "Contents:"
+          ls -la "$APP/Contents"
+
       - name: Ad-hoc sign macOS application
-        working-directory: frontend
         shell: bash
         run: |
           set -euo pipefail
 
-          APP="$PWD/src-tauri/target/release/bundle/macos/vector-watcher.app"
+          APP="src-tauri/target/release/bundle/macos/vector-watcher.app"
 
           echo "========================================"
           echo "Ad-hoc signing Vector Watcher"
           echo "========================================"
-
-          echo "APP=$APP"
 
           if [ ! -d "$APP" ]; then
             echo "ERROR: Application bundle does not exist:"
@@ -70,7 +92,8 @@ jobs:
             exit 1
           fi
 
-          echo "Application exists."
+          echo "Application:"
+          echo "$APP"
 
           echo ""
           echo "Main executable:"
@@ -103,18 +126,19 @@ jobs:
           echo ""
           echo "Signing native libraries..."
 
-          find "$APP/Contents" \
-            -type f \
-            \( -name "*.dylib" -o -name "*.so" \) \
-            -print0 |
           while IFS= read -r -d '' FILE; do
-            echo "Signing library: $FILE"
+            echo "Signing: $FILE"
 
             /usr/bin/codesign \
               --force \
               --sign - \
               "$FILE"
-          done
+          done < <(
+            find "$APP/Contents" \
+              -type f \
+              \( -name "*.dylib" -o -name "*.so" \) \
+              -print0
+          )
 
           echo ""
           echo "Signing application bundle..."
@@ -125,7 +149,7 @@ jobs:
             "$APP"
 
           echo ""
-          echo "Verifying application..."
+          echo "Verifying application signature..."
 
           /usr/bin/codesign \
             --verify \
@@ -133,10 +157,17 @@ jobs:
             "$APP"
 
           echo ""
-          echo "Ad-hoc signing completed successfully."
+          echo "Signature information:"
+
+          /usr/bin/codesign \
+            -dv \
+            --verbose=4 \
+            "$APP" 2>&1 || true
+
+          echo ""
+          echo "Ad-hoc signing completed."
 
       - name: Create DMG
-        working-directory: frontend
         shell: bash
         run: |
           set -euo pipefail
@@ -144,54 +175,75 @@ jobs:
           APP="src-tauri/target/release/bundle/macos/vector-watcher.app"
           DMG_DIR="src-tauri/target/release/bundle/dmg"
           STAGING="$RUNNER_TEMP/vector-watcher-dmg"
+          DMG="$DMG_DIR/vector-watcher_0.1.10_aarch64.dmg"
+
+          echo "========================================"
+          echo "Creating DMG"
+          echo "========================================"
 
           rm -rf "$STAGING"
           mkdir -p "$STAGING"
           mkdir -p "$DMG_DIR"
 
-          cp -R "$APP" "$STAGING/"
+          cp -R "$APP" "$STAGING/vector-watcher.app"
 
           ln -s /Applications "$STAGING/Applications"
 
-          rm -f "$DMG_DIR/vector-watcher_0.1.10_aarch64.dmg"
+          rm -f "$DMG"
 
-          hdiutil create \
+          /usr/bin/hdiutil create \
             -volname "Vector Watcher" \
             -srcfolder "$STAGING" \
             -ov \
             -format UDZO \
-            "$DMG_DIR/vector-watcher_0.1.10_aarch64.dmg"
+            "$DMG"
 
           echo ""
           echo "DMG created:"
-          ls -lh "$DMG_DIR"
+          ls -lh "$DMG"
 
       - name: Verify final application
-        working-directory: frontend
         shell: bash
         run: |
           set -euo pipefail
 
           APP="src-tauri/target/release/bundle/macos/vector-watcher.app"
 
+          echo "========================================"
+          echo "Final verification"
+          echo "========================================"
+
+          test -d "$APP"
           test -f "$APP/Contents/MacOS/vector-watcher"
           test -f "$APP/Contents/MacOS/vector-watcher-backend"
+          test -d "$APP/Contents/Frameworks"
+          test -f "src-tauri/target/release/bundle/dmg/vector-watcher_0.1.10_aarch64.dmg"
 
-          echo "Application:"
+          echo ""
+          echo "Executables:"
           ls -lh "$APP/Contents/MacOS/"
 
           echo ""
           echo "Backend runtime:"
           ls -ld "$APP/Contents/Frameworks"
+          find "$APP/Contents/Frameworks" -maxdepth 1 -type d -print
 
           echo ""
-          echo "Final signature verification:"
-          codesign --verify --verbose=4 "$APP"
+          echo "Code signature:"
+          /usr/bin/codesign \
+            --verify \
+            --verbose=4 \
+            "$APP"
+
+          echo ""
+          echo "DMG:"
+          ls -lh \
+            "src-tauri/target/release/bundle/dmg/vector-watcher_0.1.10_aarch64.dmg"
 
       - name: Upload application
         uses: actions/upload-artifact@v4
         with:
           name: vector-watcher-macos
           path: |
-            frontend/src-tauri/target/release/bundle/macos/*.app
-            frontend/src-tauri/target/release/bundle/dmg/*.dmg
+            src-tauri/target/release/bundle/macos/*.app
+            src-tauri/target/release/bundle/dmg/*.dmg
