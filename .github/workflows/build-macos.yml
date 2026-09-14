@@ -56,34 +56,65 @@ jobs:
         run: |
           set -euo pipefail
 
-          APP="src-tauri/target/release/bundle/macos/vector-watcher.app"
+          APP="$PWD/src-tauri/target/release/bundle/macos/vector-watcher.app"
 
           echo "========================================"
           echo "Ad-hoc signing Vector Watcher"
           echo "========================================"
 
-          test -d "$APP"
+          echo "APP=$APP"
+
+          if [ ! -d "$APP" ]; then
+            echo "ERROR: Application bundle does not exist:"
+            echo "$APP"
+            exit 1
+          fi
+
+          echo "Application exists."
 
           echo ""
-          echo "Signing Mach-O files inside application..."
+          echo "Main executable:"
+          file "$APP/Contents/MacOS/vector-watcher"
 
+          echo ""
+          echo "Backend executable:"
+          file "$APP/Contents/MacOS/vector-watcher-backend"
+
+          echo ""
+          echo "Signing backend..."
+
+          /usr/bin/codesign \
+            --force \
+            --sign - \
+            "$APP/Contents/MacOS/vector-watcher-backend"
+
+          echo "Backend signed."
+
+          echo ""
+          echo "Signing main executable..."
+
+          /usr/bin/codesign \
+            --force \
+            --sign - \
+            "$APP/Contents/MacOS/vector-watcher"
+
+          echo "Main executable signed."
+
+          echo ""
+          echo "Signing native libraries..."
+
+          find "$APP/Contents" \
+            -type f \
+            \( -name "*.dylib" -o -name "*.so" \) \
+            -print0 |
           while IFS= read -r -d '' FILE; do
-            echo "Signing: $FILE"
+            echo "Signing library: $FILE"
 
             /usr/bin/codesign \
               --force \
               --sign - \
               "$FILE"
-          done < <(
-            find "$APP/Contents" \
-              -type f \
-              -print0 |
-            while IFS= read -r -d '' FILE; do
-              if /usr/bin/file "$FILE" | grep -q "Mach-O"; then
-                printf '%s\0' "$FILE"
-              fi
-            done
-          )
+          done
 
           echo ""
           echo "Signing application bundle..."
@@ -102,11 +133,7 @@ jobs:
             "$APP"
 
           echo ""
-          echo "Code signature:"
-          /usr/bin/codesign \
-            -dv \
-            --verbose=4 \
-            "$APP" 2>&1 || true
+          echo "Ad-hoc signing completed successfully."
 
       - name: Create DMG
         working-directory: frontend
