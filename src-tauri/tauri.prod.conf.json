@@ -16,7 +16,6 @@
       }
     },
     "macOS": {
-      "signingIdentity": "-",
       "files": {
         "Frameworks": "binaries/_internal/"
       }

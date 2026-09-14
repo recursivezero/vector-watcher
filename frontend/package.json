@@ -45,7 +45,7 @@
     "lint:fix": "eslint . --fix",
     "version:set": "node scripts/set-version.mjs",
     "tauri:build:linux": "cd .. && tauri build --config ./src-tauri/tauri.prod.conf.json --bundles deb",
-    "tauri:build:mac": "cd .. && tauri build --config ./src-tauri/tauri.prod.conf.json --bundles app --no-sign",
+    "tauri:build:mac": "cd .. && tauri build --config ./src-tauri/tauri.prod.conf.json --bundles app,dmg --no-sign",
     "tauri:build:windows": "cd .. && tauri build --config ./src-tauri/tauri.prod.conf.json --config ./src-tauri/tauri.windows.conf.json --bundles nsis"
   },
   "dependencies": {
