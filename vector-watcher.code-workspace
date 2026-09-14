@@ -7,30 +7,34 @@
 	"settings": {
 		"python.terminal.useEnvFile": true,
 		"workbench.colorCustomizations": {
-			"activityBar.activeBackground": "#65c89b",
-			"activityBar.background": "#65c89b",
+			"activityBar.activeBackground": "#89f4ba",
+			"activityBar.background": "#89f4ba",
 			"activityBar.foreground": "#15202b",
 			"activityBar.inactiveForeground": "#15202b99",
-			"activityBarBadge.background": "#945bc4",
-			"activityBarBadge.foreground": "#e7e7e7",
-			"activityBarTop.activeBackground": "#65c89b",
-			"activityBarTop.background": "#65c89b",
+			"activityBarBadge.background": "#aa6df1",
+			"activityBarBadge.foreground": "#15202b",
+			"activityBarTop.activeBackground": "#89f4ba",
+			"activityBarTop.background": "#89f4ba",
 			"activityBarTop.foreground": "#15202b",
 			"activityBarTop.inactiveForeground": "#15202b99",
 			"commandCenter.border": "#15202b99",
 			"commandCenter.foreground": "#15202b",
-			"sash.hoverBorder": "#65c89b",
-			"statusBar.background": "#42b883",
+			"sash.hoverBorder": "#89f4ba",
+			"statusBar.background": "#5af09f",
 			"statusBar.foreground": "#15202b",
-			"statusBarItem.hoverBackground": "#359268",
-			"statusBarItem.remoteBackground": "#f0e8f7",
+			"statusBarItem.hoverBackground": "#2bec84",
+			"statusBarItem.remoteBackground": "#aa6df2",
 			"statusBarItem.remoteForeground": "#15202b",
-			"titleBar.activeBackground": "#42b883",
+			"titleBar.activeBackground": "#5af09f",
 			"titleBar.activeForeground": "#15202b",
-			"titleBar.inactiveBackground": "#42b88399",
+			"titleBar.inactiveBackground": "#5af09f99",
 			"titleBar.inactiveForeground": "#15202b99",
-			"statusBar.debuggingBackground": "#42b883",
-			"statusBar.debuggingForeground": "#15202b"
+			"statusBar.debuggingBackground": "#5af09f",
+			"statusBar.debuggingForeground": "#15202b",
+			"activityBar.activeBorder": "#15202b",
+			"activityBarTop.activeBorder": "#15202b",
+			"sideBar.border": "#89f4ba",
+			"tab.activeBorder": "#89f4ba"
 		},
 		"cSpell.words": [
 			"appindicator",
@@ -96,6 +100,7 @@
 			"editor.formatOnSave": true
 		},
 		"vsicons.presets.yamlOfficial": true,
-		"window.zoomLevel": 1.5
+		"window.zoomLevel": 1.5,
+		"peacock.color": "#5af09f"
 	}
 }
