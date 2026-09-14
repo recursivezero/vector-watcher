@@ -46,33 +46,125 @@ jobs:
         working-directory: frontend
         run: npm ci
 
-      - name: Configure macOS system tools
-        run: |
-          echo "/usr/bin" >> "$GITHUB_PATH"
-          echo "xattr: $(/usr/bin/xattr -h >/dev/null 2>&1 && echo /usr/bin/xattr)"
-          echo "cargo: $(command -v cargo)"
-          echo "rustc: $(command -v rustc)"
-          echo "node: $(command -v node)"
-
-      - name: Build application
+      - name: Build unsigned macOS application
         working-directory: frontend
         run: npm run tauri:build:mac
 
-      - name: Verify application bundle
+      - name: Ad-hoc sign macOS application
+        working-directory: frontend
+        shell: bash
         run: |
+          set -euo pipefail
+
           APP="src-tauri/target/release/bundle/macos/vector-watcher.app"
 
+          echo "========================================"
+          echo "Ad-hoc signing Vector Watcher"
+          echo "========================================"
+
           test -d "$APP"
+
+          echo ""
+          echo "Signing Mach-O files inside application..."
+
+          while IFS= read -r -d '' FILE; do
+            echo "Signing: $FILE"
+
+            /usr/bin/codesign \
+              --force \
+              --sign - \
+              "$FILE"
+          done < <(
+            find "$APP/Contents" \
+              -type f \
+              -print0 |
+            while IFS= read -r -d '' FILE; do
+              if /usr/bin/file "$FILE" | grep -q "Mach-O"; then
+                printf '%s\0' "$FILE"
+              fi
+            done
+          )
+
+          echo ""
+          echo "Signing application bundle..."
+
+          /usr/bin/codesign \
+            --force \
+            --sign - \
+            "$APP"
+
+          echo ""
+          echo "Verifying application..."
+
+          /usr/bin/codesign \
+            --verify \
+            --verbose=4 \
+            "$APP"
+
+          echo ""
+          echo "Code signature:"
+          /usr/bin/codesign \
+            -dv \
+            --verbose=4 \
+            "$APP" 2>&1 || true
+
+      - name: Create DMG
+        working-directory: frontend
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          APP="src-tauri/target/release/bundle/macos/vector-watcher.app"
+          DMG_DIR="src-tauri/target/release/bundle/dmg"
+          STAGING="$RUNNER_TEMP/vector-watcher-dmg"
+
+          rm -rf "$STAGING"
+          mkdir -p "$STAGING"
+          mkdir -p "$DMG_DIR"
+
+          cp -R "$APP" "$STAGING/"
+
+          ln -s /Applications "$STAGING/Applications"
+
+          rm -f "$DMG_DIR/vector-watcher_0.1.10_aarch64.dmg"
+
+          hdiutil create \
+            -volname "Vector Watcher" \
+            -srcfolder "$STAGING" \
+            -ov \
+            -format UDZO \
+            "$DMG_DIR/vector-watcher_0.1.10_aarch64.dmg"
+
+          echo ""
+          echo "DMG created:"
+          ls -lh "$DMG_DIR"
+
+      - name: Verify final application
+        working-directory: frontend
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          APP="src-tauri/target/release/bundle/macos/vector-watcher.app"
+
           test -f "$APP/Contents/MacOS/vector-watcher"
           test -f "$APP/Contents/MacOS/vector-watcher-backend"
 
-          echo "Application bundle:"
-          ls -la "$APP/Contents"
+          echo "Application:"
+          ls -lh "$APP/Contents/MacOS/"
+
+          echo ""
+          echo "Backend runtime:"
+          ls -ld "$APP/Contents/Frameworks"
+
+          echo ""
+          echo "Final signature verification:"
+          codesign --verify --verbose=4 "$APP"
 
       - name: Upload application
         uses: actions/upload-artifact@v4
         with:
           name: vector-watcher-macos
           path: |
-            src-tauri/target/release/bundle/macos/*.app
-            src-tauri/target/release/bundle/dmg/*.dmg
+            frontend/src-tauri/target/release/bundle/macos/*.app
+            frontend/src-tauri/target/release/bundle/dmg/*.dmg
