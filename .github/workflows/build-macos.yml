@@ -25,6 +25,11 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin
+
       - name: Install Poetry
         run: pip install poetry
 
@@ -44,19 +49,13 @@ jobs:
       - name: Configure macOS system tools
         run: |
           echo "/usr/bin" >> "$GITHUB_PATH"
-          export PATH="/usr/bin:$PATH"
-
-          echo "xattr:"
-          command -v xattr
-          echo "xattr path: $(command -v xattr)"
-
-          echo "xattr version/help:"
-          /usr/bin/xattr -h
+          echo "xattr: $(/usr/bin/xattr -h >/dev/null 2>&1 && echo /usr/bin/xattr)"
+          echo "cargo: $(command -v cargo)"
+          echo "rustc: $(command -v rustc)"
+          echo "node: $(command -v node)"
 
       - name: Build application
         working-directory: frontend
-        env:
-          PATH: /usr/bin:/bin:/usr/sbin:/sbin:${{ env.PATH }}
         run: npm run tauri:build:mac
 
       - name: Verify application bundle
@@ -69,9 +68,6 @@ jobs:
 
           echo "Application bundle:"
           ls -la "$APP/Contents"
-
-          echo "Executable:"
-          file "$APP/Contents/MacOS/vector-watcher"
 
       - name: Upload application
         uses: actions/upload-artifact@v4
