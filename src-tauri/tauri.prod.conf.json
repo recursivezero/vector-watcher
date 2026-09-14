@@ -18,7 +18,7 @@
     "macOS": {
       "signingIdentity": "-",
       "files": {
-        "Frameworks": "binaries/_internal/"
+        "MacOS/_internal": "binaries/_internal/"
       }
     },
     "icon": [
