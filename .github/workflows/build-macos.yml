@@ -40,6 +40,10 @@ jobs:
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci
+      
+      - name: Remove macOS extended attributes
+        run: |
+          xattr -cr .
 
       - name: Build application
         working-directory: frontend
