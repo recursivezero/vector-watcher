@@ -45,25 +45,6 @@ jobs:
         working-directory: frontend
         run: npm run tauri:build:mac
 
-      - name: Re-sign macOS application
-        run: |
-          codesign --force --deep --sign - \
-            frontend/src-tauri/target/release/bundle/macos/vector-watcher.app
-
-          codesign --verify --deep --strict --verbose=4 \
-            frontend/src-tauri/target/release/bundle/macos/vector-watcher.app
-
-      - name: Recreate DMG
-        run: |
-          rm frontend/src-tauri/target/release/bundle/dmg/*.dmg
-
-          hdiutil create \
-            -volname "vector-watcher" \
-            -srcfolder frontend/src-tauri/target/release/bundle/macos/vector-watcher.app \
-            -ov \
-            -format UDZO \
-            frontend/src-tauri/target/release/bundle/dmg/vector-watcher_0.1.9_aarch64.dmg
-
       - name: Upload application
         uses: actions/upload-artifact@v4
         with:
