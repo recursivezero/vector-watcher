@@ -16,10 +16,7 @@
       }
     },
     "macOS": {
-      "signingIdentity": "-",
-      "files": {
-        "MacOS/_internal": "binaries/_internal/"
-      }
+      "signingIdentity": "-"
     },
     "icon": [
       "icons/32x32.png",

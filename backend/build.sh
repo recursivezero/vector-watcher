@@ -26,7 +26,7 @@ case "$OS" in
         ;;
     esac
 
-    PYINSTALLER_MODE="onedir"
+    PYINSTALLER_MODE="onefile"
     ;;
 
   Linux)
