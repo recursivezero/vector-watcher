@@ -6,7 +6,7 @@ on:
 
 jobs:
   build_macos:
-    name: MacOS
+    name: macOS Apple Silicon
     runs-on: macos-14
 
     steps:
@@ -40,16 +40,38 @@ jobs:
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci
-      
-      - name: Debug xattr
+
+      - name: Configure macOS system tools
         run: |
-          which xattr
-          xattr -h
-          xattr -l src-tauri || true
+          echo "/usr/bin" >> "$GITHUB_PATH"
+          export PATH="/usr/bin:$PATH"
+
+          echo "xattr:"
+          command -v xattr
+          echo "xattr path: $(command -v xattr)"
+
+          echo "xattr version/help:"
+          /usr/bin/xattr -h
 
       - name: Build application
         working-directory: frontend
+        env:
+          PATH: /usr/bin:/bin:/usr/sbin:/sbin:${{ env.PATH }}
         run: npm run tauri:build:mac
+
+      - name: Verify application bundle
+        run: |
+          APP="src-tauri/target/release/bundle/macos/vector-watcher.app"
+
+          test -d "$APP"
+          test -f "$APP/Contents/MacOS/vector-watcher"
+          test -f "$APP/Contents/MacOS/vector-watcher-backend"
+
+          echo "Application bundle:"
+          ls -la "$APP/Contents"
+
+          echo "Executable:"
+          file "$APP/Contents/MacOS/vector-watcher"
 
       - name: Upload application
         uses: actions/upload-artifact@v4
